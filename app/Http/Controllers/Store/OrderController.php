@@ -1,0 +1,235 @@
+<?php
+
+namespace App\Http\Controllers\Store;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class OrderController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function formatearFecha($fecha){
+        // $fecha='04 Marzo 2021';
+        $fechaE=explode(' ',$fecha);
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $mes =array_search($fechaE[1], $meses)+1;
+        if($mes<10)
+            $mes='0'.$mes;
+        $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
+        return $fecha_;
+    }
+    public function index()
+    {
+        //
+        $fecha='04 Marzo 2021';
+        $fechaE=explode(' ',$fecha);
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $mes =array_search($fechaE[1], $meses)+1;
+        if($mes<10)
+            $mes='0'.$mes;
+        $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $form=$request->form_data;
+        // return $form['celular'];
+
+        $cart=$request->cart;
+
+        // $validated=$request->validate([
+        //     'full_name'=>'required',
+        //     'email'=>'required',
+        //     'phone'=>'required',
+        //     'departament'=>'required',
+        //     'province'=>'required',
+        //     'distrite'=>'required',
+        //     'address'=>'required',
+        //     'reference'=>'required',
+        //     'fecha_entrega'=>'required',
+        //     'hora_entrega'=>'required',
+        //     'metodo_pago'=>'required',
+        //     'carro'=>'required',
+        //     'cliente_id'=>'required',
+        //     'tax'=>'required',
+        //     'total'=>'required',
+        // ]);
+
+
+        $cliente_id=$form['id_user'];
+        $client=User::findorfail($cliente_id);
+        $code='';
+        $full_name=$client->name;
+        $email=$client->email;
+        $phone=$form['celular'];
+        $departament='';
+        $province='';
+        $distrite=$form['distrito'];
+        $address=$form['direccion'];
+        $reference=$form['referencia'];
+        $lat='';
+        $long='';
+        $coupond_id=0;
+        $subcoupond=0;
+        $subtotal=0;
+        $tax=$form['tax'];
+        $total=$form['total_price'];
+
+        $fecha_pedido= Carbon::now('America/Chicago')->toDateTimeString();
+        // $fecha_pedido= $fecha_pedido->today();
+
+        // $fecha_entrega=Carbon::createFromFormat($form['picked_fecha'])->toDateTimeString();
+        $fecha_entrega=$this->formatearFecha($form['picked_fecha']);
+
+        // $Fecha =  "2018-03-27 08:15:00";
+        // $fecha_entrega= date("yyyy-mm-dd", strtotime( $form['picked_fecha']));
+        $hora_entrega=$form['picked_hora'];
+        $metodo_pago=$form['picked_metodo'];;
+        $url_comprobante='';
+        $imagen_comprobante='';
+        $user_id=0;
+        $nota_cancelacion_cliente='';
+        $state=1;
+        $lugar_entrega=0;
+        $cliente_id=$form['id_user'];
+        $nota_cancelacion_user='';
+
+        $order=new Order();
+        $order->code=$code;
+        $order->full_name=$full_name;
+        $order->email=$email;
+        $order->phone=$phone;
+        $order->departament=$departament;
+        $order->province=$province;
+        $order->distrite=$distrite;
+        $order->address=$address;
+        $order->reference=$reference;
+        $order->lat=$lat;
+        $order->long=$long;
+        $order->coupond_id=$coupond_id;
+        $order->subcoupond=$subcoupond;
+        $order->subtotal=$subtotal;
+        $order->tax=$tax;
+        $order->total=$total;
+        $order->fecha_pedido=$fecha_pedido;
+        $order->url_comprobante=$url_comprobante;
+        $order->imagen_comprobante=$imagen_comprobante;
+        $order->nota_cancelacion_user=$nota_cancelacion_user;
+        $order->user_id=$user_id;
+        $order->nota_cancelacion_cliente=$nota_cancelacion_cliente;
+        $order->state=$state;
+        $order->lugar_entrega=$lugar_entrega;
+        $order->cliente_id=$cliente_id;
+        $order->fecha_entrega=$fecha_entrega;
+        $order->hora_entrega=$hora_entrega;
+        $order->metodo_pago=$metodo_pago;
+        $order->save();
+
+        // Creamos el detalle del la orden
+        foreach($cart as $cart_){
+
+            $product_id=$cart_['id'];
+            $quantity=$cart_['quantity'];
+            if($product_id>0&&$quantity>0){
+                $producto=Product::findorfail($product_id);
+                if($producto){
+                    if($quantity<=$producto->stock){
+
+                        $order_product = new OrderProduct();
+                        $order_product->quantity=$quantity;
+                        $order_product->pu=$producto->price;
+                        $order_product->state=1;
+                        $order_product->product_id=$producto->id;
+                        $order_product->order_id=$order->id;
+                        $order_product->save();
+
+                        $producto->stock=$producto->stock-$quantity;
+                        $producto->save();
+                    }
+                }
+            }
+
+        }
+
+        return response()->json(['status'=>'1']);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Order $order)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Order $order)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Order $order)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Order $order)
+    {
+        //
+    }
+
+    public function getAllClient($client_id)
+    {
+        //
+        $orders=Order::with(['cliente','productos_ordenados.producto.categorias','productos_ordenados.producto.photos'])
+        ->where('cliente_id',$client_id)->get();
+        return $orders;
+    }
+}

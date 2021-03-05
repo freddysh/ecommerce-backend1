@@ -267,6 +267,16 @@ return [
 //            'label'       => 4,
 //            'label_color' => 'success',
         ],
+        ['header' => 'Configuraciones'],
+        [
+            'text'        => 'Marcas',
+            'route'         => 'admin.brands',
+            'icon'        => 'fas fa-fw fa-users',
+            'can'       => '',
+            'active'        => ['admin/*'],
+//            'label'       => 4,
+//            'label_color' => 'success',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

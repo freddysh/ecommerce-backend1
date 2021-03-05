@@ -7,13 +7,10 @@
 @stop
 
 @section('content')
-    <p>Listar productos.</p>
-
-    <example-component></example-component>
+<brand-component></brand-component>
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
