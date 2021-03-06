@@ -16,7 +16,7 @@ class UnitController extends Controller
     public function index_view()
     {
         //
-        return view('admin.brands.index');
+        return view('admin.units.index');
     }
     public function index()
     {
