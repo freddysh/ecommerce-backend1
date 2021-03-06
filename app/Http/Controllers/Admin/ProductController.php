@@ -26,6 +26,12 @@ class ProductController extends Controller
         //
         return view('admin.products.index');
     }
+    public function index_import_view()
+    {
+        //
+        return view('admin.products.index_import');
+    }
+
     public function index()
     {
         //
@@ -53,6 +59,7 @@ class ProductController extends Controller
         //
         try {
             //code...
+
             $validated=$request->validate([
                 'code'=>'required|unique:products',
                 'name'=>'required',
@@ -64,14 +71,15 @@ class ProductController extends Controller
                 'regular_price'=>'required',
                 'stock'=>'required',
                 'limit'=>'required',
-                'valido_desde'=>'required',
-                'valido_hasta'=>'required',
+                'rango_fecha'=>'required',
                 'unit'=>'required',
                 'brand'=>'required',
                 'categorias'=>'required',
                 'state'=>'required',
-                'photos'=>'required',
+                // 'photos'=>'required',
             ]);
+
+// return $request->all();
             $product=new Product();
                 $product->code=$request->code;
                 $product->name=$request->name;
@@ -83,15 +91,15 @@ class ProductController extends Controller
                 $product->regular_price=$request->regular_price;
                 $product->stock=$request->stock;
                 $product->limit=$request->limit;
-                $product->valido_desde=$request->valido_desde;
-                $product->valido_hasta=$request->valido_hasta;
+                $product->valido_desde=explode('T',$request->rango_fecha[0])[0];
+                $product->valido_hasta=explode('T',$request->rango_fecha[1])[0];
                 $product->unit=$request->unit;
                 $product->brand=$request->brand;
                 $product->state=$request->state;
                 $product->quantity=1;
                 $product->save();
 
-                //agregamos las categorias
+                // //agregamos las categorias
                 $arreglo=null;
                 $i=0;
                 foreach($request->categorias as $categoria){
@@ -124,8 +132,10 @@ class ProductController extends Controller
                     }
                 }
                 return response()->json(['state'=>'1']);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             //throw $th;
+
+            return response()->json(['state'=>$th]);
         }
 
 
@@ -166,6 +176,8 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         //
+
+// return $request->all();
         try {
             //code...
             $validated=$request->validate([
@@ -179,13 +191,12 @@ class ProductController extends Controller
                 'regular_price'=>'required',
                 'stock'=>'required',
                 'limit'=>'required',
-                'valido_desde'=>'required',
-                'valido_hasta'=>'required',
+                'rango_fecha'=>'required',
                 'unit'=>'required',
                 'brand'=>'required',
                 'categorias'=>'required',
                 'state'=>'required',
-                'photos'=>'required',
+                // 'photos'=>'required',
             ]);
             // $product=Product::findorfail($product_->id);
                 $product->code=$request->code;
@@ -198,8 +209,8 @@ class ProductController extends Controller
                 $product->regular_price=$request->regular_price;
                 $product->stock=$request->stock;
                 $product->limit=$request->limit;
-                $product->valido_desde=$request->valido_desde;
-                $product->valido_hasta=$request->valido_hasta;
+                $product->valido_desde=explode('T',$request->rango_fecha[0])[0];
+                $product->valido_hasta=explode('T',$request->rango_fecha[1])[0];
                 $product->unit=$request->unit;
                 $product->brand=$request->brand;
                 $product->state=$request->state;
@@ -333,344 +344,360 @@ class ProductController extends Controller
     }
     public function importar_excel(Request $request)
     {
-        $request->validate([
-            'import_file' => 'required|file|mimes:xls,xlsx'
-        ]);
+        try {
+            //code...
+            $request->validate([
+                'import_file' => 'required|file|mimes:xls,xlsx'
+            ]);
 
-        $path = $request->file('import_file');
-        $data = Excel::toArray(new ProductCollectionImport, $path)[0];
-        $valor='';
-        $arreglo=Array();
-        $correctos=0;
-        $advertencias=0;
-        $errores=0;
-        foreach ($data as $key => $value) {
-            # code...
-            $codigo=$value['codigo']?$value['codigo']:null;
-            $marca=$value['marca']?$value['marca']:null;
-            $unidad=$value['unidad']?$value['unidad']:null;
-            $categoria=$value['categoria']?$value['categoria']:null;
-            $nombre=$value['nombre']?$value['nombre']:null;
-            $descripcion=$value['descripcion']?$value['descripcion']:null;
-            $detalle=$value['detalle']?$value['detalle']:null;
-            $limite=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
-            $precio=$value['precio']?$value['precio']:null;
-            $precio_web=$value['precio_web']?$value['precio_web']:null;
-            $stock=$value['stock']?$value['stock']:null;
+            $path = $request->file('import_file');
+            $data = Excel::toArray(new ProductCollectionImport, $path)[0];
+            $valor='';
+            $arreglo=Array();
+            $correctos=0;
+            $advertencias=0;
+            $errores=0;
+            foreach ($data as $key => $value) {
+                # code...
+                $codigo=$value['codigo']?$value['codigo']:null;
+                $marca=$value['marca']?$value['marca']:null;
+                $unidad=$value['unidad']?$value['unidad']:null;
+                $categoria=$value['categoria']?$value['categoria']:null;
+                $nombre=$value['nombre']?$value['nombre']:null;
+                $descripcion=$value['descripcion']?$value['descripcion']:null;
+                $detalle=$value['detalle']?$value['detalle']:null;
+                $limite=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
+                $precio=$value['precio']?$value['precio']:null;
+                $precio_web=$value['precio_web']?$value['precio_web']:null;
+                $stock=$value['stock']?$value['stock']:null;
 
 
 
-            if($codigo!=null){
-                if(Product::where('code',$codigo)->get()->count()==0){
-                    $codigo_msj= Array('msj'=>'Producto nuevo','error'=>'0');
-                    $correctos++;
-                }
-                elseif(Product::where('code',$codigo)->get()->count()==1){
-                    $codigo_msj= Array('msj'=>'Producto ya existe','error'=>'1');
-                    $advertencias++;
-                }
-                elseif(Product::where('code',$codigo)->get()->count()>1){
-                    $codigo_msj= Array('msj'=>'Hay mas de 1 producto','error'=>'1');
-                    $advertencias++;
-                }
-            }
-            else{
-                $codigo_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            if($marca!=null){
-                if(Brand::where('name',$marca)->get()->count()==0){
-                    $marca_msj= Array('msj'=>'Marca nueva','error'=>'0');
-                    $correctos++;
-                }
-                elseif(Brand::where('name',$marca)->get()->count()>=1){
-                    $marca_msj= Array('msj'=>'Marca ya existe','error'=>'1');
-                    $advertencias++;
-                }
-            }
-            else{
-                $marca_msj=  Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            if($unidad!=null){
-                if(Unit::where('name',$unidad)->get()->count()==0){
-                    $unidad_msj= Array('msj'=>'Unidad nueva','error'=>'0');
-                    $correctos++;
-                }
-                elseif(Unit::where('name',$unidad)->get()->count()>=1){
-                    $unidad_msj= Array('msj'=>'Unidad ya existe','error'=>'1');
-                    $advertencias++;
-                }
-            }
-            else{
-                $unidad_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            if($categoria!=null){
-                if(Category::where('name',$categoria)->get()->count()==0){
-                    $categoria_msj= Array('msj'=>'Nueva categoria','error'=>'0');
-                    $correctos++;
-                }
-                elseif(Category::where('name',$categoria)->get()->count()>=1){
-                    $categoria_msj= Array('msj'=>'Categoria ya existe','error'=>'1');
-                    $advertencias++;
-                }
-            }
-            else{
-                $categoria_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            if($nombre!=null){
-                if(Product::where('name',$nombre)->get()->count()==0){
-                    $nombre_msj= Array('msj'=>'Nuevo nombre','error'=>'0');
-                    $correctos++;
-                }
-                elseif(Product::where('name',$nombre)->get()->count()>=1){
-                    $nombre_msj= Array('msj'=>'Nombre ya existe','error'=>'1');
-                    $advertencias++;
-                }
-            }
-            else{
-                $nombre_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            $descripcion_msj= Array('msj'=>'','error'=>'0');
-            if($descripcion==null){
-                $descripcion_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-            $limite_msj= Array('msj'=>'','error'=>'0');
-            if($limite===null){
-                $limite_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-            $detalle_msj=  Array('msj'=>'','error'=>'0');
-            if($detalle===null){
-                $detalle_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
-
-            if($precio!=null){
-                if(is_numeric($precio)){
-                    $precio_msj= Array('msj'=>'Es un numero','error'=>'0');
-                    $correctos++;
+                if($codigo!=null){
+                    if(Product::where('code',$codigo)->get()->count()==0){
+                        $codigo_msj= Array('msj'=>'Producto nuevo','error'=>'0');
+                        $correctos++;
+                    }
+                    elseif(Product::where('code',$codigo)->get()->count()==1){
+                        $codigo_msj= Array('msj'=>'Producto ya existe','error'=>'1');
+                        $advertencias++;
+                    }
+                    elseif(Product::where('code',$codigo)->get()->count()>1){
+                        $codigo_msj= Array('msj'=>'Hay mas de 1 producto','error'=>'1');
+                        $advertencias++;
+                    }
                 }
                 else{
-                    $precio_msj= Array('msj'=>'No es un numero','error'=>'2');
+                    $codigo_msj= Array('msj'=>'Celda vacia','error'=>'2');
                     $errores++;
                 }
-            }
-            else{
-                $precio_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
 
-            if($precio_web!=null){
-                if(is_numeric($precio_web)){
-                    $precio_web_msj= Array('msj'=>'Es un numero','error'=>'0');
-                    $correctos++;
+                if($marca!=null){
+                    if(Brand::where('name',$marca)->get()->count()==0){
+                        $marca_msj= Array('msj'=>'Marca nueva','error'=>'0');
+                        $correctos++;
+                    }
+                    elseif(Brand::where('name',$marca)->get()->count()>=1){
+                        $marca_msj= Array('msj'=>'Marca ya existe','error'=>'1');
+                        $advertencias++;
+                    }
                 }
                 else{
-                    $precio_web_msj= Array('msj'=>'No es un numero','error'=>'2');
+                    $marca_msj=  Array('msj'=>'Celda vacia','error'=>'2');
                     $errores++;
                 }
-            }
-            else{
-                $precio_web_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
 
-            if($stock!=null){
-                if(is_numeric($stock)){
-                    $stock_msj= Array('msj'=>'Es un numero','error'=>'0');
-                    $correctos++;
+                if($unidad!=null){
+                    if(Unit::where('name',$unidad)->get()->count()==0){
+                        $unidad_msj= Array('msj'=>'Unidad nueva','error'=>'0');
+                        $correctos++;
+                    }
+                    elseif(Unit::where('name',$unidad)->get()->count()>=1){
+                        $unidad_msj= Array('msj'=>'Unidad ya existe','error'=>'1');
+                        $advertencias++;
+                    }
                 }
                 else{
-                    $stock_msj= Array('msj'=>'No es un numero','error'=>'2');
+                    $unidad_msj= Array('msj'=>'Celda vacia','error'=>'2');
                     $errores++;
                 }
-            }
-            else{
-                $stock_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                $errores++;
-            }
 
-            if($limite===0||$limite===1){
+                if($categoria!=null){
+                    if(Category::where('name',$categoria)->get()->count()==0){
+                        $categoria_msj= Array('msj'=>'Nueva categoria','error'=>'0');
+                        $correctos++;
+                    }
+                    elseif(Category::where('name',$categoria)->get()->count()>=1){
+                        $categoria_msj= Array('msj'=>'Categoria ya existe','error'=>'1');
+                        $advertencias++;
+                    }
+                }
+                else{
+                    $categoria_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
 
-                if($limite===1){
+                if($nombre!=null){
+                    if(Product::where('name',$nombre)->get()->count()==0){
+                        $nombre_msj= Array('msj'=>'Nuevo nombre','error'=>'0');
+                        $correctos++;
+                    }
+                    elseif(Product::where('name',$nombre)->get()->count()>=1){
+                        $nombre_msj= Array('msj'=>'Nombre ya existe','error'=>'1');
+                        $advertencias++;
+                    }
+                }
+                else{
+                    $nombre_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+
+                $descripcion_msj= Array('msj'=>'','error'=>'0');
+                if($descripcion==null){
+                    $descripcion_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+                $limite_msj= Array('msj'=>'','error'=>'0');
+                if($limite===null){
+                    $limite_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+                $detalle_msj=  Array('msj'=>'','error'=>'0');
+                if($detalle===null){
+                    $detalle_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+
+                if($precio!=null){
+                    if(is_numeric($precio)){
+                        $precio_msj= Array('msj'=>'Es un numero','error'=>'0');
+                        $correctos++;
+                    }
+                    else{
+                        $precio_msj= Array('msj'=>'No es un numero','error'=>'2');
+                        $errores++;
+                    }
+                }
+                else{
+                    $precio_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+
+                if($precio_web!=null){
+                    if(is_numeric($precio_web)){
+                        $precio_web_msj= Array('msj'=>'Es un numero','error'=>'0');
+                        $correctos++;
+                    }
+                    else{
+                        $precio_web_msj= Array('msj'=>'No es un numero','error'=>'2');
+                        $errores++;
+                    }
+                }
+                else{
+                    $precio_web_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+
+                if($stock!=null){
+                    if(is_numeric($stock)){
+                        $stock_msj= Array('msj'=>'Es un numero','error'=>'0');
+                        $correctos++;
+                    }
+                    else{
+                        $stock_msj= Array('msj'=>'No es un numero','error'=>'2');
+                        $errores++;
+                    }
+                }
+                else{
+                    $stock_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
+
+                if($limite===0||$limite===1){
+
+                    if($limite===1){
+                        $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
+                        $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
+                        $valido_desde_msj=  Array('msj'=>'','error'=>'0');
+                        if($valido_desde===null){
+                            $valido_desde_msj= Array('msj'=>'Celda vacia1','error'=>'2');
+                            $errores++;
+                        }
+                        $valido_hasta_msj=  Array('msj'=>'','error'=>'0');
+                        if($valido_hasta===null){
+                            $valido_hasta_msj= Array('msj'=>'Celda vacia2','error'=>'2');
+                            $errores++;
+                        }
+                    }
+                    else{
+                        $valido_desde=null;
+                        $valido_hasta=null;
+                        $valido_desde_msj=  Array('msj'=>'','error'=>'0');
+                        // if($valido_desde===null){
+                        //     $valido_desde_msj= Array('msj'=>'Celda vacia1','error'=>'2');
+                        //     $errores++;
+                        // }
+                        $valido_hasta_msj=  Array('msj'=>'','error'=>'0');
+                        // if($valido_hasta===null){
+                        //     $valido_hasta_msj= Array('msj'=>'Celda vacia2','error'=>'2');
+                        //     $errores++;
+                        // }
+                    }
+
+
+                }
+                else{
+
                     $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
                     $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
                     $valido_desde_msj=  Array('msj'=>'','error'=>'0');
-                    if($valido_desde===null){
-                        $valido_desde_msj= Array('msj'=>'Celda vacia1','error'=>'2');
+                    if($valido_desde==null){
+                        $valido_desde_msj= Array('msj'=>'Celda vacia','error'=>'2');
                         $errores++;
                     }
                     $valido_hasta_msj=  Array('msj'=>'','error'=>'0');
-                    if($valido_hasta===null){
-                        $valido_hasta_msj= Array('msj'=>'Celda vacia2','error'=>'2');
+                    if($valido_hasta==null){
+                        $valido_hasta_msj= Array('msj'=>'Celda vacia','error'=>'2');
                         $errores++;
                     }
                 }
-                else{
-                    $valido_desde=null;
-                    $valido_hasta=null;
-                    $valido_desde_msj=  Array('msj'=>'','error'=>'0');
-                    // if($valido_desde===null){
-                    //     $valido_desde_msj= Array('msj'=>'Celda vacia1','error'=>'2');
-                    //     $errores++;
-                    // }
-                    $valido_hasta_msj=  Array('msj'=>'','error'=>'0');
-                    // if($valido_hasta===null){
-                    //     $valido_hasta_msj= Array('msj'=>'Celda vacia2','error'=>'2');
-                    //     $errores++;
-                    // }
-                }
+                $arreglo[$key]=Array(
+                    'codigo'=>Array('dato'=>$codigo,'error'=>$codigo_msj),
+                    'marca'=>Array('dato'=>$marca,'error'=>$marca_msj),
+                    'unidad'=>Array('dato'=>$unidad,'error'=>$unidad_msj),
+                    'categoria'=>Array('dato'=>$categoria,'error'=>$categoria_msj),
+                    'nombre'=>Array('dato'=>$nombre,'error'=>$nombre_msj),
+                    'descripcion'=>Array('dato'=>$descripcion,'error'=>$descripcion_msj),
+                    'detalle'=>Array('dato'=>$detalle,'error'=>$detalle_msj),
+                    'precio'=>Array('dato'=>$precio,'error'=>$precio_msj),
+                    'precio_web'=>Array('dato'=>$precio_web,'error'=>$precio_web_msj),
+                    'stock'=>Array('dato'=>$stock,'error'=>$stock_msj),
+                    'limite'=>Array('dato'=>$limite,'error'=>$limite_msj),
 
+                    'valido_desde'=>Array('dato'=>$valido_desde,'error'=>$valido_desde_msj),
+                    'valido_hasta'=>Array('dato'=>$valido_hasta,'error'=>$valido_hasta_msj),
+
+                );
 
             }
-            else{
 
-                $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
-                $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
-                $valido_desde_msj=  Array('msj'=>'','error'=>'0');
-                if($valido_desde==null){
-                    $valido_desde_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                    $errores++;
-                }
-                $valido_hasta_msj=  Array('msj'=>'','error'=>'0');
-                if($valido_hasta==null){
-                    $valido_hasta_msj= Array('msj'=>'Celda vacia','error'=>'2');
-                    $errores++;
-                }
-            }
-            $arreglo[$key]=Array(
-                'codigo'=>Array('dato'=>$codigo,'error'=>$codigo_msj),
-                'marca'=>Array('dato'=>$marca,'error'=>$marca_msj),
-                'unidad'=>Array('dato'=>$unidad,'error'=>$unidad_msj),
-                'categoria'=>Array('dato'=>$categoria,'error'=>$categoria_msj),
-                'nombre'=>Array('dato'=>$nombre,'error'=>$nombre_msj),
-                'descripcion'=>Array('dato'=>$descripcion,'error'=>$descripcion_msj),
-                'detalle'=>Array('dato'=>$detalle,'error'=>$detalle_msj),
-                'precio'=>Array('dato'=>$precio,'error'=>$precio_msj),
-                'precio_web'=>Array('dato'=>$precio_web,'error'=>$precio_web_msj),
-                'stock'=>Array('dato'=>$stock,'error'=>$stock_msj),
-                'limite'=>Array('dato'=>$limite,'error'=>$limite_msj),
+            return response()->json(['datos'=>$arreglo,'correctos'=>$correctos,'advertencias'=>$advertencias,'errores'=>$errores], 200);
 
-                'valido_desde'=>Array('dato'=>$valido_desde,'error'=>$valido_desde_msj),
-                'valido_hasta'=>Array('dato'=>$valido_hasta,'error'=>$valido_hasta_msj),
-
-            );
-
+        } catch (\Exception $th) {
+            //throw $th;
+            return response()->json(['state'=>'0']);
         }
-
-        return response()->json(['datos'=>$arreglo,'correctos'=>$correctos,'advertencias'=>$advertencias,'errores'=>$errores], 200);
-    }
+       }
     public function importar_excel_ya(Request $request)
     {
-        $request->validate([
-            'import_file' => 'required|file|mimes:xls,xlsx'
-        ]);
 
-        $path = $request->file('import_file');
-        $data = Excel::toArray(new ProductCollectionImport, $path)[0];
-        $valor='';
-        $arreglo=Array();
-        $correctos=0;
-        $advertencias=0;
-        $errores=0;
-        foreach ($data as $key => $value) {
-            # code...
-            $codigo=$value['codigo']?$value['codigo']:null;
-            $marca=$value['marca']?$value['marca']:null;
-            $unidad=$value['unidad']?$value['unidad']:null;
-            $categoria=$value['categoria']?$value['categoria']:null;
-            $nombre=$value['nombre']?$value['nombre']:null;
-            $descripcion=$value['descripcion']?$value['descripcion']:null;
-            $detalle=$value['detalle']?$value['detalle']:null;
-            $precio=$value['precio']?$value['precio']:null;
-            $limit=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
-            $precio_web=$value['precio_web']?$value['precio_web']:null;
-            $stock=$value['stock']?$value['stock']:null;
-            $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
-            $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
+        try {
+            //code...
+            $request->validate([
+                'import_file' => 'required|file|mimes:xls,xlsx'
+            ]);
+
+            $path = $request->file('import_file');
+            $data = Excel::toArray(new ProductCollectionImport, $path)[0];
+            $valor='';
+            $arreglo=Array();
+            $correctos=0;
+            $advertencias=0;
+            $errores=0;
+            foreach ($data as $key => $value) {
+                # code...
+                $codigo=$value['codigo']?$value['codigo']:null;
+                $marca=$value['marca']?$value['marca']:null;
+                $unidad=$value['unidad']?$value['unidad']:null;
+                $categoria=$value['categoria']?$value['categoria']:null;
+                $nombre=$value['nombre']?$value['nombre']:null;
+                $descripcion=$value['descripcion']?$value['descripcion']:null;
+                $detalle=$value['detalle']?$value['detalle']:null;
+                $precio=$value['precio']?$value['precio']:null;
+                $limit=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
+                $precio_web=$value['precio_web']?$value['precio_web']:null;
+                $stock=$value['stock']?$value['stock']:null;
+                $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
+                $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
 
 
-            if($codigo!=null){
-                if(Product::where('code',$codigo)->get()->count()==0){
-                    $temp_marca=null;
-                    if(Brand::where('name',$marca)->get()->count()==0){
-                        $temp_marca=new Brand();
-                        $temp_marca->name=$marca;
-                        $temp_marca->state=1;
-                        $temp_marca->save();
+                if($codigo!=null){
+                    if(Product::where('code',$codigo)->get()->count()==0){
+                        $temp_marca=null;
+                        if(Brand::where('name',$marca)->get()->count()==0){
+                            $temp_marca=new Brand();
+                            $temp_marca->name=$marca;
+                            $temp_marca->state=1;
+                            $temp_marca->save();
+                        }
+                        else
+                            $temp_marca=Brand::where('name',$marca)->get()->first();
+
+
+                        $temp_unidad=null;
+                        if(Unit::where('name',$unidad)->get()->count()==0){
+                            $temp_unidad=new Unit();
+                            $temp_unidad->name=$unidad;
+                            $temp_unidad->state=1;
+                            $temp_unidad->save();
+                        }
+                        else
+                            $temp_unidad=Unit::where('name',$unidad)->get()->first();
+
+
+                        $temp_categoria=null;
+                        if(Category::where('name',$categoria)->get()->count()==0){
+                            $temp_categoria=new Category();
+                            $temp_categoria->name=$categoria;
+                            $temp_categoria->description='';
+                            $temp_categoria->photo='';
+                            $temp_categoria->father_id=1;
+                            $temp_categoria->state=1;
+                            $temp_categoria->save();
+                        }
+                        else
+                            $temp_categoria=Category::where('name',$categoria)->get()->first();
+
+                        $temp_producto=new Product();
+                        $temp_producto->code=$codigo;
+                        $temp_producto->name=$nombre;
+                        $temp_producto->url=$nombre;
+                        $temp_producto->description=$descripcion;
+                        $temp_producto->detail=$detalle;
+                        $temp_producto->regular_price=$precio_web+(($precio_web*5)/100);
+                        $temp_producto->discount=5;
+                        $temp_producto->price=$precio_web;
+                        $temp_producto->stock=$stock;
+                        $temp_producto->limit=$limit;
+                        $temp_producto->valido_desde=$valido_desde;
+                        $temp_producto->valido_hasta=$valido_hasta;
+                        $temp_producto->unit=$temp_unidad->name;
+                        $temp_producto->brand=$temp_marca->name;
+                        $temp_producto->state=1;
+                        $temp_producto->quantity=1;
+                        $temp_producto->save();
+
+                        $temp_producto->categorias()->attach($temp_categoria->id);
+
                     }
-                    else
-                        $temp_marca=Brand::where('name',$marca)->get()->first();
-
-
-                    $temp_unidad=null;
-                    if(Unit::where('name',$unidad)->get()->count()==0){
-                        $temp_unidad=new Unit();
-                        $temp_unidad->name=$unidad;
-                        $temp_unidad->state=1;
-                        $temp_unidad->save();
+                    else{
+                        $temp_producto=Product::where('code',$codigo)->get()->first();
+                        $temp_producto->price=$precio_web;
+                        $temp_producto->stock=$temp_producto->stock+$stock;
+                        $temp_producto->save();
                     }
-                    else
-                        $temp_unidad=Unit::where('name',$unidad)->get()->first();
-
-
-                    $temp_categoria=null;
-                    if(Category::where('name',$categoria)->get()->count()==0){
-                        $temp_categoria=new Category();
-                        $temp_categoria->name=$categoria;
-                        $temp_categoria->description='';
-                        $temp_categoria->photo='';
-                        $temp_categoria->father_id=1;
-                        $temp_categoria->state=1;
-                        $temp_categoria->save();
-                    }
-                    else
-                        $temp_categoria=Category::where('name',$categoria)->get()->first();
-
-                    $temp_producto=new Product();
-                    $temp_producto->code=$codigo;
-                    $temp_producto->name=$nombre;
-                    $temp_producto->url=$nombre;
-                    $temp_producto->description=$descripcion;
-                    $temp_producto->detail=$detalle;
-                    $temp_producto->regular_price=$precio_web+(($precio_web*5)/100);
-                    $temp_producto->discount=5;
-                    $temp_producto->price=$precio_web;
-                    $temp_producto->stock=$stock;
-                    $temp_producto->limit=$limit;
-                    $temp_producto->valido_desde=$valido_desde;
-                    $temp_producto->valido_hasta=$valido_hasta;
-                    $temp_producto->unit=$temp_unidad->name;
-                    $temp_producto->brand=$temp_marca->name;
-                    $temp_producto->state=1;
-                    $temp_producto->quantity=1;
-                    $temp_producto->save();
-
-                    $temp_producto->categorias()->attach($temp_categoria->id);
-
-                }
-                else{
-                    $temp_producto=Product::where('code',$codigo)->get()->first();
-                    $temp_producto->price=$precio_web;
-                    $temp_producto->stock=$stock;
-                    $temp_producto->save();
-                }
 
                 }
 
             }
 
-            return response()->json(['state'=>'1']);
+                return response()->json(['state'=>'1']);
+        } catch (\Throwable $th) {
+            //throw $th;
 
+            return response()->json(['state'=>'0']);
         }
+
+
+    }
 }

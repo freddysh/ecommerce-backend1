@@ -5,10 +5,13 @@
  */
  import Vue from 'vue'
 require('./bootstrap');
-
+require('alpinejs');
+import Vuesax from 'vuesax'
+import 'vuesax/dist/vuesax.css' ;
 window.Vue = require('vue').default;
 import VuePaginate from 'vue-paginate';
 Vue.use(VuePaginate);
+Vue.use(Vuesax);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -24,6 +27,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 Vue.component('brand-component',require('./components/Admin/Brand/index.vue').default);
 Vue.component('unit-component',require('./components/Admin/Unit/index.vue').default);
+Vue.component('category-component',require('./components/Admin/Category/index.vue').default);
+Vue.component('product-component',require('./components/Admin/Product/index.vue').default);
+Vue.component('product-import-component',require('./components/Admin/Product/index-import.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

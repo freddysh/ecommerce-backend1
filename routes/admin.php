@@ -20,4 +20,6 @@ Route::resource('users', UserController::class)->only('index','edit','update')->
 Route::get('brands', [BrandController::class,'index_view'])->name('brands');
 Route::get('units', [UnitController::class,'index_view'])->name('units');
 Route::get('categories', [CategoryController::class,'index_view'])->name('categories');
+Route::get('products', [ProductController::class,'index_view'])->name('products');
+Route::get('products-import', [ProductController::class,'index_import_view'])->name('products_import');
 
