@@ -14,6 +14,12 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index_view()
+    {
+        //
+        return view('admin.categories.index');
+    }
+
     public function index()
     {
         //

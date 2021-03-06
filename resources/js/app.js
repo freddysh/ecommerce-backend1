@@ -23,6 +23,7 @@ Vue.use(VuePaginate);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 Vue.component('brand-component',require('./components/Admin/Brand/index.vue').default);
+Vue.component('unit-component',require('./components/Admin/Unit/index.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

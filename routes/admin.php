@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UserController;
@@ -17,4 +19,5 @@ Route::resource('users', UserController::class)->only('index','edit','update')->
 // Route::resource('users', UserController::class)->only('index','edit','update')->names('users');
 Route::get('brands', [BrandController::class,'index_view'])->name('brands');
 Route::get('units', [UnitController::class,'index_view'])->name('units');
+Route::get('categories', [CategoryController::class,'index_view'])->name('categories');
 

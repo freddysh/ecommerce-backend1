@@ -1,92 +1,131 @@
 <template>
-  <b-row>
-    <b-col sm="12">
-      <div class="modal-dialog modal-xl" role="document"></div>
-      <iq-card body-class="p-0 profile-page">
-        <template v-slot:headerTitle> </template>
-        <template v-slot:body>
-          <b-row class="pt-2 mx-2 mb-2">
-            <b-col cols="12">
-              <b-row>
-                <b-col cols="12" sm="10">
-                  <b-form-input
-                    id="name"
-                    v-model="valorBuscar"
-                    required
-                    placeholder="Buscar"
-                  ></b-form-input>
-                </b-col>
-                <b-col class="text-right" cols="12" sm="2">
-                  <b-button
-                    class="btn-block"
-                    id="toggle-btn"
-                    v-b-modal.modal-prevent-closing
-                    variant="primary"
-                    @click="iniciarForm()"
-                    ><i class="las la-plus-circle"></i> Nuevo</b-button
-                  >
-                </b-col>
-              </b-row>
-              <b-modal
-                id="modal-prevent-closing"
-                ref="modal"
-                :title="tituloModal"
-                @ok="handleOk"
-                ok-title="Guardar"
-                cancel-title="Cerrar"
-                size="lg"
-              >
-                <form ref="form" @submit.stop.prevent="handleSubmit">
-                  <b-form-group
-                    label="Nombre"
-                    label-for="name"
-                    invalid-feedback="El nombre es requerido"
-                  >
-                    <b-form-input
-                      id="name"
-                      v-model="brand.name"
-                      required
-                    ></b-form-input>
-                  </b-form-group>
-                </form>
-              </b-modal>
-            </b-col>
-          </b-row>
-          <b-table
-            id="my-table"
-            :items="itemss"
-            :fields="fields"
-            :per-page="per_page"
-            :current-page="currentPage"
-            responsive="sm"
-            class="px-2"
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-10">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              v-model="valorBuscar"
+              required
+              placeholder="Buscar"
+            />
+          </div>
+        </div>
+        <div class="text-right col-2">
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            data-toggle="modal"
+            @click="iniciarForm()"
           >
-            <template #cell(opciones)="data">
-              <b-button
-                variant="warning"
-                class="mb-3 mr-1"
-                @click="editar(data.item)"
-                ><i class="las la-edit"></i>Editar</b-button
+            <i class="las la-plus-circle"></i> Nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                {{ tituloModal }}
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
               >
-              <b-button
-                variant="danger"
-                class="mb-3 mr-1"
-                @click="borrar(data.value)"
-                ><i class="las la-trash-alt"></i>Eliminar</b-button
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form ref="form">
+                <div class="form-group">
+                  <label for="name">Nombre</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    aria-describedby="nameHelp"
+                    placeholder="Ingrese el nombre"
+                    v-model="brand.name"
+                    required
+                  />
+                  <small id="nameHelp" class="form-text text-muted"
+                    >El nombre es requerido</small
+                  >
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
               >
-            </template>
-          </b-table>
-          <b-pagination
-            class="mx-4"
-            v-model="currentPage"
-            :total-rows="row"
-            :per-page="per_page"
-            aria-controls="my-table"
-          ></b-pagination>
-        </template>
-      </iq-card>
-    </b-col>
-  </b-row>
+                Cerrar
+              </button>
+              <button type="button" class="btn btn-primary" @click="handleOk">
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table
+        class="table table-striped table-hover table-condensed"
+        id="my-table"
+      >
+        <thead>
+          <tr>
+            <th scope="col" v-for="(item, key) in fields" :key="key">
+              {{ item.label }}
+            </th>
+          </tr>
+        </thead>
+        <paginate name="itemss" :list="itemss" :per="10" tag="tbody">
+          <tr v-for="(item, key) in paginated('itemss')" :key="key">
+            <td scope="row">{{ key + 1 }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.state }}</td>
+            <td>
+              <button class="btn btn-warning" @click="editar(item)">
+                <i class="fas fa-edit"></i>Editar
+              </button>
+              <button class="btn btn-danger" @click="borrar(item.id)">
+                <i class="fas fa-trash-alt"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </paginate>
+      </table>
+      <paginate-links
+        for="itemss"
+        :classes="{ ul: 'pagination', li: 'page-item', a: 'page-link' }"
+        :async="true"
+        :show-step-links="true"
+        :step-links="{
+          next: 'Next',
+          prev: 'Preview'
+        }"
+      ></paginate-links>
+    </div>
+  </div>
 </template>
 <script>
 import Axios from "axios";
@@ -134,7 +173,8 @@ export default {
       submittedNames: [],
       currentPage: 1,
       per_page: 10,
-      valorBuscar: ""
+      valorBuscar: "",
+      paginate: ["itemss"]
     };
   },
   methods: {
@@ -170,7 +210,7 @@ export default {
         console.log("rpt;", datos.data);
         if (datos.data.status == 1) {
           // alert('datos editados')
-          this.brand = this.brand_inicial;
+          this.limpiarCampos();
           // this.ocultar();
           this.index();
         }
@@ -185,7 +225,8 @@ export default {
         console.log("rpt;", datos.data);
         if (datos.data.status == 1) {
           // alert('datos guardados')
-          this.brand = this.brand_inicial;
+          //   this.brand = this.brand_inicial;
+          this.limpiarCampos();
           // this.ocultar();
           this.index();
         }
@@ -194,7 +235,8 @@ export default {
     toggleModal() {
       // We pass the ID of the button that we want to return focus to
       // when the modal has hidden
-      this.$refs["modal"].toggle("#toggle-btn");
+      //   this.$refs["modal"].toggle("#toggle-btn");
+      $("#exampleModal").modal("toggle");
     },
     editar(brand_) {
       console.log(brand_);
@@ -243,26 +285,37 @@ export default {
     },
     handleOk(bvModalEvt) {
       // Prevent modal from closing
-      bvModalEvt.preventDefault();
+      //   bvModalEvt.preventDefault();
       // Trigger submit handler
       this.handleSubmit();
     },
     handleSubmit() {
       // Exit when the form isn't valid
-      if (!this.checkFormValidity()) {
-        return;
-      }
+      //   if (!this.checkFormValidity()) {
+      //     return;
+      //   }
       // Push the name to submitted names
       this.submittedNames.push(this.brand.name);
       //llamamos al metodo para guardar o editar
       this.agregar();
       // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing");
-      });
+      //   this.$nextTick(() => {
+      //     this.$bvModal.hide("modal-prevent-closing");
+      //   });
+      this.toggleModal();
     },
     iniciarForm() {
-      this.brand = this.brand_inicial;
+      this.limpiarCampos();
+      this.toggleModal();
+    },
+    limpiarCampos() {
+      this.brand = {
+        id: 0,
+        name: "",
+        // photo:'',
+        state: 0,
+        opciones: 0
+      };
     }
   },
   computed: {

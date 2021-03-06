@@ -21,6 +21,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index_view()
+    {
+        //
+        return view('admin.products.index');
+    }
     public function index()
     {
         //
