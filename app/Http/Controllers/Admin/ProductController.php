@@ -272,6 +272,7 @@ class ProductController extends Controller
                         }
                     }
                 }
+
                 return response()->json(['state'=>'1']);
         } catch (\Exception $e) {
             //throw $th;

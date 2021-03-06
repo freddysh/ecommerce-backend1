@@ -49,7 +49,7 @@ class CategoryController extends Controller
         $validated=$request->validate([
             'name'=>'required|unique:categories',
             'description'=>'required',
-            'photo'=>'required',
+            // 'photo'=>'required',
             'father_id'=>'required',
             'state'=>'required',
         ]);
@@ -113,7 +113,7 @@ class CategoryController extends Controller
         $validated=$request->validate([
             'name'=>'required',
             'description'=>'required',
-            'photo'=>'required',
+            // 'photo'=>'required',
             'father_id'=>'required',
             'state'=>'required',
         ]);
