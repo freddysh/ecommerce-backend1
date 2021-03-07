@@ -57,6 +57,10 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+
+        try {
+            //code...
+
         //
         $form=$request->form_data;
         // return $form['celular'];
@@ -159,7 +163,7 @@ class OrderController extends Controller
             if($product_id>0&&$quantity>0){
                 $producto=Product::findorfail($product_id);
                 if($producto){
-                    if($quantity<=$producto->stock){
+                    // if($quantity<=$producto->stock){
 
                         $order_product = new OrderProduct();
                         $order_product->quantity=$quantity;
@@ -171,13 +175,18 @@ class OrderController extends Controller
 
                         $producto->stock=$producto->stock-$quantity;
                         $producto->save();
-                    }
+                    // }
                 }
             }
 
         }
-
         return response()->json(['status'=>'1']);
+
+        } catch (\Exception $th) {
+            //throw $th;
+
+        return response()->json(['status'=>'0']);
+        }
     }
 
     /**
