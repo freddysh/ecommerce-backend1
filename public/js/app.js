@@ -6902,7 +6902,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   };
                 });
                 console.log(rpt);
-                _this.items = rpt;
+                _this.items = rpt.data.filter(function (a) {
+                  return a.state == 1;
+                });
 
                 _this.items.sort(function (a, b) {
                   return a.fecha_entrega - b.fecha_entrega;
@@ -7453,7 +7455,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 }), _defineProperty(_name$mounted$created, "computed", {
   subTotal: function subTotal() {
     return this.item.productos_ordenados.reduce(function (p, c) {
-      return p + c.quantity * c.pu;
+      return p + c.quantity * parseFloat(c.pu);
     }, 0);
   } // row() {
   //   return this.items.length;
@@ -69946,7 +69948,7 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-right" }, [
-                      _vm._v(_vm._s(_vm.item.total))
+                      _vm._v(_vm._s(_vm.subTotal + _vm.item.tax))
                     ])
                   ])
                 ],

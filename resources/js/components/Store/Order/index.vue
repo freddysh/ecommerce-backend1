@@ -113,7 +113,7 @@ export default {
         hora_entrega: item.hora_entrega
       }));
       console.log(rpt);
-      this.items = rpt;
+      this.items = rpt.data.filter(a => a.state == 1);
       this.items.sort((a, b) => a.fecha_entrega - b.fecha_entrega);
     }
     // async agregar() {

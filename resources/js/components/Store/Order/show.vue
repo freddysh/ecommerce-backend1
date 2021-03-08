@@ -108,7 +108,7 @@
               </tr>
               <tr>
                 <td colspan="4" class="text-right text-bold">Total</td>
-                <td class="text-right">{{ item.total }}</td>
+                <td class="text-right">{{ subTotal + item.tax }}</td>
               </tr>
             </tbody>
           </table>
@@ -333,7 +333,7 @@ export default {
   computed: {
     subTotal() {
       return this.item.productos_ordenados.reduce(
-        (p, c) => p + c.quantity * c.pu,
+        (p, c) => p + c.quantity * parseFloat(c.pu),
         0
       );
     }
