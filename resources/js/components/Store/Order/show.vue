@@ -9,23 +9,48 @@
           </p>
           <p class="py-0 my-0">
             <span class="text-gray">Estado:</span>
-            <span class="badge badge-primary" v-if="item.state == 1"
+            <span class="badge badge-danger" v-if="item.state == 1"
               >En tienda</span
             >
-            <span class="badge badge-primary" v-if="item.state == 2"
+            <span class="badge badge-warning" v-if="item.state == 2"
               >En empacado</span
             >
             <span class="badge badge-primary" v-if="item.state == 3"
               >En camino</span
             >
-            <span class="badge badge-primary" v-if="item.state == 4"
+            <span class="badge badge-success" v-if="item.state == 4"
               >Entregado</span
             >
           </p>
-          <p class="py-0 my-0">
+          <p class="py-0 my-0" v-if="item.state == 1">
             <span class="text-gray">Fecha de creacion:</span>
             {{
               moment(`${item.created_at}`).format("dddd, Do MMMM YYYY HH:mm:ss")
+            }}
+          </p>
+          <p class="py-0 my-0" v-if="item.state == 2">
+            <span class="text-gray">Fecha de creacion:</span>
+            {{
+              moment(`${item.en_proceso_user}`).format(
+                "dddd, Do MMMM YYYY HH:mm:ss"
+              )
+            }}
+          </p>
+          <p class="py-0 my-0" v-if="item.state == 3">
+            <span class="text-gray">Fecha de creacion:</span>
+            {{
+              moment(`${item.dispached_user}`).format(
+                "dddd, Do MMMM YYYY HH:mm:ss"
+              )
+            }}
+          </p>
+
+          <p class="py-0 my-0" v-if="item.state == 4">
+            <span class="text-gray">Fecha de creacion:</span>
+            {{
+              moment(`${item.entregado_user}`).format(
+                "dddd, Do MMMM YYYY HH:mm:ss"
+              )
             }}
           </p>
         </div>
@@ -92,10 +117,10 @@
                   {{ producto.producto.name }} -
                   {{ producto.producto.detail }}
                 </td>
-                <td class="text-right">{{ producto.pu }}</td>
+                <td class="text-right">{{ numero(producto.pu) }}</td>
                 <td class="text-right">{{ producto.quantity }}</td>
                 <td class="text-right">
-                  {{ producto.quantity * producto.pu }}
+                  {{ numero(numero(producto.quantity) * numero(producto.pu)) }}
                 </td>
               </tr>
               <tr>
@@ -108,17 +133,45 @@
               </tr>
               <tr>
                 <td colspan="4" class="text-right text-bold">Total</td>
-                <td class="text-right">{{ subTotal + item.tax }}</td>
+                <td class="text-right">
+                  {{ numero(numero(subTotal) + numero(item.tax)) }}
+                </td>
               </tr>
             </tbody>
           </table>
           <div class="row">
-            <div class="col-6">
-              <button class="btn btn-danger">Rechazar</button>
+            <div class="text-right col-6" v-if="item.state == 1">
+              <button class="btn btn-danger btn-lg">
+                Rechazar nueva orden
+              </button>
             </div>
-            <div class="col-6">
-              <button class="btn btn-success" @click="enviar">
-                Enviar a empacar
+            <div class="text-right col-6" v-if="item.state == 3">
+              <button class="btn btn-danger btn-lg">Cancelar entrega</button>
+            </div>
+            <div class="text-left col-6">
+              <button
+                v-if="item.state == 1"
+                class="btn btn-success btn-lg"
+                @click="enviarEmpacado"
+              >
+                <i class="fa fa-cubes" aria-hidden="true"></i>
+                Enviar para empacar
+              </button>
+              <button
+                v-if="item.state == 2"
+                class="btn btn-success btn-lg"
+                @click="enviarEncamino"
+              >
+                <i class="fa fa-truck" aria-hidden="true"></i>
+                Enviar para entregar
+              </button>
+              <button
+                v-if="item.state == 3"
+                class="btn btn-success btn-lg"
+                @click="enviarEntrega"
+              >
+                <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                Realizar entrega
               </button>
             </div>
           </div>
@@ -143,7 +196,7 @@ export default {
   created() {
     this.index();
   },
-  props: ["order_id"],
+  props: ["order_id", "user_id"],
   data() {
     return {
       order: {
@@ -181,6 +234,9 @@ export default {
     this.index();
   },
   methods: {
+    numero(num) {
+      return Math.round(num * 100) / 100;
+    },
     async index() {
       let datos = await Axios.get(
         `${process.env.MIX_MIX_APP_URL}/api/v1/orders/${this.order_id}`
@@ -189,14 +245,24 @@ export default {
       //   this.items.sort((a, b) => a.fecha_entrega - b.fecha_entrega);
     },
     rechazar() {},
-    enviar() {
-      if (confirm("Esta seguro de enviar a empacar?")) {
-        this.enviarDatos();
+    enviarEmpacado() {
+      if (confirm("Esta seguro de guardar los datos?")) {
+        this.enviarDatos(2);
       }
     },
-    async enviarDatos() {
+    enviarEncamino() {
+      if (confirm("Esta seguro de guardar los datos?")) {
+        this.enviarDatos(3);
+      }
+    },
+    enviarEntrega() {
+      if (confirm("Esta seguro de guardar los datos?")) {
+        this.enviarDatos(4);
+      }
+    },
+    async enviarDatos(state) {
       let datos = await Axios.get(
-        `${process.env.MIX_MIX_APP_URL}/api/v1/orders/enviar/${this.item.id}/2`
+        `${process.env.MIX_MIX_APP_URL}/api/v1/orders/enviar/${this.item.id}/${state}/${this.user_id}`
       );
       console.log("rpt;", datos.data);
       if (datos.data.status == 1) {
@@ -333,7 +399,10 @@ export default {
   computed: {
     subTotal() {
       return this.item.productos_ordenados.reduce(
-        (p, c) => p + c.quantity * parseFloat(c.pu),
+        (p, c) =>
+          this.numero(
+            this.numero(p) + this.numero(c.quantity) * this.numero(c.pu)
+          ),
         0
       );
     }

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -256,11 +257,22 @@ class OrderController extends Controller
         return $orders;
     }
 
-    public function enviar($order_id,$state)
+    public function enviar($order_id,$state,$user_id)
     {
         //
         $order=Order::findorfail($order_id);
         $order->state=$state;
+        if($state==2){
+            $order->en_proceso_user=Carbon::now('America/Lima')->toDateTimeString();
+            $order->en_proceso_user_id=$user_id;
+        }
+        elseif($state==3){
+            $order->dispached_user=Carbon::now('America/Lima')->toDateTimeString();
+            $order->dispached_user_id=$user_id;
+        }elseif($state==4){
+            $order->entregado_user=Carbon::now('America/Lima')->toDateTimeString();
+            $order->entregado_user_id=$user_id;
+        }
         $order->save();
         return response()->json(['status'=>'1']);
     }

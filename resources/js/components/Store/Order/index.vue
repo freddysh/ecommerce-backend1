@@ -8,37 +8,134 @@
               NUEVOS PEDIDOS
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
-              <div class="card" v-for="(item, key) in items" :key="key">
-                <div class="p-1 card-body">
-                  <a :href="`orders/show/${item.id}`">
-                    <div class="row">
-                      <div class="col-8 text-primary text-bold">
-                        {{ item.full_name }}
+              <div v-for="(item, key) in items" :key="key">
+                <div class="card" v-if="item.state == 1">
+                  <div class="p-1 card-body">
+                    <a :href="`orders/show/${item.id}`">
+                      <div class="row">
+                        <div class="col-8 col-lg-8 text-primary text-bold">
+                          {{ item.full_name }}
+                        </div>
+                        <div
+                          class="text-right col-4 col-lg-4 text-success text-bold"
+                        >
+                          S/. {{ item.total }}
+                        </div>
+                        <div class="text-sm col-12 text-secondary text-bold">
+                          Entregar:
+                          {{
+                            moment(`${item.fecha_entrega}.00:00:00`).format(
+                              "dddd, Do MMMM YYYY"
+                            )
+                          }}
+                          {{ item.hora_entrega }}
+                        </div>
                       </div>
-                      <div class="col-4 text-success text-bold">
-                        S/. {{ item.total }}
+                      <div class="row">
+                        <div class="text-sm text-gray col-12">
+                          Creado:
+                          {{
+                            moment(item.created_at).format(
+                              "dddd, Do MMMM YYYY, h:mm:ss a"
+                            )
+                          }}
+                        </div>
                       </div>
-                      <div class="text-sm col-12 text-secondary text-bold">
-                        Entregar:
-                        {{
-                          moment(`${item.fecha_entrega}.00:00:00`).format(
-                            "dddd, Do MMMM YYYY"
-                          )
-                        }}
-                        {{ item.hora_entrega }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card">
+            <div class="card-header bg-warning">
+              NUEVOS EN EMPACADO <i class="fa fa-cubes" aria-hidden="true"></i>
+            </div>
+            <div class="p-2 card-body bg-gradient-secondary">
+              <div v-for="(item, key) in items" :key="key">
+                <div class="card" v-if="item.state == 2">
+                  <div class="p-1 card-body">
+                    <a :href="`orders/show/${item.id}`">
+                      <div class="row">
+                        <div class="col-8 col-lg-8 text-primary text-bold">
+                          {{ item.full_name }}
+                        </div>
+                        <div
+                          class="text-right col-4 col-lg-4 text-success text-bold"
+                        >
+                          S/. {{ item.total }}
+                        </div>
+                        <div class="text-sm col-12 text-secondary text-bold">
+                          Entregar:
+                          {{
+                            moment(`${item.fecha_entrega}.00:00:00`).format(
+                              "dddd, Do MMMM YYYY"
+                            )
+                          }}
+                          {{ item.hora_entrega }}
+                        </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="text-sm text-gray col-12">
-                        Hace:
-                        {{
-                          moment(item.created_at).format(
-                            "dddd, Do MMMM YYYY, h:mm:ss a"
-                          )
-                        }}
+                      <div class="row">
+                        <div class="text-sm text-gray col-12">
+                          Creado:
+                          {{
+                            moment(item.en_proceso_user).format(
+                              "dddd, Do MMMM YYYY, h:mm:ss a"
+                            )
+                          }}
+                        </div>
                       </div>
-                    </div>
-                  </a>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card">
+            <div class="card-header bg-primary">
+              NUEVOS EN ENCAMINO
+              <i class="fa fa-truck" aria-hidden="true"></i>
+            </div>
+            <div class="p-2 card-body bg-gradient-secondary">
+              <div v-for="(item, key) in items" :key="key">
+                <div class="card" v-if="item.state == 3">
+                  <div class="p-1 card-body">
+                    <a :href="`orders/show/${item.id}`">
+                      <div class="row">
+                        <div class="col-8 col-lg-8 text-primary text-bold">
+                          {{ item.full_name }}
+                        </div>
+                        <div
+                          class="text-right col-4 col-lg-4 text-success text-bold"
+                        >
+                          S/. {{ item.total }}
+                        </div>
+                        <div class="text-sm col-12 text-secondary text-bold">
+                          Entregar:
+                          {{
+                            moment(`${item.fecha_entrega}.00:00:00`).format(
+                              "dddd, Do MMMM YYYY"
+                            )
+                          }}
+                          {{ item.hora_entrega }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="text-sm text-gray col-12">
+                          Creado:
+                          {{
+                            moment(item.dispached_user).format(
+                              "dddd, Do MMMM YYYY, h:mm:ss a"
+                            )
+                          }}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -78,6 +175,7 @@ export default {
         // nameState: null,
       },
       items: [],
+      itemsEmpacado: [],
       order_inicial: {
         id: 0,
         code: "",
@@ -108,12 +206,16 @@ export default {
         full_name: item.full_name,
         state: item.state,
         created_at: item.created_at,
+        en_proceso_user: item.en_proceso_user,
+        dispached_user: item.dispached_user,
+        entregado_user: item.entregado_user,
         total: item.total,
         fecha_entrega: item.fecha_entrega,
         hora_entrega: item.hora_entrega
       }));
       console.log(rpt);
-      this.items = rpt.data.filter(a => a.state == 1);
+      this.items = rpt;
+      //   this.items = rpt.data.filter(a => a.state == 1);
       this.items.sort((a, b) => a.fecha_entrega - b.fecha_entrega);
     }
     // async agregar() {

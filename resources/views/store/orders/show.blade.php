@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-<order-view-component :order_id="{{ $order_id }}"></order-view-component>
+<order-view-component :order_id="{{ $order_id }}" :user_id="{{ Auth::user()->id }}"></order-view-component>
 @stop
 @section('css')
 @stop
