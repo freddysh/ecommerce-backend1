@@ -45,3 +45,5 @@ Route::apiResource('/v1/units',UnitController::class);
 Route::apiResource('/v1/orders',OrderController::class);
 Route::get('/v1/orders/{client_id}/get-all-client',[OrderController::class,'getAllClient'])->name('order.getAllClient');
 
+Route::get('/v1/orders/enviar/{order_id}/{state}',[OrderController::class,'enviar'])->name('order.enviar');
+

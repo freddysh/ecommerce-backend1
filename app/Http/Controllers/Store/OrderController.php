@@ -27,16 +27,28 @@ class OrderController extends Controller
         $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
         return $fecha_;
     }
+    public function index_view()
+    {
+        //
+        return view('store.orders.index');
+    }
+    public function order_show_view($order_id)
+    {
+        //
+        return view('store.orders.show',['order_id'=>$order_id]);
+    }
+
     public function index()
     {
         //
-        $fecha='04 Marzo 2021';
-        $fechaE=explode(' ',$fecha);
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        $mes =array_search($fechaE[1], $meses)+1;
-        if($mes<10)
-            $mes='0'.$mes;
-        $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
+        // $fecha='04 Marzo 2021';
+        // $fechaE=explode(' ',$fecha);
+        // $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        // $mes =array_search($fechaE[1], $meses)+1;
+        // if($mes<10)
+        //     $mes='0'.$mes;
+        // $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
+        return Order::all();
     }
 
     /**
@@ -198,6 +210,8 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         //
+        return Order::with(['cliente','productos_ordenados.producto.categorias','productos_ordenados.producto.photos'])
+        ->where('id',$order->id)->get()->first();
     }
 
     /**
@@ -240,5 +254,14 @@ class OrderController extends Controller
         $orders=Order::with(['cliente','productos_ordenados.producto.categorias','productos_ordenados.producto.photos'])
         ->where('cliente_id',$client_id)->get();
         return $orders;
+    }
+
+    public function enviar($order_id,$state)
+    {
+        //
+        $order=Order::findorfail($order_id);
+        $order->state=$state;
+        $order->save();
+        return response()->json(['status'=>'1']);
     }
 }

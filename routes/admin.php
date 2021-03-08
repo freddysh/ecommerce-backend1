@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Store\OrderController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('', [Homecontroller::class, "index"]);
@@ -23,4 +24,4 @@ Route::get('categories', [CategoryController::class,'index_view'])->name('catego
 Route::get('products', [ProductController::class,'index_view'])->name('products');
 Route::get('products-import', [ProductController::class,'index_import_view'])->name('products_import');
 Route::get('orders', [OrderController::class,'index_view'])->name('orders');
-
+Route::get('orders/show/{order_id}', [OrderController::class,'order_show_view'])->name('order_show_view');

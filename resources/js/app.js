@@ -12,6 +12,12 @@ window.Vue = require('vue').default;
 import VuePaginate from 'vue-paginate';
 Vue.use(VuePaginate);
 Vue.use(Vuesax);
+
+import moment from 'moment'
+import 'moment/locale/es';
+Vue.prototype.moment = moment
+Vue.use(require('vue-moment'));
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,6 +36,8 @@ Vue.component('unit-component',require('./components/Admin/Unit/index.vue').defa
 Vue.component('category-component',require('./components/Admin/Category/index.vue').default);
 Vue.component('product-component',require('./components/Admin/Product/index.vue').default);
 Vue.component('product-import-component',require('./components/Admin/Product/index-import.vue').default);
+Vue.component('order-component',require('./components/Store/Order/index.vue').default);
+Vue.component('order-view-component',require('./components/Store/Order/show.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

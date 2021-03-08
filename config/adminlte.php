@@ -317,7 +317,7 @@ return [
             'route'         => 'admin.orders',
             'icon'        => 'fa fa-cog',
             'can'       => '',
-            'active'        => ['admin/ordes/*'],
+            'active'        => ['admin/orders/*'],
 //            'label'       => 4,
 //            'label_color' => 'success',
         ],
