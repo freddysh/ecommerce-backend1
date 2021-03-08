@@ -38,6 +38,7 @@ Vue.component('product-component',require('./components/Admin/Product/index.vue'
 Vue.component('product-import-component',require('./components/Admin/Product/index-import.vue').default);
 Vue.component('order-component',require('./components/Store/Order/index.vue').default);
 Vue.component('order-view-component',require('./components/Store/Order/show.vue').default);
+Vue.component('orders-entregadas-component',require('./components/Store/Order/orders-entregadas.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

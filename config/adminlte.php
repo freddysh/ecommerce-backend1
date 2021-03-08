@@ -258,15 +258,6 @@ return [
 //            'label'       => 4,
 //            'label_color' => 'success',
         ],
-        [
-            'text'        => 'Lista de Productos',
-            'route'         => 'store.listar_productos',
-            'icon'        => 'fas fa-fw fa-users',
-            'can'       => 'Leer Producto',
-            'active'        => ['store/*'],
-//            'label'       => 4,
-//            'label_color' => 'success',
-        ],
         ['header' => 'Configuraciones'],
         [
             'text'        => 'Marcas',
@@ -320,7 +311,16 @@ return [
             'active'        => ['admin/orders/*'],
 //            'label'       => 4,
 //            'label_color' => 'success',
+        ],[
+            'text'        => 'Ordenes entregadas',
+            'route'         => 'admin.orders.entregadas',
+            'icon'        => 'fa fa-cog',
+            'can'       => '',
+            'active'        => ['admin/orders/entregadas'],
+//            'label'       => 4,
+//            'label_color' => 'success',
         ],
+        ['header' => 'Reportes'],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

@@ -25,3 +25,4 @@ Route::get('products', [ProductController::class,'index_view'])->name('products'
 Route::get('products-import', [ProductController::class,'index_import_view'])->name('products_import');
 Route::get('orders', [OrderController::class,'index_view'])->name('orders');
 Route::get('orders/show/{order_id}', [OrderController::class,'order_show_view'])->name('order_show_view');
+Route::get('orders/entregadas', [OrderController::class,'orders_entregadas'])->name('orders.entregadas');
