@@ -267,7 +267,7 @@ export default {
       console.log("rpt;", datos.data);
       if (datos.data.status == 1) {
         // alert('datos editados')
-        window.location.href = "../../orders";
+        window.location.href = "../../list";
       } else {
         alert("Ocurrio un error, vuelva a intentarlo mas tarde");
       }

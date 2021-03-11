@@ -8,7 +8,10 @@
               <div class="row">
                 <div class="col-4">
                   ORDENES ENTREGADAS
-                  <i class="fa fa-like" aria-hidden="true"></i>
+                  <i
+                    class="fa fa-like"
+                    aria-hidden="true"
+                  ></i>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
@@ -22,13 +25,15 @@
                         v-for="(item, key) in filtros"
                         :key="key"
                         :value="item.value"
-                        >{{ item.text }}</option
-                      >
+                      >{{ item.text }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="form-group" v-if="filtro == 5">
+                  <div
+                    class="form-group"
+                    v-if="filtro == 5"
+                  >
                     <input
                       type="text"
                       class="form-control"
@@ -39,25 +44,35 @@
                     />
                   </div>
 
-                  <div class="form-group" v-if="filtro == 4">
-                    <date-picker v-model="rango_fecha" range></date-picker>
+                  <div
+                    class="form-group"
+                    v-if="filtro == 4"
+                  >
+                    <date-picker
+                      v-model="rango_fecha"
+                      range
+                    ></date-picker>
                   </div>
                 </div>
               </div>
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
               <div v-if="itemss && itemss.length > 0">
-                <div v-for="(item, key) in itemss" :key="key">
-                  <div class="card" v-if="item.state == 4">
+                <div
+                  v-for="(item, key) in itemss"
+                  :key="key"
+                >
+                  <div
+                    class="card"
+                    v-if="item.state == 4"
+                  >
                     <div class="p-1 card-body">
-                      <a :href="`orders/show/${item.id}`">
+                      <a :href="`../orders/entregadas/show/${item.id}`">
                         <div class="row">
                           <div class="col-8 col-lg-8 text-primary text-bold">
                             {{ item.full_name }}
                           </div>
-                          <div
-                            class="text-right col-4 col-lg-4 text-success text-bold"
-                          >
+                          <div class="text-right col-4 col-lg-4 text-success text-bold">
                             S/.
                             {{ numero(numero(item.total) + numero(item.tax)) }}
                           </div>

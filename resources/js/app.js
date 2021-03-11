@@ -18,6 +18,9 @@ import 'moment/locale/es';
 Vue.prototype.moment = moment
 Vue.use(require('vue-moment'));
 
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+Vue.use(Chartkick.use(Chart))
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -39,6 +42,7 @@ Vue.component('product-import-component',require('./components/Admin/Product/ind
 Vue.component('order-component',require('./components/Store/Order/index.vue').default);
 Vue.component('order-view-component',require('./components/Store/Order/show.vue').default);
 Vue.component('orders-entregadas-component',require('./components/Store/Order/orders-entregadas.vue').default);
+Vue.component('report-component',require('./components/Admin/Report/index.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

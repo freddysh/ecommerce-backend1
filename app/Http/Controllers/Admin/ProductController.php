@@ -328,7 +328,22 @@ class ProductController extends Controller
          $productosTop=Product::whereIn('id',$rpt)->get();
          return $productosTop;
     }
-
+    public function tops5()
+    {
+        //
+         $rpt= DB::table('order_products')
+         ->join('products','order_products.product_id','=','products.id')
+        //  ->groupBy('id')
+         ->groupBy('product_id')
+         ->orderBy('cantidad','desc')
+         ->take(5)
+         ->select('products.*',DB::raw('SUM(order_products.quantity) as cantidad'))
+         ->get()
+        //  ->pluck('product_id')
+         ->toArray();
+        //  $productosTop=Product::whereIn('id',$rpt)->get();
+         return $rpt;
+    }
     public function get_imagen($filename)
     {
         $file = Storage::disk('product')->get($filename);

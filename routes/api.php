@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Products
 Route::apiResource('/v1/products',ProductController::class);
 Route::get('/v1/products/others/listado/{categorias}',[ProductController::class,'listado'])->name('products.listado');
-Route::get('/v1/products/others/tops',[ProductController::class,'tops'])->name('products.tops');
+Route::get('/v1/products/others/tops',[ProductController::class,'tops5'])->name('products.tops');
 Route::get('/v1/products/imagen/{imagen}',[ProductController::class,'get_imagen'])->name('products.get_imagen');
 Route::get('/v1/products/swith-state/{product_id}/{valor}',[ProductController::class,'switch_state'])->name('products.get_imagen');
 Route::post('/v1/products/importar-excel',[ProductController::class,'importar_excel'])->name('products.importar_excel');
@@ -44,6 +44,10 @@ Route::apiResource('/v1/units',UnitController::class);
 //Orders
 Route::apiResource('/v1/orders',OrderController::class);
 Route::get('/v1/orders/{client_id}/get-all-client',[OrderController::class,'getAllClient'])->name('order.getAllClient');
-
 Route::get('/v1/orders/enviar/{order_id}/{state}/{user_id}',[OrderController::class,'enviar'])->name('order.enviar');
 
+
+Route::get('/v1/orders/others/pendientes',[OrderController::class,'pendientes'])->name('orders.pendientes');
+Route::get('/v1/orders/others/empacados',[OrderController::class,'empacados'])->name('orders.empacados');
+Route::get('/v1/orders/others/encamino',[OrderController::class,'encamino'])->name('orders.encamino');
+Route::get('/v1/orders/others/ingresos/{desde}/{hasta}',[OrderController::class,'ingresos'])->name('orders.ingresos');

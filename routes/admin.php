@@ -23,6 +23,11 @@ Route::get('units', [UnitController::class,'index_view'])->name('units');
 Route::get('categories', [CategoryController::class,'index_view'])->name('categories');
 Route::get('products', [ProductController::class,'index_view'])->name('products');
 Route::get('products-import', [ProductController::class,'index_import_view'])->name('products_import');
-Route::get('orders', [OrderController::class,'index_view'])->name('orders');
-Route::get('orders/show/{order_id}', [OrderController::class,'order_show_view'])->name('order_show_view');
-Route::get('orders/entregadas', [OrderController::class,'orders_entregadas'])->name('orders.entregadas');
+Route::get('orders/list', [OrderController::class,'index_view'])->name('orders_list');
+Route::get('orders/list/show/{order_id}', [OrderController::class,'order_show_view'])->name('orders_list.order_show_view');
+
+Route::get('orders/entregadas', [OrderController::class,'orders_entregadas'])->name('orders_entregadas');
+Route::get('orders/entregadas/show/{order_id}', [OrderController::class,'order_entregadas_show_view'])->name('orders_entregadas.order_show_view');
+Route::get('reportes/list', [OrderController::class,'reportes'])->name('reportes.list');
+
+

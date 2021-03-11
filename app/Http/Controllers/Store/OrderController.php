@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -34,6 +35,11 @@ class OrderController extends Controller
         return view('store.orders.index');
     }
     public function order_show_view($order_id)
+    {
+        //
+        return view('store.orders.show',['order_id'=>$order_id]);
+    }
+    public function order_entregadas_show_view($order_id)
     {
         //
         return view('store.orders.show',['order_id'=>$order_id]);
@@ -281,4 +287,42 @@ class OrderController extends Controller
         $order->save();
         return response()->json(['status'=>'1']);
     }
+    public function reportes(){
+        return view('admin.report.index');
+    }
+
+    public function pendientes(){
+        return Order::where('state',1)->get()->count();
+    }
+    public function empacados(){
+        return Order::where('state',2)->get()->count();
+    }
+    public function encamino(){
+        return Order::where('state',3)->get()->count();
+    }
+    public function ingresos($desde,$hasta){
+
+        // return "$desde,$hasta";
+        $ingresos= DB::table('orders')
+        ->join('order_products','order_products.order_id','=','orders.id')
+        ->join('products','order_products.product_id','=','products.id')
+        ->groupBy('orders.fecha_pedido')
+        ->orderBy('fecha_pedido','asc')
+        ->select('orders.fecha_pedido',DB::raw('SUM(order_products.quantity*order_products.pu) as ingreso'))
+        ->whereBetween('fecha_pedido',[$desde,$hasta])
+        ->get();
+
+        $arreglo=Array();
+        foreach ($ingresos as $key => $value) {
+            # code...
+            $arreglo[$value->fecha_pedido]=$this->numero($value->ingreso);
+        }
+
+        return $arreglo;
+    }
+    protected function numero($num){
+        return Round($num * 100) / 100;
+    }
+
+
 }

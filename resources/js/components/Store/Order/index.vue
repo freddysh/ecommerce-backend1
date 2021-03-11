@@ -11,7 +11,7 @@
               <div v-for="(item, key) in items" :key="key">
                 <div class="card" v-if="item.state == 1">
                   <div class="p-1 card-body">
-                    <a :href="`orders/show/${item.id}`">
+                    <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}
@@ -57,7 +57,7 @@
               <div v-for="(item, key) in items" :key="key">
                 <div class="card" v-if="item.state == 2">
                   <div class="p-1 card-body">
-                    <a :href="`orders/show/${item.id}`">
+                    <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}
@@ -104,7 +104,7 @@
               <div v-for="(item, key) in items" :key="key">
                 <div class="card" v-if="item.state == 3">
                   <div class="p-1 card-body">
-                    <a :href="`orders/show/${item.id}`">
+                    <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}

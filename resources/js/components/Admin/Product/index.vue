@@ -37,10 +37,16 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-xl" role="document">
+        <div
+          class="modal-dialog modal-xl"
+          role="document"
+        >
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+              <h5
+                class="modal-title"
+                id="exampleModalLabel"
+              >
                 {{ tituloModal }}
               </h5>
               <button
@@ -109,8 +115,7 @@
                           v-for="(brand_, key) in brands"
                           :key="key"
                           :value="brand_.value"
-                          >{{ brand_.text }}</option
-                        >
+                        >{{ brand_.text }}</option>
                       </select>
                     </div>
                   </div>
@@ -126,8 +131,7 @@
                           v-for="(unit_, key) in units"
                           :key="key"
                           :value="unit_.value"
-                          >{{ unit_.text }}</option
-                        >
+                        >{{ unit_.text }}</option>
                       </select>
                     </div>
                   </div>
@@ -214,13 +218,14 @@
                   </div>
                   <div class="col col-sm-12 col-md-3">
                     <div class="form-group">
-                      <label for="my-checkbox"
-                        >El producto tiene limite de stock?</label
-                      >
+                      <label for="my-checkbox">El producto tiene limite de stock?</label>
                       <vs-switch v-model="product.limit" />
                     </div>
                   </div>
-                  <div class="col col-sm-12 col-md-3" v-if="product.limit">
+                  <div
+                    class="col col-sm-12 col-md-3"
+                    v-if="product.limit"
+                  >
                     <div class="form-group">
                       <label for="url">Stock</label>
                       <input
@@ -234,7 +239,10 @@
                       />
                     </div>
                   </div>
-                  <div class="col col-sm-12 col-md-6" v-if="product.limit">
+                  <div
+                    class="col col-sm-12 col-md-6"
+                    v-if="product.limit"
+                  >
                     <div class="form-group">
                       <label>Ingrese el rango de fechas:</label>
                       <date-picker
@@ -252,9 +260,10 @@
                         lang="es"
                         @change="onFileChanges"
                       />
-                      <label class="custom-file-label" for="photos"
-                        >Imagenes (solo formato jpg|jpeg)</label
-                      >
+                      <label
+                        class="custom-file-label"
+                        for="photos"
+                      >Imagenes (solo formato jpg|jpeg)</label>
                     </div>
                   </div>
 
@@ -268,13 +277,14 @@
                         <div class="row">
                           <div class="col-md-12">Imagen {{ key + 1 }}</div>
                           <div class="col-md-12">
-                            <img class="output w-50" :src="imagen.imgSrc" />
+                            <img
+                              class="output w-50"
+                              :src="imagen.imgSrc"
+                            />
                           </div>
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label :for="`principal${key}`"
-                                >Convertir en principal</label
-                              >
+                              <label :for="`principal${key}`">Convertir en principal</label>
                               <vs-switch v-model="imagen.state" />
                             </div>
                           </div>
@@ -302,7 +312,11 @@
               >
                 Cerrar
               </button>
-              <button type="button" class="btn btn-primary" @click="handleOk">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="handleOk"
+              >
                 Guardar
               </button>
             </div>
@@ -317,13 +331,25 @@
           >
             <thead>
               <tr>
-                <th scope="col" v-for="(item, key) in fields" :key="key">
+                <th
+                  scope="col"
+                  v-for="(item, key) in fields"
+                  :key="key"
+                >
                   {{ item.label }}
                 </th>
               </tr>
             </thead>
-            <paginate name="itemss" :list="itemss" :per="10" tag="tbody">
-              <tr v-for="(item, key) in paginated('itemss')" :key="key">
+            <paginate
+              name="itemss"
+              :list="itemss"
+              :per="10"
+              tag="tbody"
+            >
+              <tr
+                v-for="(item, key) in paginated('itemss')"
+                :key="key"
+              >
                 <td scope="row">{{ key + 1 }}</td>
                 <td>{{ item.code }}</td>
                 <td>{{ item.name }}</td>
@@ -334,10 +360,16 @@
                   />
                 </td>
                 <td>
-                  <button class="btn btn-warning" @click="editar(item)">
+                  <button
+                    class="btn btn-warning"
+                    @click="editar(item)"
+                  >
                     <i class="fas fa-edit"></i>Editar
                   </button>
-                  <button class="btn btn-danger" @click="borrar(item.id)">
+                  <button
+                    class="btn btn-danger"
+                    @click="borrar(item.id)"
+                  >
                     <i class="fas fa-trash-alt"></i> Eliminar
                   </button>
                 </td>
