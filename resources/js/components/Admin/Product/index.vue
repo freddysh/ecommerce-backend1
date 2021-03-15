@@ -409,11 +409,18 @@
                 </td>
                 <td>
                   <img
-                    :src="item.photo"
+                    v-if="obj.state"
+                    v-for="(obj,key) in item.photos"
+                    :key="key"
+                    :src="obj.imgSrc"
                     width="50px"
                     height="50px"
                     alt=""
                   >
+                  <span
+                    class="text-gray-500"
+                    v-if="item.photos.length==0"
+                  >Sin imagen</span>
                 </td>
                 <td>
                   <button
@@ -633,9 +640,6 @@ export default {
           imgSrc: phot.photo ? `/api/v1/products/imagen/${phot.photo}` : "",
           state: phot.state ? true : false
         })),
-        photo: obj.photos.map(phot =>
-          phot.state == 1 ? `/api/v1/products/imagen/${phot.photo}` : ""
-        ),
         state: obj.state ? true : false,
         opciones: obj.id,
         created_at: obj.created_at
