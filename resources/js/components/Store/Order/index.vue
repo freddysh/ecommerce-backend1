@@ -8,17 +8,21 @@
               NUEVOS PEDIDOS
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
-              <div v-for="(item, key) in items" :key="key">
-                <div class="card" v-if="item.state == 1">
+              <div
+                v-for="(item, key) in items"
+                :key="key"
+              >
+                <div
+                  class="card"
+                  v-if="item.state == 1"
+                >
                   <div class="p-1 card-body">
                     <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}
                         </div>
-                        <div
-                          class="text-right col-4 col-lg-4 text-success text-bold"
-                        >
+                        <div class="text-right col-4 col-lg-4 text-success text-bold">
                           S/. {{ item.total }}
                         </div>
                         <div class="text-sm col-12 text-secondary text-bold">
@@ -51,20 +55,27 @@
         <div class="col-4">
           <div class="card">
             <div class="card-header bg-warning">
-              NUEVOS EN EMPACADO <i class="fa fa-cubes" aria-hidden="true"></i>
+              NUEVOS EN EMPACADO <i
+                class="fa fa-cubes"
+                aria-hidden="true"
+              ></i>
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
-              <div v-for="(item, key) in items" :key="key">
-                <div class="card" v-if="item.state == 2">
+              <div
+                v-for="(item, key) in items"
+                :key="key"
+              >
+                <div
+                  class="card"
+                  v-if="item.state == 2"
+                >
                   <div class="p-1 card-body">
                     <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}
                         </div>
-                        <div
-                          class="text-right col-4 col-lg-4 text-success text-bold"
-                        >
+                        <div class="text-right col-4 col-lg-4 text-success text-bold">
                           S/. {{ item.total }}
                         </div>
                         <div class="text-sm col-12 text-secondary text-bold">
@@ -98,20 +109,27 @@
           <div class="card">
             <div class="card-header bg-primary">
               NUEVOS EN ENCAMINO
-              <i class="fa fa-truck" aria-hidden="true"></i>
+              <i
+                class="fa fa-truck"
+                aria-hidden="true"
+              ></i>
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
-              <div v-for="(item, key) in items" :key="key">
-                <div class="card" v-if="item.state == 3">
+              <div
+                v-for="(item, key) in items"
+                :key="key"
+              >
+                <div
+                  class="card"
+                  v-if="item.state == 3"
+                >
                   <div class="p-1 card-body">
                     <a :href="`../orders/list/show/${item.id}`">
                       <div class="row">
                         <div class="col-8 col-lg-8 text-primary text-bold">
                           {{ item.full_name }}
                         </div>
-                        <div
-                          class="text-right col-4 col-lg-4 text-success text-bold"
-                        >
+                        <div class="text-right col-4 col-lg-4 text-success text-bold">
                           S/.
                           {{ numero(numero(item.total) + numero(item.tax)) }}
                         </div>
@@ -218,7 +236,7 @@ export default {
       console.log(rpt);
       this.items = rpt;
       //   this.items = rpt.data.filter(a => a.state == 1);
-      this.items.sort((a, b) => a.fecha_entrega - b.fecha_entrega);
+      this.items.sort((a, b) => b.fecha_entrega - a.fecha_entrega);
     },
     numero(num) {
       return Math.round(num * 100) / 100;

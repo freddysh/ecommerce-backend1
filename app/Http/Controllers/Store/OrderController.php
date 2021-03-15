@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Mail\OrderMail;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -204,6 +206,7 @@ class OrderController extends Controller
             }
 
         }
+        $this->enviarMail($order->id);
         return response()->json(['status'=>'1']);
 
         } catch (\Exception $th) {
@@ -313,16 +316,29 @@ class OrderController extends Controller
         ->get();
 
         $arreglo=Array();
+        $total=0;
         foreach ($ingresos as $key => $value) {
             # code...
             $arreglo[$value->fecha_pedido]=$this->numero($value->ingreso);
+            $total+=$value->ingreso;
         }
 
-        return $arreglo;
+        return response()->json(['ingresos'=>$arreglo,'total'=>$total]);
     }
     protected function numero($num){
         return Round($num * 100) / 100;
     }
 
+    protected function enviarMail($order_id=1){
 
+        $order=Order::with(['cliente','productos_ordenados.producto.categorias','productos_ordenados.producto.photos'])
+        ->where('id',$order_id)->get()->first();
+        $destinatario = $order->cliente->email;
+        // $order = "Listado de ordenes";
+        // $nombre = "Luis Cabrera Benito";
+        // Armar correo y pasarle datos para el constructor
+        $correo = new OrderMail($order);
+        # ¡Enviarlo!
+        Mail::to($destinatario)->send($correo);
+    }
 }

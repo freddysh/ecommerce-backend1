@@ -11,9 +11,10 @@
               lang="es"
               @change="onFileChange"
             />
-            <label class="custom-file-label" for="photos"
-              >Imagenes (solo formato jpg|jpeg)</label
-            >
+            <label
+              class="custom-file-label"
+              for="photos"
+            >Imagenes (solo formato jpg|jpeg)</label>
           </div>
         </div>
 
@@ -33,7 +34,7 @@
             id="btn-importar"
             @click="importarExcel()"
           >
-            <i class="las la-file-excel"></i> Importar
+            <i class="las la-file-excel"></i> Vista Previa
           </button>
         </div>
       </div>
@@ -55,7 +56,22 @@
         <b class="text-danger">{{ mensajepre }}</b>
       </p>
       <div class="row">
-        <div class="col-12">
+
+        <div class="text-center col-12">
+          <div
+            v-if="loadder"
+            class="spinner-border text-primary"
+            style="width: 3rem; height: 3rem;"
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div
+          class="col-12"
+          v-if="!loadder"
+        >
+
           <table
             v-if="items"
             class="table table-striped table-hover table-condensed"
@@ -63,13 +79,20 @@
           >
             <thead>
               <tr>
-                <th scope="col" v-for="(item, key) in fields" :key="key">
+                <th
+                  scope="col"
+                  v-for="(item, key) in fields"
+                  :key="key"
+                >
                   {{ item.label }}
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, key) in items" :key="key">
+              <tr
+                v-for="(item, key) in items"
+                :key="key"
+              >
                 <td>
                   <span> {{ item.codigo.dato }} </span><br />
                   <span
@@ -93,7 +116,10 @@
                 </td>
                 <td>
                   <span> {{ item.marca.dato }} </span><br />
-                  <span v-if="item.marca.error.error == 0" class="text-success">
+                  <span
+                    v-if="item.marca.error.error == 0"
+                    class="text-success"
+                  >
                     {{ item.marca.error.msj }}
                   </span>
                   <span
@@ -258,7 +284,10 @@
                 </td>
                 <td>
                   <span> {{ item.stock.dato }} </span><br />
-                  <span v-if="item.stock.error.error == 0" class="text-success">
+                  <span
+                    v-if="item.stock.error.error == 0"
+                    class="text-success"
+                  >
                     {{ item.stock.error.msj }}
                   </span>
                   <span
@@ -363,6 +392,7 @@ export default {
   created() {},
   data() {
     return {
+      loadder: false,
       import_file: null,
       test: {
         activeLabel: "Yes",
@@ -491,6 +521,7 @@ export default {
   },
   methods: {
     importarExcel1() {
+      this.loadder = true;
       let formData = new FormData();
       formData.append("import_file", this.import_file);
       Axios.post(
@@ -510,15 +541,17 @@ export default {
           } else {
             console.log("error al subir el excel");
           }
+          this.loadder = false;
         })
         .catch(error => {
           // this.error = error.response.data
-
           this.codigopre = 0;
           this.mensajepre = "Error en el formato del archivo subido";
+          this.loadder = false;
         });
     },
     importarExcel1Ya() {
+      this.loadder = true;
       let formData = new FormData();
       formData.append("import_file", this.import_file);
       Axios.post(
@@ -536,12 +569,17 @@ export default {
             this.errores = 0;
             this.codigo = 1;
             this.mensaje = "Datos guardados correctamente";
+          } else {
+            console.log("error al subir el excel");
           }
+          this.loadder = false;
         })
         .catch(error => {
           // this.error = error.response.data
           this.codigo = 0;
           this.mensaje = "Error al guardar los datos";
+
+          this.loadder = false;
         });
     },
     importarExcel() {

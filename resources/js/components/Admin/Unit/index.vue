@@ -7,7 +7,7 @@
             <input
               type="text"
               class="form-control"
-              id="name"
+              id="nameBuscar"
               v-model="valorBuscar"
               required
               placeholder="Buscar"
@@ -37,10 +37,16 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog" role="document">
+        <div
+          class="modal-dialog"
+          role="document"
+        >
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+              <h5
+                class="modal-title"
+                id="exampleModalLabel"
+              >
                 {{ tituloModal }}
               </h5>
               <button
@@ -53,21 +59,28 @@
               </button>
             </div>
             <div class="modal-body">
-              <form ref="form">
+              <form>
                 <div class="form-group">
-                  <label for="name">Nombre</label>
+                  <label for="nombre">Nombre</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="name"
+                    name="nombre"
                     aria-describedby="nameHelp"
                     placeholder="Ingrese el nombre"
                     v-model="brand.name"
-                    required
+                    v-validate="'required|alpha_spaces'"
+                    :class="{'input': true, 'danger': errors.has('nombre') }"
                   />
-                  <small id="nameHelp" class="form-text text-muted"
-                    >El nombre es requerido</small
-                  >
+                  <i
+                    v-show="errors.has('nombre')"
+                    class="fa fa-warning"
+                  ></i>
+                  <span
+                    v-show="errors.has('nombre')"
+                    class="help text-danger"
+                  >{{ errors.first('nombre') }}</span>
+
                 </div>
               </form>
             </div>
@@ -79,7 +92,11 @@
               >
                 Cerrar
               </button>
-              <button type="button" class="btn btn-primary" @click="handleOk">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="agregar"
+              >
                 Guardar
               </button>
             </div>
@@ -93,21 +110,39 @@
       >
         <thead>
           <tr>
-            <th scope="col" v-for="(item, key) in fields" :key="key">
+            <th
+              scope="col"
+              v-for="(item, key) in fields_"
+              :key="key"
+            >
               {{ item.label }}
             </th>
           </tr>
         </thead>
-        <paginate name="itemss" :list="itemss" :per="10" tag="tbody">
-          <tr v-for="(item, key) in paginated('itemss')" :key="key">
+        <paginate
+          name="itemss"
+          :list="itemss"
+          :per="10"
+          tag="tbody"
+        >
+          <tr
+            v-for="(item, key) in paginated('itemss')"
+            :key="key"
+          >
             <td scope="row">{{ key + 1 }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.state }}</td>
             <td>
-              <button class="btn btn-warning" @click="editar(item)">
+              <button
+                class="btn btn-warning"
+                @click="editar(item)"
+              >
                 <i class="fas fa-edit"></i>Editar
               </button>
-              <button class="btn btn-danger" @click="borrar(item.id)">
+              <button
+                class="btn btn-danger"
+                @click="borrar(item.id)"
+              >
                 <i class="fas fa-trash-alt"></i> Eliminar
               </button>
             </td>
@@ -138,7 +173,7 @@ export default {
   name: "Brand",
   //   components: { AddSocialPost, SocialPost },
   mounted() {
-    core.index();
+    // core.index();
   },
   created() {
     this.index();
@@ -153,7 +188,7 @@ export default {
         opciones: 0
         // nameState: null,
       },
-      fields: [
+      fields_: [
         { key: "id", label: "#" },
         { key: "name", label: "Nombre" },
         // {key:'photo',label:'Imagen'},
@@ -193,7 +228,7 @@ export default {
       this.items = rpt;
       this.items.sort((a, b) => b.name - a.name);
     },
-    async agregar() {
+    async agregar_() {
       console.log("agregar");
       // if(this.post.titulo.trim().length==0)
       //     return;
@@ -213,6 +248,13 @@ export default {
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       } else {
         // Agregamos
@@ -229,9 +271,28 @@ export default {
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          //   Vue.swal("Hello Vue world!!!");
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       }
     },
+
+    agregar() {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.agregar_();
+
+          this.toggleModal();
+        }
+      });
+    },
+
     toggleModal() {
       // We pass the ID of the button that we want to return focus to
       // when the modal has hidden
@@ -254,9 +315,22 @@ export default {
       }
     },
     borrar(brand_id) {
-      if (confirm("Estas seguro de borra este dato?")) {
-        this.delete(brand_id);
-      }
+      Vue.swal
+        .fire({
+          title: "Esta seguro de borrar este dato?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Borrar!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.delete(brand_id);
+          }
+        });
     },
     createImage(file) {
       const reader = new FileReader();

@@ -2,18 +2,72 @@
   <div class="card">
     <div class="p-2 card-body">
       <div class="row">
-        <div class="col-6">
-          <span>Top(5) productos mas vendidos</span>
 
-          <GChart
-            type="PieChart"
-            :data="top_chartData"
-          />
+        <div class="col-12">
+          <span>Situacion de las ventas</span>
+          <div class="row">
+            <div class="col-5">
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic example"
+              >
+                <button
+                  type="button"
+                  :class="`btn btn-primary ${opcion==1?'active':''}`"
+                  @click="switcher(1)"
+                >Dia</button>
+                <button
+                  type="button"
+                  :class="`btn btn-primary ${opcion==2?'active':''}`"
+                  @click="switcher(2)"
+                >Mes</button>
+                <button
+                  type="button"
+                  :class="`btn btn-primary ${opcion==3?'active':''}`"
+                  @click="switcher(3)"
+                >Año</button>
+              </div>
+            </div>
+            <div class="text-right col-6">
+              <date-picker
+                v-model="rango_fecha"
+                range
+              ></date-picker>
+            </div>
+            <div class="text-left col-1">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="filtrar_ingresos()"
+              ><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p class="text-bold">Total ventas S/. {{ ventaTotal }}</p>
+              <div class="text-center">
+                <div
+                  v-if="loadder"
+                  class="spinner-border text-primary"
+                  style="width: 3rem; height: 3rem;"
+                  role="status"
+                >
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <line-chart
+                v-if="!loadder"
+                :data="ingresos"
+              ></line-chart>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <div class="row">
-        <div class="col-4">
+        <div class="col-6">
           <span>Situacion actual de las ordenes</span>
           <table class="table table-striped table-sm table-responsive">
             <thead>
@@ -39,53 +93,14 @@
             </tbody>
           </table>
         </div>
-        <div class="col-8">
 
-          <span>Situacion de las ordenes</span>
-          <div class="row">
-            <div class="col-5">
-              <div
-                class="btn-group"
-                role="group"
-                aria-label="Basic example"
-              >
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="switcher(1)"
-                >Dia</button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="switcher(2)"
-                >Mes</button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="switcher(3)"
-                >Año</button>
-              </div>
-            </div>
-            <div class="col-6">
-              <date-picker
-                v-model="rango_fecha"
-                range
-              ></date-picker>
-            </div>
-            <div class="text-left col-1">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="filtrar_ingresos()"
-              ><i class="fas fa-search"></i></button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <line-chart :data="ingresos"></line-chart>
-            </div>
-          </div>
+        <div class="col-6">
+          <span>Top(5) productos mas vendidos</span>
 
+          <GChart
+            type="PieChart"
+            :data="top_chartData"
+          />
         </div>
       </div>
     </div>
@@ -122,7 +137,10 @@ export default {
       encamino: 0,
       top_chartData: [["Producto", "Cantidad"]],
       ingresos: {},
-      rango_fecha: Array(new Date(), new Date())
+      rango_fecha: Array(new Date(), new Date()),
+      ventaTotal: 0,
+      opcion: 1,
+      loadder: false
     };
   },
   methods: {
@@ -159,6 +177,7 @@ export default {
       this.encamino = datos.data;
     },
     async ingresos_() {
+      this.loadder = true;
       let datos = await Axios.get(
         `${
           process.env.MIX_MIX_APP_URL
@@ -169,12 +188,16 @@ export default {
         )}`
       );
       console.log("ingresos:" + datos.data);
-      this.ingresos = datos.data;
+      this.ingresos = datos.data.ingresos;
+      this.ventaTotal = datos.data.total;
+
+      this.loadder = false;
     },
     numero(num) {
       return Math.round(num * 100) / 100;
     },
     switcher(opcion) {
+      this.opcion = opcion;
       if (opcion == 1) {
         this.rango_fecha = Array(new Date(), new Date());
       }

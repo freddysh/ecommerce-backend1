@@ -21,6 +21,35 @@ Vue.use(require('vue-moment'));
 import Chartkick from 'vue-chartkick'
 import Chart from 'chart.js'
 Vue.use(Chartkick.use(Chart))
+
+import es from 'vee-validate/dist/locale/es'
+// Importa VeeValidate y el Validator
+import VeeValidate, { Validator } from "vee-validate";
+Vue.use(VeeValidate);
+// Indicar uso de idioma español
+Validator.localize("es", es);
+
+// Agregamos el swwet-alert2
+import VueSweetalert2 from 'vue-sweetalert2';
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2);
+
+// Ahora agregamos su toast
+import VueToast from 'vue-toast-notification';
+// Import one of the available themes
+//import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast);
+//Vue.$toast.open({/* options */});
+let instance = Vue.$toast.open('You did it!');
+
+// Force dismiss specific toast
+instance.dismiss();
+// Dismiss all opened toast immediately
+Vue.$toast.clear();
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

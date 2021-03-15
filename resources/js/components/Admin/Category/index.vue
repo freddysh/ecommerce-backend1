@@ -37,10 +37,16 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog" role="document">
+        <div
+          class="modal-dialog"
+          role="document"
+        >
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+              <h5
+                class="modal-title"
+                id="exampleModalLabel"
+              >
                 {{ tituloModal }}
               </h5>
               <button
@@ -55,19 +61,26 @@
             <div class="modal-body">
               <form ref="form">
                 <div class="form-group">
-                  <label for="name">Nombre</label>
+                  <label for="name">nombre</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="name"
+                    name="nombre"
                     aria-describedby="nameHelp"
                     placeholder="Ingrese el nombre"
                     v-model="brand.name"
-                    required
+                    v-validate="'required|alpha_spaces'"
+                    :class="{'input': true, 'danger': errors.has('nombre') }"
                   />
-                  <small id="nameHelp" class="form-text text-muted"
-                    >El nombre es requerido</small
-                  >
+                  <i
+                    v-show="errors.has('nombre')"
+                    class="fa fa-warning"
+                  ></i>
+                  <span
+                    v-show="errors.has('nombre')"
+                    class="help text-danger"
+                  >{{ errors.first('nombre') }}</span>
+
                 </div>
                 <div class="form-group">
                   <label for="description">Descripcion</label>
@@ -87,15 +100,19 @@
                     required
                     @change="onFileChange"
                   />
-                  <label class="custom-file-label" for="customFile"
-                    >Escoja una imagen</label
-                  >
+                  <label
+                    class="custom-file-label"
+                    for="customFile"
+                  >Escoja una imagen</label>
                   <div class="invalid-feedback">
                     Suba una imagen
                   </div>
                 </div>
 
-                <div class="card" v-if="brand.photo">
+                <div
+                  class="card"
+                  v-if="brand.photo"
+                >
                   <div class="card-body">
                     <div class="row">
                       <div class="col-10">Imagen subida</div>
@@ -111,7 +128,10 @@
                     </div>
                     <div class="row">
                       <div class="text-center col-6">
-                        <img class="output w-100" :src="brand.photo" />
+                        <img
+                          class="output w-100"
+                          :src="brand.photo"
+                        />
                       </div>
                     </div>
                   </div>
@@ -126,7 +146,11 @@
               >
                 Cerrar
               </button>
-              <button type="button" class="btn btn-primary" @click="handleOk">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="agregar"
+              >
                 Guardar
               </button>
             </div>
@@ -140,13 +164,25 @@
       >
         <thead>
           <tr>
-            <th scope="col" v-for="(item, key) in fields" :key="key">
+            <th
+              scope="col"
+              v-for="(item, key) in fields_"
+              :key="key"
+            >
               {{ item.label }}
             </th>
           </tr>
         </thead>
-        <paginate name="itemss" :list="itemss" :per="10" tag="tbody">
-          <tr v-for="(item, key) in paginated('itemss')" :key="key">
+        <paginate
+          name="itemss"
+          :list="itemss"
+          :per="10"
+          tag="tbody"
+        >
+          <tr
+            v-for="(item, key) in paginated('itemss')"
+            :key="key"
+          >
             <td scope="row">{{ key + 1 }}</td>
             <td>{{ item.name }}</td>
             <td>
@@ -160,10 +196,16 @@
             <td>{{ item.state }}</td>
             <td>{{ item.father_id }}</td>
             <td>
-              <button class="btn btn-warning" @click="editar(item)">
+              <button
+                class="btn btn-warning"
+                @click="editar(item)"
+              >
                 <i class="fas fa-edit"></i>Editar
               </button>
-              <button class="btn btn-danger" @click="borrar(item.id)">
+              <button
+                class="btn btn-danger"
+                @click="borrar(item.id)"
+              >
                 <i class="fas fa-trash-alt"></i> Eliminar
               </button>
             </td>
@@ -211,7 +253,7 @@ export default {
         father_id: 0,
         nameState: null
       },
-      fields: [
+      fields_: [
         {
           key: "id",
           label: "#"
@@ -259,7 +301,7 @@ export default {
   },
   methods: {
     async index() {
-      this.items = [];
+      //   this.items = [];
       let datos = await Axios.get(
         `${process.env.MIX_MIX_APP_URL}/api/v1/categories`
       );
@@ -276,7 +318,7 @@ export default {
       this.items = rpt;
       this.items.sort((a, b) => b.name - a.name);
     },
-    async agregar() {
+    async agregar_() {
       console.log("agregar");
       // if(this.post.titulo.trim().length==0)
       //     return;
@@ -291,11 +333,18 @@ export default {
           this.brand
         );
         console.log("rpt;", datos.data);
-        if (datos.data.status == 1) {
+        if (datos.data.state == 1) {
           // alert('datos editados')
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       } else {
         // Agregamos
@@ -306,13 +355,29 @@ export default {
           this.brand
         );
         console.log("rpt;", datos.data);
-        if (datos.data.status == 1) {
+        if (datos.data.state == 1) {
           // alert('datos guardados')
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       }
+    },
+    agregar() {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.agregar_();
+
+          this.toggleModal();
+        }
+      });
     },
     toggleModal() {
       // We pass the ID of the button that we want to return focus to
@@ -330,15 +395,30 @@ export default {
         `${process.env.MIX_MIX_APP_URL}/api/v1/categories/${brand_id}`
       );
       console.log("rpt;", datos.data);
-      if (datos.data.status == 1) {
+      if (datos.data.state == 1) {
         // alert('datos guardados')
         this.index();
       }
     },
     borrar(brand_id) {
-      if (confirm("Estas seguro de borra este dato?")) {
-        this.delete(brand_id);
-      }
+      Vue.swal
+        .fire({
+          title: "Esta seguro de borrar este dato?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Borrar!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.delete(brand_id);
+          }
+        });
+      //   if (confirm("Estas seguro de borra este dato?")) {
+      //   }
     },
     createImage(file) {
       const reader = new FileReader();

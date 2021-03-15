@@ -51,3 +51,4 @@ Route::get('/v1/orders/others/pendientes',[OrderController::class,'pendientes'])
 Route::get('/v1/orders/others/empacados',[OrderController::class,'empacados'])->name('orders.empacados');
 Route::get('/v1/orders/others/encamino',[OrderController::class,'encamino'])->name('orders.encamino');
 Route::get('/v1/orders/others/ingresos/{desde}/{hasta}',[OrderController::class,'ingresos'])->name('orders.ingresos');
+Route::get('/v1/orders/others/enviar-mail',[OrderController::class,'enviarMail'])->name('orders.enviarMail');

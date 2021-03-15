@@ -7,7 +7,7 @@
             <input
               type="text"
               class="form-control"
-              id="name"
+              id="nameBuscar"
               v-model="valorBuscar"
               required
               placeholder="Buscar"
@@ -68,11 +68,21 @@
                         type="text"
                         class="form-control"
                         id="code"
+                        name="codigo"
                         aria-describedby="nameHelp"
                         placeholder="Ingrese el codigo"
                         v-model="product.code"
-                        required
+                        v-validate="'required|alpha_num'"
+                        :class="{'input': true, 'danger': errors.has('codigo') }"
                       />
+                      <i
+                        v-show="errors.has('codigo')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('codigo')"
+                        class="help text-danger"
+                      >{{ errors.first('codigo') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-4">
@@ -82,11 +92,21 @@
                         type="text"
                         class="form-control"
                         id="name"
+                        name="nombre"
                         aria-describedby="nameHelp"
                         placeholder="Ingrese el nombre"
                         v-model="product.name"
-                        required
+                        v-validate="'required'"
+                        :class="{'input': true, 'danger': errors.has('nombre') }"
                       />
+                      <i
+                        v-show="errors.has('nombre')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('nombre')"
+                        class="help text-danger"
+                      >{{ errors.first('nombre') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-4">
@@ -96,11 +116,22 @@
                         type="text"
                         class="form-control"
                         id="url"
+                        name="url"
                         aria-describedby="urlHelp"
                         placeholder="Ingrese la url"
                         v-model="url"
-                        required
+                        v-validate="'required|alpha_dash'"
+                        :class="{'input': true, 'danger': errors.has('url') }"
                       />
+
+                      <i
+                        v-show="errors.has('url')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('url')"
+                        class="help text-danger"
+                      >{{ errors.first('url') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-2">
@@ -109,6 +140,7 @@
                       <select
                         class="form-control"
                         id="brand"
+                        name="brand"
                         v-model="product.brand"
                       >
                         <option
@@ -125,6 +157,7 @@
                       <select
                         class="form-control"
                         id="unit"
+                        name="unit"
                         v-model="product.unit"
                       >
                         <option
@@ -155,8 +188,10 @@
                       <textarea
                         class="form-control"
                         id="description"
+                        name="descripcion"
                         rows="5"
                         v-model="product.description"
+                        v-validate="'required'"
                       ></textarea>
                     </div>
                   </div>
@@ -166,8 +201,10 @@
                       <textarea
                         class="form-control"
                         id="detail"
+                        name="detalle"
                         rows="5"
                         v-model="product.detail"
+                        v-validate="'required'"
                       ></textarea>
                     </div>
                   </div>
@@ -179,11 +216,13 @@
                         type="number"
                         class="form-control"
                         id="price"
+                        name="precio"
                         placeholder="Ingrese el precio"
                         v-model="product.price"
                         required
                         step="0.10"
-                        min="0"
+                        min="1"
+                        v-validate="'decimal:2'"
                       />
                     </div>
                   </div>
@@ -194,10 +233,12 @@
                         type="number"
                         class="form-control"
                         id="discount"
+                        name="descuento"
                         placeholder="Ingrese el descuento"
                         v-model="product.discount"
                         required
                         min="0"
+                        v-validate="'decimal:2'"
                       />
                     </div>
                   </div>
@@ -207,12 +248,14 @@
                       <input
                         type="number"
                         class="form-control"
-                        id="discount"
+                        id="regular_price"
+                        name="precio regular"
                         placeholder="Ingrese el precio regular"
                         v-model="precio"
                         required
                         step="0.10"
                         min="0"
+                        v-validate="'decimal:2'"
                       />
                     </div>
                   </div>
@@ -235,7 +278,7 @@
                         placeholder="Ingrese el stock"
                         v-model="product.stock"
                         required
-                        min="0"
+                        min="1"
                       />
                     </div>
                   </div>
@@ -257,8 +300,10 @@
                         type="file"
                         class="custom-file-input"
                         id="photos"
+                        name="imagen"
                         lang="es"
                         @change="onFileChanges"
+                        v-validate="'image'"
                       />
                       <label
                         class="custom-file-label"
@@ -315,7 +360,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="handleOk"
+                @click="agregar"
               >
                 Guardar
               </button>
@@ -333,7 +378,7 @@
               <tr>
                 <th
                   scope="col"
-                  v-for="(item, key) in fields"
+                  v-for="(item, key) in fields_"
                   :key="key"
                 >
                   {{ item.label }}
@@ -358,6 +403,17 @@
                     v-model="item.state"
                     @click="cambiar_estado(item.id, item.state)"
                   />
+                </td>
+                <td>
+                  {{moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a') }}
+                </td>
+                <td>
+                  <img
+                    :src="item.photo"
+                    width="50px"
+                    height="50px"
+                    alt=""
+                  >
                 </td>
                 <td>
                   <button
@@ -435,15 +491,17 @@ export default {
         stock: 0,
         limit: true,
         rango_fecha: Array(new Date(), new Date()),
+        photo: "",
         unit: "",
         brand: "",
         categorias: [],
         photos: [],
         state: true,
         opciones: 0,
-        nameState: null
+        nameState: null,
+        created_at: ""
       },
-      fields: [
+      fields_: [
         {
           key: "id",
           label: "#"
@@ -459,6 +517,14 @@ export default {
         {
           key: "state",
           label: "Estado"
+        },
+        {
+          key: "created_at",
+          label: "Creado"
+        },
+        {
+          key: "photo",
+          label: "Miniatura(250px"
         },
         {
           key: "opciones",
@@ -482,13 +548,15 @@ export default {
         stock: 0,
         limit: true,
         rango_fecha: Array(new Date(), new Date()),
+        photo: "",
         unit: "",
         brand: "",
         categorias: [],
         photos: [],
         state: true,
         opciones: 0,
-        nameState: null
+        nameState: null,
+        created_at: ""
       },
       modal: false,
       mostrr: "hide",
@@ -536,7 +604,7 @@ export default {
       //   this.product.valido_desde=new Date().toISOString();
       //   console.log('fecha:'+this.product.valido_desde);
       //   Obtenemos los productos
-      this.items = [];
+      //   this.items = [];
       let datos = await Axios.get(
         `${process.env.MIX_MIX_APP_URL}/api/v1/products`
       );
@@ -565,8 +633,12 @@ export default {
           imgSrc: phot.photo ? `/api/v1/products/imagen/${phot.photo}` : "",
           state: phot.state ? true : false
         })),
+        photo: obj.photos.map(phot =>
+          phot.state == 1 ? `/api/v1/products/imagen/${phot.photo}` : ""
+        ),
         state: obj.state ? true : false,
-        opciones: obj.id
+        opciones: obj.id,
+        created_at: obj.created_at
       }));
       console.log(rpt);
       this.items = rpt;
@@ -575,7 +647,7 @@ export default {
       this.getUnits();
       this.getCategories();
     },
-    async agregar() {
+    async agregar_() {
       console.log("agregar");
       // if(this.post.titulo.trim().length==0)
       //     return;
@@ -598,6 +670,13 @@ export default {
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       } else {
         // Agregamos
@@ -613,8 +692,24 @@ export default {
           this.limpiarCampos();
           // this.ocultar();
           this.index();
+          Vue.$toast.open({
+            message: "Datos guardados correctamente!",
+            type: "success",
+            duration: 6000,
+            position: "top-right"
+            // all of other options may go here
+          });
         }
       }
+    },
+    agregar() {
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.agregar_();
+
+          this.toggleModal();
+        }
+      });
     },
     toggleModal() {
       // We pass the ID of the button that we want to return focus to
@@ -638,9 +733,22 @@ export default {
       }
     },
     borrar(brand_id) {
-      if (confirm("Estas seguro de borra este dato?" + brand_id)) {
-        this.delete(brand_id);
-      }
+      Vue.swal
+        .fire({
+          title: "Esta seguro de borrar este dato?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Borrar!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.delete(brand_id);
+          }
+        });
     },
     async cambiar_estado(brand_id, valor) {
       console.log("evento switch" + brand_id + "," + valor);
