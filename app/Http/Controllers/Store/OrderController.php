@@ -206,7 +206,7 @@ class OrderController extends Controller
             }
 
         }
-        $this->enviarMail($order->id);
+        // $this->enviarMail($order->id);
         return response()->json(['status'=>'1']);
 
         } catch (\Exception $th) {
