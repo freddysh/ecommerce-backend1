@@ -45,7 +45,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <p class="text-bold">Total ventas S/. {{ ventaTotal }}</p>
+              <p class="text-bold">Total ventas S/. {{ numero(ventaTotal) }}</p>
               <div class="text-center">
                 <div
                   v-if="loadder"
@@ -146,7 +146,7 @@ export default {
   methods: {
     async index() {
       let datos = await Axios.get(
-        `${process.env.MIX_MIX_APP_URL}/api/v1/products/others/tops`
+        `${process.env.MIX_MIX_APP_URL}/api/v1/products/others/5`
       );
       console.log("tops" + datos.data);
       let rpt = datos.data.map(item => [

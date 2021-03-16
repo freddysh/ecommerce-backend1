@@ -25,7 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Products
 Route::apiResource('/v1/products',ProductController::class);
 Route::get('/v1/products/others/listado/{categorias}',[ProductController::class,'listado'])->name('products.listado');
-Route::get('/v1/products/others/tops',[ProductController::class,'tops5'])->name('products.tops');
+Route::get('/v1/products/others/tops',[ProductController::class,'tops'])->name('products.tops');
+Route::get('/v1/products/others/tops5',[ProductController::class,'tops5'])->name('products.tops');
 Route::get('/v1/products/imagen/{imagen}',[ProductController::class,'get_imagen'])->name('products.get_imagen');
 Route::get('/v1/products/swith-state/{product_id}/{valor}',[ProductController::class,'switch_state'])->name('products.get_imagen');
 Route::post('/v1/products/importar-excel',[ProductController::class,'importar_excel'])->name('products.importar_excel');

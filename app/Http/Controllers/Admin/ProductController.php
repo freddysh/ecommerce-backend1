@@ -299,7 +299,9 @@ class ProductController extends Controller
     public function listado($categorias)
     {
         //
-        $listado=Category::whereIn('name',[$categorias])->get()->pluck('id')->toArray();
+        $categorias=explode(',',$categorias);
+        return $categorias;
+        $listado=Category::whereIn('name',$categorias)->get()->pluck('id')->toArray();
         // return $listado;
         if(!count($listado)){
             return response()->json([]);

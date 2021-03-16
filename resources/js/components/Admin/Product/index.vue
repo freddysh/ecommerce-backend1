@@ -870,7 +870,7 @@ export default {
     },
     itemss() {
       return this.items.filter(valor => {
-        return valor.name
+        return valor.code
           .toLowerCase()
           .includes(this.valorBuscar.toLowerCase());
       });
