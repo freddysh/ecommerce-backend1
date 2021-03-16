@@ -61,17 +61,19 @@ Vue.$toast.clear();
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-Vue.component('brand-component',require('./components/Admin/Brand/index.vue').default);
-Vue.component('unit-component',require('./components/Admin/Unit/index.vue').default);
-Vue.component('category-component',require('./components/Admin/Category/index.vue').default);
-Vue.component('product-component',require('./components/Admin/Product/index.vue').default);
-Vue.component('product-import-component',require('./components/Admin/Product/index-import.vue').default);
-Vue.component('order-component',require('./components/Store/Order/index.vue').default);
-Vue.component('order-view-component',require('./components/Store/Order/show.vue').default);
-Vue.component('orders-entregadas-component',require('./components/Store/Order/orders-entregadas.vue').default);
-Vue.component('report-component',require('./components/Admin/Report/index.vue').default);
+// Vue.component('brand-component',require('./components/Admin/Brand/index.vue').default);
+// Vue.component('unit-component',require('./components/Admin/Unit/index.vue').default);
+// Vue.component('category-component',require('./components/Admin/Category/index.vue').default);
+// Vue.component('product-component',require('./components/Admin/Product/index.vue').default);
+// Vue.component('product-import-component',require('./components/Admin/Product/index-import.vue').default);
+// Vue.component('order-component',require('./components/Store/Order/index.vue').default);
+// Vue.component('order-view-component',require('./components/Store/Order/show.vue').default);
+// Vue.component('orders-entregadas-component',require('./components/Store/Order/orders-entregadas.vue').default);
+// Vue.component('report-component',require('./components/Admin/Report/index.vue').default);
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -81,4 +83,14 @@ Vue.component('report-component',require('./components/Admin/Report/index.vue').
 
 const app = new Vue({
     el: '#app',
+    components: {
+        'brand-component':()=>import('./components/Admin/Brand/index.vue'),
+        'unit-component':()=>import('./components/Admin/Unit/index.vue'),
+        'category-component':()=>import('./components/Admin/Category/index.vue'),
+        'product-component':()=>import('./components/Admin/Product/index.vue'),
+        'product-import-component':()=>import('./components/Admin/Product/index-import.vue'),
+        'order-component':()=>import('./components/Store/Order/index.vue'),
+        'orders-entregadas-component':()=>import('./components/Store/Order/orders-entregadas.vue'),
+        'report-component':()=>import('./components/Admin/Report/index.vue'),
+    },
 });
