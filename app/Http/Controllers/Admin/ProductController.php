@@ -35,7 +35,8 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return Product::with(['categorias','photos'])->get();
+        return Product::with(['categorias','photos'])
+        ->take(100)->get();
     }
 
     /**
