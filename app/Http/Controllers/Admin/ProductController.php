@@ -36,7 +36,7 @@ class ProductController extends Controller
     {
         //
         return Product::with(['categorias','photos'])
-        ->take(100)->get();
+        ->take(70)->get();
     }
 
     /**
