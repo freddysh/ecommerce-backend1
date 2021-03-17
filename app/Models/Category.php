@@ -9,7 +9,8 @@ class Category extends Model
 {
     use HasFactory;
     protected $table='categories';
-    public function categorias(){
+    public function productos(){
+        // return $this->belongsToMany(Product::class)->withTimestamps();
         return $this->belongsToMany(Product::class);
     }
 }

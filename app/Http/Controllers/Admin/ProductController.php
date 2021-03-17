@@ -36,7 +36,7 @@ class ProductController extends Controller
     {
         //
         return Product::with(['categorias','photos'])
-        ->take(70)->get();
+        ->get();
     }
 
     /**
@@ -307,13 +307,21 @@ class ProductController extends Controller
         if(!count($listado)){
             return response()->json([]);
         }
-        // return Product::with(['categorias'=>function ($query)use($listado){
-        //     $query->whereIn('category_id',[$listado]);
-        // },'photos'])->get();
+        return Product::with(['categorias'=>function ($query)use($listado){
+            $query->whereIn('category_id',[$listado])->get();
+        },'photos'])->get();
 
-        return Product::whereHas('categorias',function ($query)use($listado){
-            $query->whereIn('category_id',[$listado]);
-        })->with('photos')->get();
+        // function ($query)use($listado){
+        //     $query->whereIn('category_id',[$listado]);
+        // }
+        // $consulta=Product::with(['categorias','photos'])->get();
+        // return $consulta.photos();
+        // return $consulta->whereHas('categorias',function($query)use($listado){
+        //     $query->whereIn('category_id',[$listado]);
+        //     })->get();
+        // return Product::wherehas(['categorias'],function($query)use($listado){
+        //     $query->whereIn('categories.id',[$listado]);
+        // })->get();
 
     }
     public function tops()

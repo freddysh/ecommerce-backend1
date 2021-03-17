@@ -13,6 +13,7 @@ class Product extends Model
         return $this->hasMany(ProductPhotos::class);
     }
     public function categorias(){
+        // return $this->belongsToMany(Category::class)->withTimestamps();
         return $this->belongsToMany(Category::class);
     }
     // public function producto(){
