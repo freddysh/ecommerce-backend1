@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Products
 Route::apiResource('/v1/products',ProductController::class);
 Route::get('/v1/products/others/listado/{categorias}',[ProductController::class,'listado'])->name('products.listado');
-Route::get('/v1/products/others/secciones',[ProductController::class,'secciones'])->name('products.listado');
+Route::get('/v1/products/others/secciones',[ProductController::class,'secciones'])->name('products.secciones');
 Route::get('/v1/products/others/tops',[ProductController::class,'tops'])->name('products.tops');
 // Route::get('/v1/products/others/tops/{cantidad}',[ProductController::class,'tops_cantidad'])->name('products.tops');
 Route::get('/v1/products/others/tops5',[ProductController::class,'tops5'])->name('products.tops');

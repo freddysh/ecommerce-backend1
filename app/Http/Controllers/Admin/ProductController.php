@@ -334,10 +334,25 @@ class ProductController extends Controller
         // if(!count($listado)){
         //     return response()->json([]);
         // }
-        return Product::with(['categorias'=>function ($query){
-            $query->where('state',2)->get();
-        },'photos'])->get();
 
+        // Version 1
+        // return Product::with(['categorias'=>function ($query){
+        //     $query->where('state',2)->get();
+        // },'photos'])->get();
+
+        // VErsion 2
+        // $resultados= Product::has('categorias.state','=',2)->get();
+
+        $listado=Category::where('state',2)->get()->pluck('id')->toArray();
+
+        $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
+            $q->whereIn('category_id',[$listado]);
+        })->with('categorias')->with('photos')->get();
+         // Solo devuelve los datos de los registros de publicaciones del usuario después del 29 de noviembre de 2017
+        // $listado=Category::with(['productos'])->where('state',2)
+        //         ->select('productos')
+        //         ->get();
+        return $resultados;
     }
     public function tops()
     {
