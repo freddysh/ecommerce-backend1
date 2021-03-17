@@ -344,16 +344,15 @@ class ProductController extends Controller
         // $resultados= Product::has('categorias.state','=',2)->get();
 
         $listado=Category::where('state',2)->get()->pluck('id')->toArray();
+        // return $listado;
         // $listado1=Product::whereHas('categorias_produtos', function($q)use($listado){
         //     $q->whereIn('category_id',[$listado]);
         // })->get()->pluck('id')->toArray();
-
-
         // return Product::with(['categorias','photos'])
         // ->whereIn('id',[$listado1])
         // ->get();
         $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
-            $q->whereIn('category_id',[$listado]);
+            $q->whereIn('category_id',$listado);
         })->with('categorias')->with('photos')->get();
          // Solo devuelve los datos de los registros de publicaciones del usuario después del 29 de noviembre de 2017
         // $listado=Category::with(['productos'])->where('state',2)
