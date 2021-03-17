@@ -304,60 +304,25 @@ class ProductController extends Controller
         // return $categorias;
         $listado=Category::whereIn('name',$categorias)->get()->pluck('id')->toArray();
         // return $listado;
-        if(!count($listado)){
-            return response()->json([]);
-        }
-        return Product::with(['categorias'=>function ($query)use($listado){
-            $query->whereIn('category_id',[$listado])->get();
-        },'photos'])->get();
-
-        // function ($query)use($listado){
-        //     $query->whereIn('category_id',[$listado]);
+        // if(!count($listado)){
+        //     return response()->json([]);
         // }
-        // $consulta=Product::with(['categorias','photos'])->get();
-        // return $consulta.photos();
-        // return $consulta->whereHas('categorias',function($query)use($listado){
-        //     $query->whereIn('category_id',[$listado]);
-        //     })->get();
-        // return Product::wherehas(['categorias'],function($query)use($listado){
-        //     $query->whereIn('categories.id',[$listado]);
-        // })->get();
+        // return Product::with(['categorias'=>function ($query)use($listado){
+        //     $query->whereIn('category_id',[$listado])->get();
+        // },'photos'])->get();
+
+        $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
+            $q->whereIn('category_id',$listado);
+        })->with('categorias')->with('photos')->get();
+        return $resultados;
 
     }
     public function secciones()
     {
-        //
-        // $categorias=explode(',',$categorias);
-        // // return $categorias;
-        // $listado=Category::whereIn('name',$categorias)->get()->pluck('id')->toArray();
-        // // return $listado;
-        // if(!count($listado)){
-        //     return response()->json([]);
-        // }
-
-        // Version 1
-        // return Product::with(['categorias'=>function ($query){
-        //     $query->where('state',2)->get();
-        // },'photos'])->get();
-
-        // VErsion 2
-        // $resultados= Product::has('categorias.state','=',2)->get();
-
         $listado=Category::where('state',2)->get()->pluck('id')->toArray();
-        // return $listado;
-        // $listado1=Product::whereHas('categorias_produtos', function($q)use($listado){
-        //     $q->whereIn('category_id',[$listado]);
-        // })->get()->pluck('id')->toArray();
-        // return Product::with(['categorias','photos'])
-        // ->whereIn('id',[$listado1])
-        // ->get();
         $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
             $q->whereIn('category_id',$listado);
         })->with('categorias')->with('photos')->get();
-         // Solo devuelve los datos de los registros de publicaciones del usuario después del 29 de noviembre de 2017
-        // $listado=Category::with(['productos'])->where('state',2)
-        //         ->select('productos')
-        //         ->get();
         return $resultados;
     }
     public function tops()
