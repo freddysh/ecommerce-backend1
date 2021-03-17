@@ -324,6 +324,21 @@ class ProductController extends Controller
         // })->get();
 
     }
+    public function secciones()
+    {
+        //
+        // $categorias=explode(',',$categorias);
+        // // return $categorias;
+        // $listado=Category::whereIn('name',$categorias)->get()->pluck('id')->toArray();
+        // // return $listado;
+        // if(!count($listado)){
+        //     return response()->json([]);
+        // }
+        return Product::with(['categorias'=>function ($query){
+            $query->where('state',2)->get();
+        },'photos'])->get();
+
+    }
     public function tops()
     {
         //
