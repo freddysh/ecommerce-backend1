@@ -344,7 +344,14 @@ class ProductController extends Controller
         // $resultados= Product::has('categorias.state','=',2)->get();
 
         $listado=Category::where('state',2)->get()->pluck('id')->toArray();
+        // $listado1=Product::whereHas('categorias_produtos', function($q)use($listado){
+        //     $q->whereIn('category_id',[$listado]);
+        // })->get()->pluck('id')->toArray();
 
+
+        // return Product::with(['categorias','photos'])
+        // ->whereIn('id',[$listado1])
+        // ->get();
         $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
             $q->whereIn('category_id',[$listado]);
         })->with('categorias')->with('photos')->get();
