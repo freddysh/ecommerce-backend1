@@ -489,14 +489,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -519,6 +511,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      columns: [{
+        field: "code",
+        label: "Codigo"
+      }, {
+        field: "name",
+        label: "Nombre"
+      }, {
+        field: "state",
+        label: "Estado"
+      }, {
+        field: "created_at",
+        label: "Creado"
+      }, {
+        field: "photos",
+        label: "Miniatura(250px)"
+      }, {
+        field: "categorias",
+        label: "Categorias"
+      }, {
+        field: "opciones",
+        label: "Opciones"
+      }],
       test: {
         activeLabel: "Yes",
         inactiveLabel: "No",
@@ -566,7 +580,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         label: "Creado"
       }, {
         key: "photo",
-        label: "Miniatura(250px"
+        label: "Miniatura(250px)"
+      }, {
+        key: "categorias",
+        label: "Categorias"
       }, {
         key: "opciones",
         label: "Opciones"
@@ -604,8 +621,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       currentPage: 1,
       per_page: 10,
       valorBuscar: "",
-      search: "",
-      paginate: ["itemss"]
+      search: ""
     };
   },
   methods: (_methods = {
@@ -2790,36 +2806,7 @@ var render = function() {
   return _c("div", { staticClass: "card" }, [
     _c("div", { staticClass: "card-header" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-10" }, [
-          _c("div", { staticClass: "form-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.valorBuscar,
-                  expression: "valorBuscar"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                id: "nameBuscar",
-                required: "",
-                placeholder: "Buscar"
-              },
-              domProps: { value: _vm.valorBuscar },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.valorBuscar = $event.target.value
-                }
-              }
-            })
-          ])
-        ]),
+        _c("div", { staticClass: "text-right col-10" }),
         _vm._v(" "),
         _c("div", { staticClass: "text-right col-2" }, [
           _c(
@@ -3727,162 +3714,167 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "col-sm-12" },
+          { staticClass: "col-12" },
           [
-            _c(
-              "table",
-              {
-                staticClass: "table table-striped table-hover table-condensed",
-                attrs: { id: "my-table" }
+            _c("vue-good-table", {
+              attrs: {
+                columns: _vm.columns,
+                rows: _vm.items,
+                "line-numbers": true,
+                "pagination-options": {
+                  enabled: true,
+                  mode: "records",
+                  perPage: 10,
+                  position: "botton",
+                  perPageDropdown: [10, 15, 20, 25, 50],
+                  dropdownAllowAll: true,
+                  setCurrentPage: 1,
+                  nextLabel: "Siguiente",
+                  prevLabel: "Previo",
+                  rowsPerPageLabel: "Filas por pagina",
+                  ofLabel: "de",
+                  pageLabel: "pagina", // for 'pages' mode
+                  allLabel: "Todos",
+                  infoFn: function(params) {
+                    return params.totalRecords + " registros"
+                  }
+                },
+                "search-options": {
+                  enabled: true
+                }
               },
-              [
-                _c("thead", [
-                  _c(
-                    "tr",
-                    _vm._l(_vm.fields_, function(item, key) {
-                      return _c("th", { key: key, attrs: { scope: "col" } }, [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(item.label) +
-                            "\n              "
-                        )
-                      ])
-                    }),
-                    0
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "paginate",
-                  {
-                    attrs: {
-                      name: "itemss",
-                      list: _vm.itemss,
-                      per: 10,
-                      tag: "tbody"
-                    }
-                  },
-                  _vm._l(_vm.paginated("itemss"), function(item, key) {
-                    return _c("tr", { key: key }, [
-                      _c("td", { attrs: { scope: "row" } }, [
-                        _vm._v(_vm._s(key + 1))
-                      ]),
+              scopedSlots: _vm._u([
+                {
+                  key: "table-row",
+                  fn: function(props) {
+                    return [
+                      props.column.field == "code"
+                        ? _c("span", [_vm._v(_vm._s(props.row.code))])
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(item.code))]),
+                      props.column.field == "name"
+                        ? _c("span", [_vm._v(_vm._s(props.row.name))])
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(item.name))]),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        [
-                          _c("vs-switch", {
+                      props.column.field == "state"
+                        ? _c("vs-switch", {
                             on: {
                               click: function($event) {
-                                return _vm.cambiar_estado(item.id, item.state)
+                                return _vm.cambiar_estado(
+                                  props.row.id,
+                                  props.row.state
+                                )
                               }
                             },
                             model: {
-                              value: item.state,
+                              value: props.row.state,
                               callback: function($$v) {
-                                _vm.$set(item, "state", $$v)
+                                _vm.$set(props.row, "state", $$v)
                               },
-                              expression: "item.state"
+                              expression: "props.row.state"
                             }
                           })
-                        ],
-                        1
-                      ),
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(
-                              _vm
-                                .moment(item.created_at)
-                                .format("MMMM Do YYYY, h:mm:ss a")
-                            ) +
-                            "\n              "
-                        )
-                      ]),
+                      props.column.field == "created_at"
+                        ? _c("span", [
+                            _vm._v(
+                              "\n              " +
+                                _vm._s(
+                                  _vm
+                                    .moment(props.row.created_at)
+                                    .format("MMMM Do YYYY, h:mm:ss a")
+                                ) +
+                                "\n            "
+                            )
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c(
-                        "td",
-                        [
-                          _vm._l(item.photos, function(obj, key) {
-                            return obj.state
-                              ? _c("img", {
+                      props.column.field == "photos"
+                        ? _c(
+                            "div",
+                            [
+                              _vm._l(props.row.photos, function(obj, key) {
+                                return obj.state
+                                  ? _c("img", {
+                                      key: key,
+                                      attrs: {
+                                        src: obj.imgSrc,
+                                        width: "50px",
+                                        height: "50px",
+                                        alt: ""
+                                      }
+                                    })
+                                  : _vm._e()
+                              }),
+                              _vm._v(" "),
+                              props.row.photos.length == 0
+                                ? _c("span", { staticClass: "text-gray-500" }, [
+                                    _vm._v("Sin imagen")
+                                  ])
+                                : _vm._e()
+                            ],
+                            2
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      props.column.field == "categorias"
+                        ? _c(
+                            "span",
+                            _vm._l(props.row.categorias, function(valor, key) {
+                              return _c(
+                                "span",
+                                {
                                   key: key,
-                                  attrs: {
-                                    src: obj.imgSrc,
-                                    width: "50px",
-                                    height: "50px",
-                                    alt: ""
-                                  }
-                                })
-                              : _vm._e()
-                          }),
-                          _vm._v(" "),
-                          item.photos.length == 0
-                            ? _c("span", { staticClass: "text-gray-500" }, [
-                                _vm._v("Sin imagen")
-                              ])
-                            : _vm._e()
-                        ],
-                        2
-                      ),
+                                  staticClass: "badge badge-primary"
+                                },
+                                [_vm._v(_vm._s(valor))]
+                              )
+                            }),
+                            0
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(item)
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "fas fa-edit" }),
-                            _vm._v("Editar\n                ")
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            on: {
-                              click: function($event) {
-                                return _vm.borrar(item.id)
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "fas fa-trash-alt" }),
-                            _vm._v(" Eliminar\n                ")
-                          ]
-                        )
-                      ])
-                    ])
-                  }),
-                  0
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("paginate-links", {
-              attrs: {
-                for: "itemss",
-                classes: { ul: "pagination", li: "page-item", a: "page-link" },
-                async: true,
-                "show-step-links": true,
-                "step-links": {
-                  next: "Next",
-                  prev: "Preview"
+                      props.column.field == "opciones"
+                        ? _c(
+                            "div",
+                            {
+                              staticClass: "btn-group",
+                              attrs: { role: "group" }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-warning",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.editar(props.row)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-edit" })]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.borrar(props.column.id)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-trash-alt" })]
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  }
                 }
-              }
+              ])
             })
           ],
           1

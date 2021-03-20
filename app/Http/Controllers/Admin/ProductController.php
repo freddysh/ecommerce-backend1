@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductPhotos;
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -372,6 +373,7 @@ class ProductController extends Controller
     }
     public function importar_excel(Request $request)
     {
+
         try {
             //code...
             $request->validate([
@@ -394,12 +396,11 @@ class ProductController extends Controller
                 $nombre=$value['nombre']?$value['nombre']:null;
                 $descripcion=$value['descripcion']?$value['descripcion']:null;
                 $detalle=$value['detalle']?$value['detalle']:null;
-                $limite=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
-                $precio=$value['precio']?$value['precio']:null;
-                $precio_web=$value['precio_web']?$value['precio_web']:null;
+                $limite=$value['limite']?(strtolower($value['limite'])=='si'||$value['limite']=='SI'?1:0):null;
+                $precio=$value['precio_regular']?$value['precio_regular']:null;
+                $precio_web=$value['precio_venta']?$value['precio_venta']:null;
+                $descuento=$value['descuento']>=0?$value['descuento']:null;
                 $stock=$value['stock']?$value['stock']:null;
-
-
 
                 if($codigo!=null){
                     if(Product::where('code',$codigo)->get()->count()==0){
@@ -451,13 +452,16 @@ class ProductController extends Controller
                 }
 
                 if($categoria!=null){
-                    if(Category::where('name',$categoria)->get()->count()==0){
-                        $categoria_msj= Array('msj'=>'Nueva categoria','error'=>'0');
-                        $correctos++;
-                    }
-                    elseif(Category::where('name',$categoria)->get()->count()>=1){
-                        $categoria_msj= Array('msj'=>'Categoria ya existe','error'=>'1');
-                        $advertencias++;
+                    $categoria_=explode(',',$categoria);
+                    for($i=0;$i<count($categoria_);$i++){
+                        if(Category::where('name',trim($categoria_[$i]))->get()->count()==0){
+                            $categoria_msj= Array('msj'=>'Nueva categoria','error'=>'0');
+                            $correctos++;
+                        }
+                        elseif(Category::where('name',trim($categoria_[$i]))->get()->count()>=1){
+                            $categoria_msj= Array('msj'=>'Categoria ya existe','error'=>'1');
+                            $advertencias++;
+                        }
                     }
                 }
                 else{
@@ -540,6 +544,20 @@ class ProductController extends Controller
                     $stock_msj= Array('msj'=>'Celda vacia','error'=>'2');
                     $errores++;
                 }
+                if($descuento!=null||$descuento>=0){
+                    if(is_numeric($descuento)){
+                        $descuento_msj= Array('msj'=>'Es un numero','error'=>'0');
+                        $correctos++;
+                    }
+                    else{
+                        $descuento_msj= Array('msj'=>'No es un numero','error'=>'2');
+                        $errores++;
+                    }
+                }
+                else{
+                    $descuento_msj= Array('msj'=>'Celda vacia','error'=>'2');
+                    $errores++;
+                }
 
                 if($limite===0||$limite===1){
 
@@ -556,6 +574,12 @@ class ProductController extends Controller
                             $valido_hasta_msj= Array('msj'=>'Celda vacia2','error'=>'2');
                             $errores++;
                         }
+
+                $valido_desde = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_desde);
+                $valido_desde =$valido_desde->format('d-m-Y');
+
+                $valido_hasta = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_hasta);
+                $valido_hasta =$valido_hasta->format('d-m-Y');
                     }
                     else{
                         $valido_desde=null;
@@ -600,6 +624,7 @@ class ProductController extends Controller
                     'precio'=>Array('dato'=>$precio,'error'=>$precio_msj),
                     'precio_web'=>Array('dato'=>$precio_web,'error'=>$precio_web_msj),
                     'stock'=>Array('dato'=>$stock,'error'=>$stock_msj),
+                    'descuento'=>Array('dato'=>$descuento,'error'=>$descuento_msj),
                     'limite'=>Array('dato'=>$limite,'error'=>$limite_msj),
 
                     'valido_desde'=>Array('dato'=>$valido_desde,'error'=>$valido_desde_msj),
@@ -608,14 +633,14 @@ class ProductController extends Controller
                 );
 
             }
-
+            // return response()->json(['state'=>'hola'], 200);
             return response()->json(['datos'=>$arreglo,'correctos'=>$correctos,'advertencias'=>$advertencias,'errores'=>$errores], 200);
 
         } catch (\Exception $th) {
             //throw $th;
-            return response()->json(['state'=>'0']);
+            return response()->json(['state'=>$th]);
         }
-       }
+    }
     public function importar_excel_ya(Request $request)
     {
 
@@ -632,6 +657,8 @@ class ProductController extends Controller
             $correctos=0;
             $advertencias=0;
             $errores=0;
+
+
             foreach ($data as $key => $value) {
                 # code...
                 $codigo=$value['codigo']?$value['codigo']:null;
@@ -641,9 +668,10 @@ class ProductController extends Controller
                 $nombre=$value['nombre']?$value['nombre']:null;
                 $descripcion=$value['descripcion']?$value['descripcion']:null;
                 $detalle=$value['detalle']?$value['detalle']:null;
-                $precio=$value['precio']?$value['precio']:null;
-                $limit=$value['limite']?($value['limite']=='si'||$value['limite']=='SI'?1:0):null;
-                $precio_web=$value['precio_web']?$value['precio_web']:null;
+                $limit=$value['limite']?(strtolower($value['limite'])=='si'||$value['limite']=='SI'?1:0):null;
+                $precio=$value['precio_regular']?$value['precio_regular']:null;
+                $precio_web=$value['precio_venta']?$value['precio_venta']:null;
+                $descuento=$value['descuento']>=0?$value['descuento']:null;
                 $stock=$value['stock']?$value['stock']:null;
                 $valido_desde=$value['valido_desde']?$value['valido_desde']:null;
                 $valido_hasta=$value['valido_hasta']?$value['valido_hasta']:null;
@@ -673,27 +701,28 @@ class ProductController extends Controller
                             $temp_unidad=Unit::where('name',$unidad)->get()->first();
 
 
-                        $temp_categoria=null;
-                        if(Category::where('name',$categoria)->get()->count()==0){
-                            $temp_categoria=new Category();
-                            $temp_categoria->name=$categoria;
-                            $temp_categoria->description='';
-                            $temp_categoria->photo='';
-                            $temp_categoria->father_id=1;
-                            $temp_categoria->state=1;
-                            $temp_categoria->save();
-                        }
-                        else
-                            $temp_categoria=Category::where('name',$categoria)->get()->first();
+                        if($limit==1){
+                            $valido_desde = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_desde);
+                            $valido_desde =$valido_desde->format('Y-d-m 00:00:00');
 
+                            $valido_desde=Carbon::createFromFormat('Y-m-d H:i:s',$valido_desde)->toDateTimeString();
+                            $valido_hasta = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_hasta);
+                            $valido_hasta =$valido_hasta->format('Y-d-m 23:59:59');
+                            $valido_hasta=Carbon::createFromFormat('Y-m-d H:i:s',$valido_hasta)->toDateTimeString();
+
+                        }
+
+                        // return response()->json(['state'=>"$valido_desde"]);
+
+                    //    Agregamos las categorias
                         $temp_producto=new Product();
                         $temp_producto->code=$codigo;
                         $temp_producto->name=$nombre;
                         $temp_producto->url=$nombre;
                         $temp_producto->description=$descripcion;
                         $temp_producto->detail=$detalle;
-                        $temp_producto->regular_price=$precio_web+(($precio_web*5)/100);
-                        $temp_producto->discount=5;
+                        $temp_producto->regular_price=$precio_web+(($precio_web*$descuento)/100);
+                        $temp_producto->discount=$descuento;
                         $temp_producto->price=$precio_web;
                         $temp_producto->stock=$stock;
                         $temp_producto->limit=$limit;
@@ -705,7 +734,25 @@ class ProductController extends Controller
                         $temp_producto->quantity=1;
                         $temp_producto->save();
 
-                        $temp_producto->categorias()->attach($temp_categoria->id);
+                        // return response()->json(['state'=>"$temp_producto"]);
+
+                        $categorias=explode(',',$categoria);
+                        for($i=0;$i<count($categorias);$i++){
+                            $temp_categoria=null;
+                            if(Category::where('name',trim($categorias[$i]))->get()->count()==0){
+                                $temp_categoria=new Category();
+                                $temp_categoria->name=$categorias[$i];
+                                $temp_categoria->description='';
+                                $temp_categoria->photo='';
+                                $temp_categoria->father_id=1;
+                                $temp_categoria->state=1;
+                                $temp_categoria->save();
+                            }
+                            else
+                                $temp_categoria=Category::where('name',trim($categorias[$i]))->get()->first();
+
+                            $temp_producto->categorias()->attach($temp_categoria->id);
+                        }
 
                     }
                     else{
@@ -720,10 +767,10 @@ class ProductController extends Controller
             }
 
                 return response()->json(['state'=>'1']);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             //throw $th;
 
-            return response()->json(['state'=>'0']);
+            return response()->json(['state'=>$th]);
         }
 
 

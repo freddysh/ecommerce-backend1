@@ -50,6 +50,9 @@ instance.dismiss();
 // Dismiss all opened toast immediately
 Vue.$toast.clear();
 
+import VueGoodTablePlugin from 'vue-good-table';
+import 'vue-good-table/dist/vue-good-table.css'
+Vue.use(VueGoodTablePlugin);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

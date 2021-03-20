@@ -390,6 +390,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // import moment from 'moment';
 // import { core } from "../../../config/pluginInit";
 // import SocialPost from './Components/SocialPost'
@@ -435,7 +458,7 @@ __webpack_require__.r(__webpack_exports__);
         opciones: 0,
         nameState: null
       },
-      fields: [{
+      fields_: [{
         key: "codigo",
         label: "Codigo"
       }, {
@@ -458,10 +481,13 @@ __webpack_require__.r(__webpack_exports__);
         label: "Detalle"
       }, {
         key: "precio",
-        label: "Precio"
+        label: "Precio regular"
       }, {
         key: "precio_web",
-        label: "Precio web"
+        label: "Precio venta"
+      }, {
+        key: "descuento",
+        label: "Descuento"
       }, {
         key: "stock",
         label: "Stock"
@@ -530,6 +556,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         if (response.status === 200) {
+          console.log("Excel" + response.data.state);
           _this.items = [];
           _this.items = response.data.datos;
           _this.correctos = response.data.correctos;
@@ -559,6 +586,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         if (response.status === 200) {
+          console.log("respuest:" + response.data.state);
           _this2.items = [];
           _this2.correctos = 0;
           _this2.advertencias = 0;
@@ -813,14 +841,14 @@ var render = function() {
                     "table",
                     {
                       staticClass:
-                        "table table-striped table-hover table-condensed",
+                        "table table-striped table-hover table-condensed table-responsive",
                       attrs: { id: "my-table" }
                     },
                     [
                       _c("thead", [
                         _c(
                           "tr",
-                          _vm._l(_vm.fields, function(item, key) {
+                          _vm._l(_vm.fields_, function(item, key) {
                             return _c(
                               "th",
                               { key: key, attrs: { scope: "col" } },
@@ -1134,6 +1162,39 @@ var render = function() {
                                     _vm._v(
                                       "\n                  " +
                                         _vm._s(item.precio_web.error.msj) +
+                                        "\n                "
+                                    )
+                                  ])
+                                : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("span", [
+                                _vm._v(" " + _vm._s(item.descuento.dato) + " ")
+                              ]),
+                              _c("br"),
+                              _vm._v(" "),
+                              item.descuento.error.error == 0
+                                ? _c("span", { staticClass: "text-success" }, [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.descuento.error.msj) +
+                                        "\n                "
+                                    )
+                                  ])
+                                : item.descuento.error.error == 1
+                                ? _c("span", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.descuento.error.msj) +
+                                        "\n                "
+                                    )
+                                  ])
+                                : item.descuento.error.error == 2
+                                ? _c("span", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      "\n                  " +
+                                        _vm._s(item.descuento.error.msj) +
                                         "\n                "
                                     )
                                   ])

@@ -135,13 +135,13 @@
                 class="btn btn-warning"
                 @click="editar(item)"
               >
-                <i class="fas fa-edit"></i>Editar
+                <i class="fas fa-edit"></i>
               </button>
               <button
                 class="btn btn-danger"
                 @click="borrar(item.id)"
               >
-                <i class="fas fa-trash-alt"></i> Eliminar
+                <i class="fas fa-trash-alt"></i>
               </button>
             </td>
           </tr>

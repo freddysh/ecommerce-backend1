@@ -1815,10 +1815,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _c("i", { staticClass: "fas fa-edit" }),
-                        _vm._v("Editar\n            ")
-                      ]
+                      [_c("i", { staticClass: "fas fa-edit" })]
                     ),
                     _vm._v(" "),
                     _c(
@@ -1831,10 +1828,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _c("i", { staticClass: "fas fa-trash-alt" }),
-                        _vm._v(" Eliminar\n            ")
-                      ]
+                      [_c("i", { staticClass: "fas fa-trash-alt" })]
                     )
                   ])
                 ])

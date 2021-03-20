@@ -74,14 +74,14 @@
 
           <table
             v-if="items"
-            class="table table-striped table-hover table-condensed"
+            class="table table-striped table-hover table-condensed table-responsive"
             id="my-table"
           >
             <thead>
               <tr>
                 <th
                   scope="col"
-                  v-for="(item, key) in fields"
+                  v-for="(item, key) in fields_"
                   :key="key"
                 >
                   {{ item.label }}
@@ -282,6 +282,29 @@
                     {{ item.precio_web.error.msj }}
                   </span>
                 </td>
+
+                <td>
+                  <span> {{ item.descuento.dato }} </span><br />
+                  <span
+                    v-if="item.descuento.error.error == 0"
+                    class="text-success"
+                  >
+                    {{ item.descuento.error.msj }}
+                  </span>
+                  <span
+                    v-else-if="item.descuento.error.error == 1"
+                    class="text-danger"
+                  >
+                    {{ item.descuento.error.msj }}
+                  </span>
+                  <span
+                    v-else-if="item.descuento.error.error == 2"
+                    class="text-danger"
+                  >
+                    {{ item.descuento.error.msj }}
+                  </span>
+                </td>
+
                 <td>
                   <span> {{ item.stock.dato }} </span><br />
                   <span
@@ -423,7 +446,7 @@ export default {
         opciones: 0,
         nameState: null
       },
-      fields: [
+      fields_: [
         {
           key: "codigo",
           label: "Codigo"
@@ -454,11 +477,15 @@ export default {
         },
         {
           key: "precio",
-          label: "Precio"
+          label: "Precio regular"
         },
         {
           key: "precio_web",
-          label: "Precio web"
+          label: "Precio venta"
+        },
+        {
+          key: "descuento",
+          label: "Descuento"
         },
         {
           key: "stock",
@@ -533,6 +560,7 @@ export default {
       )
         .then(response => {
           if (response.status === 200) {
+            console.log("Excel" + response.data.state);
             this.items = [];
             this.items = response.data.datos;
             this.correctos = response.data.correctos;
@@ -563,6 +591,7 @@ export default {
       )
         .then(response => {
           if (response.status === 200) {
+            console.log("respuest:" + response.data.state);
             this.items = [];
             this.correctos = 0;
             this.advertencias = 0;

@@ -2,17 +2,7 @@
   <div class="card">
     <div class="card-header">
       <div class="row">
-        <div class="col-10">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              id="nameBuscar"
-              v-model="valorBuscar"
-              required
-              placeholder="Buscar"
-            />
-          </div>
+        <div class="text-right col-10">
         </div>
         <div class="text-right col-2">
           <!-- Button trigger modal -->
@@ -369,86 +359,88 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
-          <table
-            class="table table-striped table-hover table-condensed"
-            id="my-table"
-          >
-            <thead>
-              <tr>
-                <th
-                  scope="col"
-                  v-for="(item, key) in fields_"
-                  :key="key"
-                >
-                  {{ item.label }}
-                </th>
-              </tr>
-            </thead>
-            <paginate
-              name="itemss"
-              :list="itemss"
-              :per="10"
-              tag="tbody"
-            >
-              <tr
-                v-for="(item, key) in paginated('itemss')"
-                :key="key"
-              >
-                <td scope="row">{{ key + 1 }}</td>
-                <td>{{ item.code }}</td>
-                <td>{{ item.name }}</td>
-                <td>
-                  <vs-switch
-                    v-model="item.state"
-                    @click="cambiar_estado(item.id, item.state)"
-                  />
-                </td>
-                <td>
-                  {{moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a') }}
-                </td>
-                <td>
-                  <img
-                    v-if="obj.state"
-                    v-for="(obj,key) in item.photos"
-                    :key="key"
-                    :src="obj.imgSrc"
-                    width="50px"
-                    height="50px"
-                    alt=""
-                  >
-                  <span
-                    class="text-gray-500"
-                    v-if="item.photos.length==0"
-                  >Sin imagen</span>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-warning"
-                    @click="editar(item)"
-                  >
-                    <i class="fas fa-edit"></i>Editar
-                  </button>
-                  <button
-                    class="btn btn-danger"
-                    @click="borrar(item.id)"
-                  >
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                  </button>
-                </td>
-              </tr>
-            </paginate>
-          </table>
-          <paginate-links
-            for="itemss"
-            :classes="{ ul: 'pagination', li: 'page-item', a: 'page-link' }"
-            :async="true"
-            :show-step-links="true"
-            :step-links="{
-              next: 'Next',
-              prev: 'Preview'
+        <div class="col-12">
+          <vue-good-table
+            :columns="columns"
+            :rows="items"
+            :line-numbers="true"
+            :pagination-options="{
+                enabled: true,
+                mode: 'records',
+                perPage: 10,
+                position: 'botton',
+                perPageDropdown: [10, 15, 20, 25, 50],
+                dropdownAllowAll: true,
+                setCurrentPage: 1,
+                nextLabel: 'Siguiente',
+                prevLabel: 'Previo',
+                rowsPerPageLabel: 'Filas por pagina',
+                ofLabel: 'de',
+                pageLabel: 'pagina', // for 'pages' mode
+                allLabel: 'Todos',
+                infoFn: (params) => `${params.totalRecords} registros`,
             }"
-          ></paginate-links>
+            :search-options="{
+                enabled: true
+            }"
+          >
+            <template
+              slot="table-row"
+              slot-scope="props"
+            >
+              <span v-if="props.column.field == 'code'">{{props.row.code}}</span>
+              <span v-if="props.column.field == 'name'">{{props.row.name}}</span>
+              <vs-switch
+                v-if="props.column.field == 'state'"
+                v-model="props.row.state"
+                @click="cambiar_estado(props.row.id,props.row.state)"
+              />
+              <span v-if="props.column.field == 'created_at'">
+                {{moment(props.row.created_at).format('MMMM Do YYYY, h:mm:ss a') }}
+              </span>
+              <div v-if="props.column.field == 'photos'">
+                <img
+                  v-if="obj.state"
+                  v-for="(obj,key) in props.row.photos"
+                  :key="key"
+                  :src="obj.imgSrc"
+                  width="50px"
+                  height="50px"
+                  alt=""
+                >
+                <span
+                  class="text-gray-500"
+                  v-if="props.row.photos.length==0"
+                >Sin imagen</span>
+              </div>
+              <span v-if="props.column.field == 'categorias'">
+                <span
+                  v-for="(valor,key) in props.row.categorias"
+                  :key="key"
+                  class="badge badge-primary"
+                >{{ valor }}</span>
+              </span>
+              <div
+                class="btn-group"
+                role="group"
+                v-if="props.column.field == 'opciones'"
+              >
+
+                <button
+                  class="btn btn-warning"
+                  @click="editar(props.row)"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button
+                  class="btn btn-danger"
+                  @click="borrar(props.column.id)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </template>
+          </vue-good-table>
         </div>
       </div>
     </div>
@@ -478,6 +470,36 @@ export default {
   },
   data() {
     return {
+      columns: [
+        {
+          field: "code",
+          label: "Codigo"
+        },
+        {
+          field: "name",
+          label: "Nombre"
+        },
+        {
+          field: "state",
+          label: "Estado"
+        },
+        {
+          field: "created_at",
+          label: "Creado"
+        },
+        {
+          field: "photos",
+          label: "Miniatura(250px)"
+        },
+        {
+          field: "categorias",
+          label: "Categorias"
+        },
+        {
+          field: "opciones",
+          label: "Opciones"
+        }
+      ],
       test: {
         activeLabel: "Yes",
         inactiveLabel: "No",
@@ -531,7 +553,11 @@ export default {
         },
         {
           key: "photo",
-          label: "Miniatura(250px"
+          label: "Miniatura(250px)"
+        },
+        {
+          key: "categorias",
+          label: "Categorias"
         },
         {
           key: "opciones",
@@ -571,8 +597,7 @@ export default {
       currentPage: 1,
       per_page: 10,
       valorBuscar: "",
-      search: "",
-      paginate: ["itemss"]
+      search: ""
     };
   },
   methods: {

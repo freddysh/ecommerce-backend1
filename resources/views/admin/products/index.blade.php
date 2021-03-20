@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+
 <product-component></product-component>
 @stop
 
