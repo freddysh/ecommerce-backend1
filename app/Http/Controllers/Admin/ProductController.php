@@ -678,7 +678,8 @@ class ProductController extends Controller
 
 
                 if($codigo!=null){
-                    if(Product::where('code',$codigo)->get()->count()==0){
+                    // if(Product::where('code',$codigo)->get()->count()==0)
+                    // {
                         $temp_marca=null;
                         if(Brand::where('name',$marca)->get()->count()==0){
                             $temp_marca=new Brand();
@@ -703,22 +704,21 @@ class ProductController extends Controller
 
                         if($limit==1){
                             $valido_desde = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_desde);
-                            $valido_desde =$valido_desde->format('Y-d-m 00:00:00');
-
+                            $valido_desde =$valido_desde->format('Y-m-d 00:00:00');
                             $valido_desde=Carbon::createFromFormat('Y-m-d H:i:s',$valido_desde)->toDateTimeString();
+
                             $valido_hasta = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($valido_hasta);
-                            $valido_hasta =$valido_hasta->format('Y-d-m 23:59:59');
+                            $valido_hasta =$valido_hasta->format('Y-m-d 23:59:59');
                             $valido_hasta=Carbon::createFromFormat('Y-m-d H:i:s',$valido_hasta)->toDateTimeString();
 
                         }
 
-                        // return response()->json(['state'=>"$valido_desde"]);
-
-                    //    Agregamos las categorias
+                    if(Product::where('code',$codigo)->get()->count()==0){
+                        //    Agregamos las categorias
                         $temp_producto=new Product();
                         $temp_producto->code=$codigo;
                         $temp_producto->name=$nombre;
-                        $temp_producto->url=$nombre;
+                        $temp_producto->url=$this->format_uri($nombre);
                         $temp_producto->description=$descripcion;
                         $temp_producto->detail=$detalle;
                         $temp_producto->regular_price=$precio_web+(($precio_web*$descuento)/100);
@@ -733,8 +733,6 @@ class ProductController extends Controller
                         $temp_producto->state=1;
                         $temp_producto->quantity=1;
                         $temp_producto->save();
-
-                        // return response()->json(['state'=>"$temp_producto"]);
 
                         $categorias=explode(',',$categoria);
                         for($i=0;$i<count($categorias);$i++){
@@ -753,14 +751,27 @@ class ProductController extends Controller
 
                             $temp_producto->categorias()->attach($temp_categoria->id);
                         }
-
                     }
                     else{
                         $temp_producto=Product::where('code',$codigo)->get()->first();
+                        $temp_producto->regular_price=$precio_web+(($precio_web*$descuento)/100);
+                        $temp_producto->discount=$descuento;
                         $temp_producto->price=$precio_web;
-                        $temp_producto->stock=$temp_producto->stock+$stock;
+                        $temp_producto->stock=$stock;
+                        $temp_producto->limit=$limit;
+                        $temp_producto->valido_desde=$valido_desde;
+                        $temp_producto->valido_hasta=$valido_hasta;
                         $temp_producto->save();
                     }
+
+
+                    // }
+                    // else{
+                    //     $temp_producto=Product::where('code',$codigo)->get()->first();
+                    //     $temp_producto->price=$precio_web;
+                    //     $temp_producto->stock=$temp_producto->stock;
+                    //     $temp_producto->save();
+                    // }
 
                 }
 
@@ -774,5 +785,17 @@ class ProductController extends Controller
         }
 
 
+    }
+
+    protected function format_uri( $string, $separator = '-' )
+    {
+    $accents_regex = '~&([a-z]{1,2})(?:acute|cedil|circ|Grave|lig|orn|ring|slash|th|tilde|uml);~i';
+    $special_cases = array( '&' => 'and', "'" => '');
+    $string = mb_strtolower( trim( $string ), 'UTF-8' );
+    $string = str_replace( array_keys($special_cases), array_values( $special_cases), $string );
+    $string = preg_replace( $accents_regex, '$1', htmlentities( $string, ENT_QUOTES, 'UTF-8' ) );
+    $string = preg_replace("/[^a-z0-9]/u", "$separator", $string);
+    $string = preg_replace("/[$separator]+/u", "$separator", $string);
+    return $string;
     }
 }

@@ -2,33 +2,70 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-sm-12 col-md-4">
+        <div class="col-12">
+          <p>Mapa</p>
+          <GoogleMapLoader
+            :mapConfig="mapConfig"
+            :apiKey="apiKey"
+          >
+            <template slot-scope="{ google, map }">
+              <GoogleMapMarker
+                v-for="marker in markers"
+                :key="marker.id"
+                :marker="marker"
+                :google="google"
+                :map="map"
+              />
+              <GoogleMapLine
+                v-for="line in lines"
+                :key="line.id"
+                :path.sync="line.path"
+                :google="google"
+                :map="map"
+              />
+            </template>
+          </GoogleMapLoader>
+        </div>
+        <div
+          v-if="item"
+          class="col-sm-12 col-md-4"
+        >
           <h4>Datos de generales</h4>
           <p class="py-0 my-0">
             <span class="text-gray">Codigo:</span> {{ item.code }}
           </p>
           <p class="py-0 my-0">
             <span class="text-gray">Estado:</span>
-            <span class="badge badge-danger" v-if="item.state == 1"
-              >En tienda</span
-            >
-            <span class="badge badge-warning" v-if="item.state == 2"
-              >En empacado</span
-            >
-            <span class="badge badge-primary" v-if="item.state == 3"
-              >En camino</span
-            >
-            <span class="badge badge-success" v-if="item.state == 4"
-              >Entregado</span
-            >
+            <span
+              class="badge badge-danger"
+              v-if="item.state == 1"
+            >En tienda</span>
+            <span
+              class="badge badge-warning"
+              v-if="item.state == 2"
+            >En empacado</span>
+            <span
+              class="badge badge-primary"
+              v-if="item.state == 3"
+            >En camino</span>
+            <span
+              class="badge badge-success"
+              v-if="item.state == 4"
+            >Entregado</span>
           </p>
-          <p class="py-0 my-0" v-if="item.state == 1">
+          <p
+            class="py-0 my-0"
+            v-if="item.state == 1"
+          >
             <span class="text-gray">Fecha de creacion:</span>
             {{
               moment(`${item.created_at}`).format("dddd, Do MMMM YYYY HH:mm:ss")
             }}
           </p>
-          <p class="py-0 my-0" v-if="item.state == 2">
+          <p
+            class="py-0 my-0"
+            v-if="item.state == 2"
+          >
             <span class="text-gray">Fecha de creacion:</span>
             {{
               moment(`${item.en_proceso_user}`).format(
@@ -36,7 +73,10 @@
               )
             }}
           </p>
-          <p class="py-0 my-0" v-if="item.state == 3">
+          <p
+            class="py-0 my-0"
+            v-if="item.state == 3"
+          >
             <span class="text-gray">Fecha de creacion:</span>
             {{
               moment(`${item.dispached_user}`).format(
@@ -45,7 +85,10 @@
             }}
           </p>
 
-          <p class="py-0 my-0" v-if="item.state == 4">
+          <p
+            class="py-0 my-0"
+            v-if="item.state == 4"
+          >
             <span class="text-gray">Fecha de creacion:</span>
             {{
               moment(`${item.entregado_user}`).format(
@@ -54,7 +97,10 @@
             }}
           </p>
         </div>
-        <div class="col-sm-12 col-md-4">
+        <div
+          v-if="item"
+          class="col-sm-12 col-md-4"
+        >
           <h4>Datos de factura</h4>
           <p class="py-0 my-0">
             <span class="text-gray">Cliente:</span> {{ item.cliente.name }}
@@ -74,7 +120,10 @@
             {{ item.cliente.phone }}
           </p>
         </div>
-        <div class="col-sm-12 col-md-4">
+        <div
+          v-if="item"
+          class="col-sm-12 col-md-4"
+        >
           <h4>Datos de envio</h4>
           <p class="py-0 my-0">
             <span class="text-gray">Cliente:</span> {{ item.cliente.name }}
@@ -95,9 +144,7 @@
         </div>
         <hr />
         <div class="col-sm-12">
-          <table
-            class="table table-striped table-hover table-condensed table-sm"
-          >
+          <table class="table table-striped table-hover table-condensed table-sm">
             <thead>
               <tr>
                 <th>Codigo</th>
@@ -107,7 +154,7 @@
                 <th class="text-right">SubTotal(S/.)</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="item">
               <tr
                 v-for="(producto, key) in item.productos_ordenados"
                 :key="key"
@@ -124,28 +171,46 @@
                 </td>
               </tr>
               <tr>
-                <td colspan="4" class="text-right text-bold">SubTotal</td>
+                <td
+                  colspan="4"
+                  class="text-right text-bold"
+                >SubTotal</td>
                 <td class="text-right">{{ subTotal }}</td>
               </tr>
               <tr>
-                <td colspan="4" class="text-right text-bold">Costo de envio</td>
+                <td
+                  colspan="4"
+                  class="text-right text-bold"
+                >Costo de envio</td>
                 <td class="text-right">{{ item.tax }}</td>
               </tr>
               <tr>
-                <td colspan="4" class="text-right text-bold">Total</td>
+                <td
+                  colspan="4"
+                  class="text-right text-bold"
+                >Total</td>
                 <td class="text-right">
                   {{ numero(numero(subTotal) + numero(item.tax)) }}
                 </td>
               </tr>
             </tbody>
           </table>
-          <div class="row">
-            <div class="text-right col-6" v-if="item.state == 1">
+          <div
+            v-if="item"
+            class="row"
+          >
+            <div
+              class="text-right col-6"
+              v-if="item.state == 1"
+            >
               <button class="btn btn-danger btn-lg">
                 Rechazar nueva orden
               </button>
             </div>
-            <div class="text-right col-6" v-if="item.state == 3">
+            <div
+              class="text-right col-6"
+              v-if="item.state == 3"
+            >
               <button class="btn btn-danger btn-lg">Cancelar entrega</button>
             </div>
             <div class="text-left col-6">
@@ -154,7 +219,10 @@
                 class="btn btn-success btn-lg"
                 @click="enviarEmpacado"
               >
-                <i class="fa fa-cubes" aria-hidden="true"></i>
+                <i
+                  class="fa fa-cubes"
+                  aria-hidden="true"
+                ></i>
                 Enviar para empacar
               </button>
               <button
@@ -162,7 +230,10 @@
                 class="btn btn-success btn-lg"
                 @click="enviarEncamino"
               >
-                <i class="fa fa-truck" aria-hidden="true"></i>
+                <i
+                  class="fa fa-truck"
+                  aria-hidden="true"
+                ></i>
                 Enviar para entregar
               </button>
               <button
@@ -170,7 +241,10 @@
                 class="btn btn-success btn-lg"
                 @click="enviarEntrega"
               >
-                <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                <i
+                  class="fa fa-handshake-o"
+                  aria-hidden="true"
+                ></i>
                 Realizar entrega
               </button>
             </div>
@@ -187,9 +261,17 @@ import Axios from "axios";
 // import { Posts } from '../../../FackApi/api/SocialPost'
 
 // import AddSocialPost from './Components/AddSocialPost'
+import GoogleMapLoader from "./GoogleMapLoader";
+import GoogleMapMarker from "./GoogleMapLoader";
+import GoogleMapLine from "./GoogleMapLoader";
+import { mapSettings } from "../../../constants/mapSettings";
 export default {
-  name: "Order",
-  //   components: { AddSocialPost, SocialPost },
+  //   name: "Order",
+  components: {
+    GoogleMapLoader,
+    GoogleMapMarker,
+    GoogleMapLine
+  },
   mounted() {
     // core.index();
   },
@@ -199,6 +281,28 @@ export default {
   props: ["order_id", "user_id"],
   data() {
     return {
+      apiKey: "AIzaSyC216yD_VOkh3YKnnNV6pbIQF2f-GDT7Ms",
+      markers: [
+        { id: "a", position: { lat: 3, lng: 101 } },
+        { id: "b", position: { lat: 5, lng: 99 } },
+        { id: "c", position: { lat: 6, lng: 97 } }
+      ],
+      lines: [
+        {
+          id: "1",
+          path: [
+            { lat: 3, lng: 101 },
+            { lat: 5, lng: 99 }
+          ]
+        },
+        {
+          id: "2",
+          path: [
+            { lat: 5, lng: 99 },
+            { lat: 6, lng: 97 }
+          ]
+        }
+      ],
       order: {
         id: 0,
         code: "",
@@ -210,7 +314,7 @@ export default {
         hora_entrega: null
         // nameState: null,
       },
-      item: [],
+      item: null,
       order_inicial: {
         id: 0,
         code: "",
@@ -229,9 +333,6 @@ export default {
       valorBuscar: "",
       paginate: ["itemss"]
     };
-  },
-  mounted() {
-    this.index();
   },
   methods: {
     numero(num) {
@@ -398,14 +499,16 @@ export default {
   },
   computed: {
     subTotal() {
-      return this.item.productos_ordenados.reduce(
-        (p, c) =>
-          this.numero(
-            this.numero(p) + this.numero(c.quantity) * this.numero(c.pu)
-          ),
-        0
-      );
-    }
+      if (this.item.productos_ordenados) {
+        return this.item.productos_ordenados.reduce(
+          (p, c) =>
+            this.numero(
+              this.numero(p) + this.numero(c.quantity) * this.numero(c.pu)
+            ),
+          0
+        );
+      }
+    },
     // row() {
     //   return this.items.length;
     // },
@@ -422,7 +525,16 @@ export default {
     //       .toLowerCase()
     //       .includes(this.valorBuscar.toLowerCase());
     //   });
-    // }
+    // },
+    mapConfig() {
+      return {
+        ...mapSettings,
+        center: this.mapCenter
+      };
+    },
+    mapCenter() {
+      return this.markers[1].position;
+    }
   }
 };
 </script>

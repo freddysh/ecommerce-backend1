@@ -93,7 +93,11 @@ const app = new Vue({
         'product-component':()=>import('./components/Admin/Product/index.vue'),
         'product-import-component':()=>import('./components/Admin/Product/index-import.vue'),
         'order-component':()=>import('./components/Store/Order/index.vue'),
+        'order-view-component':()=>import('./components/Store/Order/show.vue'),
         'orders-entregadas-component':()=>import('./components/Store/Order/orders-entregadas.vue'),
         'report-component':()=>import('./components/Admin/Report/index.vue'),
+        // 'google-map-loader-component':()=>import('./components/Store/Order/GoogleMapLoader.vue'),
+        // 'google-map-line-component':()=>import('./components/Store/Order/GoogleMapLine.vue'),
+        // 'google-map-marker-component':()=>import('./components/Store/Order/GoogleMapMarker.vue'),
     },
 });

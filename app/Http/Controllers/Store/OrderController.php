@@ -21,11 +21,14 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function fecha($fecha='08 Diciembre 2021'){
+        return $this->formatearFecha($fecha);
+    }
     protected function formatearFecha($fecha){
         // $fecha='04 Marzo 2021';
         $fechaE=explode(' ',$fecha);
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        $mes =array_search($fechaE[1], $meses)+1;
+        $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
+        $mes =array_search(strtolower(trim($fechaE[1])), $meses)+1;
         if($mes<10)
             $mes='0'.$mes;
         $fecha_= $fechaE[2].'-'.$mes.'-'.$fechaE[0];
@@ -131,7 +134,7 @@ class OrderController extends Controller
         $tax=$form['tax'];
         $total=$form['total_price'];
 
-        $fecha_pedido= Carbon::now('America/Chicago')->toDateTimeString();
+        $fecha_pedido= Carbon::now('America/Lima')->toDateTimeString();
         // $fecha_pedido= $fecha_pedido->today();
 
         // $fecha_entrega=Carbon::createFromFormat($form['picked_fecha'])->toDateTimeString();
