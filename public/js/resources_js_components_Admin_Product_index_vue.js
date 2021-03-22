@@ -4070,7 +4070,7 @@ var render = function() {
                                   staticClass: "btn btn-danger",
                                   on: {
                                     click: function($event) {
-                                      return _vm.borrar(props.column.id)
+                                      return _vm.borrar(props.row.id)
                                     }
                                   }
                                 },

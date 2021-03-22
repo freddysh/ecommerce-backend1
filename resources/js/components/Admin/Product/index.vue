@@ -481,7 +481,7 @@
                 </button>
                 <button
                   class="btn btn-danger"
-                  @click="borrar(props.column.id)"
+                  @click="borrar(props.row.id)"
                 >
                   <i class="fas fa-trash-alt"></i>
                 </button>
