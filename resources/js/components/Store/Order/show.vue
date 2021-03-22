@@ -4,27 +4,12 @@
       <div class="row">
         <div class="col-12">
           <p>Mapa</p>
-          <GoogleMapLoader
-            :mapConfig="mapConfig"
-            :apiKey="apiKey"
-          >
-            <template slot-scope="{ google, map }">
-              <GoogleMapMarker
-                v-for="marker in markers"
-                :key="marker.id"
-                :marker="marker"
-                :google="google"
-                :map="map"
-              />
-              <GoogleMapLine
-                v-for="line in lines"
-                :key="line.id"
-                :path.sync="line.path"
-                :google="google"
-                :map="map"
-              />
-            </template>
-          </GoogleMapLoader>
+          <GoogleMap
+            :latitude=13.7013266
+            :longitude=-89.226622
+            :title="'Titulo Marcador'"
+          />
+
         </div>
         <div
           v-if="item"
@@ -256,21 +241,22 @@
 </template>
 <script>
 import Axios from "axios";
+import GoogleMap from "./Map/GoogleMap";
 // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
 // import { Posts } from '../../../FackApi/api/SocialPost'
 
 // import AddSocialPost from './Components/AddSocialPost'
-import GoogleMapLoader from "./GoogleMapLoader";
-import GoogleMapMarker from "./GoogleMapLoader";
-import GoogleMapLine from "./GoogleMapLoader";
-import { mapSettings } from "../../../constants/mapSettings";
+// import GoogleMapLoader from "./GoogleMapLoader";
+// import GoogleMapMarker from "./GoogleMapLoader";
+// import GoogleMapLine from "./GoogleMapLoader";
+// import { mapSettings } from "../../../constants/mapSettings";
 export default {
   //   name: "Order",
   components: {
-    GoogleMapLoader,
-    GoogleMapMarker,
-    GoogleMapLine
+    GoogleMap
+    // GoogleMapMarker,
+    // GoogleMapLine
   },
   mounted() {
     // core.index();
@@ -282,27 +268,6 @@ export default {
   data() {
     return {
       apiKey: "AIzaSyC216yD_VOkh3YKnnNV6pbIQF2f-GDT7Ms",
-      markers: [
-        { id: "a", position: { lat: 3, lng: 101 } },
-        { id: "b", position: { lat: 5, lng: 99 } },
-        { id: "c", position: { lat: 6, lng: 97 } }
-      ],
-      lines: [
-        {
-          id: "1",
-          path: [
-            { lat: 3, lng: 101 },
-            { lat: 5, lng: 99 }
-          ]
-        },
-        {
-          id: "2",
-          path: [
-            { lat: 5, lng: 99 },
-            { lat: 6, lng: 97 }
-          ]
-        }
-      ],
       order: {
         id: 0,
         code: "",
@@ -508,7 +473,7 @@ export default {
           0
         );
       }
-    },
+    }
     // row() {
     //   return this.items.length;
     // },
@@ -526,15 +491,6 @@ export default {
     //       .includes(this.valorBuscar.toLowerCase());
     //   });
     // },
-    mapConfig() {
-      return {
-        ...mapSettings,
-        center: this.mapCenter
-      };
-    },
-    mapCenter() {
-      return this.markers[1].position;
-    }
   }
 };
 </script>

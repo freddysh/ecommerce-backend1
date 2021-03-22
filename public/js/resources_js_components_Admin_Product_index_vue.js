@@ -489,6 +489,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -865,6 +912,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     agregar: function agregar() {
       var _this6 = this;
 
+      console.log("entro para enviar los datos");
       this.$validator.validate().then(function (result) {
         if (result) {
           _this6.agregar_();
@@ -1095,38 +1143,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       valor = parseFloat(valor).toFixed(2);
       console.log("valor 2 decimales" + valor);
       return valor;
-    },
-    //-- funciones para el select tag
-    criteria: function criteria() {
-      // Compute the search criteria
-      return this.search.trim().toLowerCase();
-    },
-    availableOptions: function availableOptions() {
-      var _this12 = this;
+    } //-- funciones para el select tag
+    // criteria() {
+    //   // Compute the search criteria
+    //   return this.search.trim().toLowerCase();
+    // },
+    // availableOptions() {
+    //   const criteria = this.criteria;
+    //   // Filter out already selected options
+    //   const options = this.categories.filter(
+    //     opt => this.product.categorias.indexOf(opt) === -1
+    //   );
+    //   if (criteria) {
+    //     // Show only options that match criteria
+    //     return this.categories.filter(
+    //       opt => opt.toLowerCase().indexOf(criteria) > -1
+    //     );
+    //   }
+    //   // Show all options available
+    //   return options;
+    // },
+    // searchDesc() {
+    //   if (this.criteria && this.availableOptions.length === 0) {
+    //     return "No hay etiquetas que coincidan con sus criterios de búsqueda.";
+    //   }
+    //   return "";
+    // }
 
-      var criteria = this.criteria; // Filter out already selected options
-
-      var options = this.categories.filter(function (opt) {
-        return _this12.product.categorias.indexOf(opt) === -1;
-      });
-
-      if (criteria) {
-        // Show only options that match criteria
-        return this.categories.filter(function (opt) {
-          return opt.toLowerCase().indexOf(criteria) > -1;
-        });
-      } // Show all options available
-
-
-      return options;
-    },
-    searchDesc: function searchDesc() {
-      if (this.criteria && this.availableOptions.length === 0) {
-        return "No hay etiquetas que coincidan con sus criterios de búsqueda.";
-      }
-
-      return "";
-    }
   }
 });
 
@@ -2893,8 +2936,8 @@ var render = function() {
                                 {
                                   name: "validate",
                                   rawName: "v-validate",
-                                  value: "required|alpha_num",
-                                  expression: "'required|alpha_num'"
+                                  value: "required",
+                                  expression: "'required'"
                                 }
                               ],
                               staticClass: "form-control",
@@ -3049,8 +3092,8 @@ var render = function() {
                                 {
                                   name: "validate",
                                   rawName: "v-validate",
-                                  value: "required|alpha_dash",
-                                  expression: "'required|alpha_dash'"
+                                  value: "required",
+                                  expression: "'required'"
                                 }
                               ],
                               staticClass: "form-control",
@@ -3268,6 +3311,10 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
+                              class: {
+                                input: true,
+                                danger: _vm.errors.has("descripcion")
+                              },
                               attrs: {
                                 id: "description",
                                 name: "descripcion",
@@ -3286,7 +3333,35 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("descripcion"),
+                                  expression: "errors.has('descripcion')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("descripcion"),
+                                    expression: "errors.has('descripcion')"
+                                  }
+                                ],
+                                staticClass: "help text-danger"
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("descripcion")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -3312,6 +3387,10 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
+                              class: {
+                                input: true,
+                                danger: _vm.errors.has("descripcion")
+                              },
                               attrs: {
                                 id: "detail",
                                 name: "detalle",
@@ -3330,7 +3409,35 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("descripcion"),
+                                  expression: "errors.has('descripcion')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("descripcion"),
+                                    expression: "errors.has('descripcion')"
+                                  }
+                                ],
+                                staticClass: "help text-danger"
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("descripcion")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -3356,6 +3463,10 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
+                              class: {
+                                input: true,
+                                danger: _vm.errors.has("precio")
+                              },
                               attrs: {
                                 type: "number",
                                 id: "price",
@@ -3363,7 +3474,7 @@ var render = function() {
                                 placeholder: "Ingrese el precio",
                                 required: "",
                                 step: "0.10",
-                                min: "1"
+                                min: "0"
                               },
                               domProps: { value: _vm.product.price },
                               on: {
@@ -3378,7 +3489,35 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("precio"),
+                                  expression: "errors.has('precio')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("precio"),
+                                    expression: "errors.has('precio')"
+                                  }
+                                ],
+                                staticClass: "help text-danger"
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("precio")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -3404,6 +3543,10 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
+                              class: {
+                                input: true,
+                                danger: _vm.errors.has("descuento")
+                              },
                               attrs: {
                                 type: "number",
                                 id: "discount",
@@ -3425,7 +3568,35 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("descuento"),
+                                  expression: "errors.has('descuento')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("descuento"),
+                                    expression: "errors.has('descuento')"
+                                  }
+                                ],
+                                staticClass: "help text-danger"
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("descuento")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -3451,10 +3622,14 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
+                              class: {
+                                input: true,
+                                danger: _vm.errors.has("precio_regular")
+                              },
                               attrs: {
                                 type: "number",
                                 id: "regular_price",
-                                name: "precio regular",
+                                name: "precio_regular",
                                 placeholder: "Ingrese el precio regular",
                                 required: "",
                                 step: "0.10",
@@ -3469,7 +3644,39 @@ var render = function() {
                                   _vm.precio = $event.target.value
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("precio_regular"),
+                                  expression: "errors.has('precio_regular')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("precio_regular"),
+                                    expression: "errors.has('precio_regular')"
+                                  }
+                                ],
+                                staticClass: "help text-danger"
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(_vm.errors.first("precio_regular"))
+                                )
+                              ]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -3554,6 +3761,7 @@ var render = function() {
                                     _c("label", [
                                       _vm._v("Ingrese el rango de fechas:")
                                     ]),
+                                    _c("br"),
                                     _vm._v(" "),
                                     _c("date-picker", {
                                       attrs: { range: "" },
@@ -3904,119 +4112,6 @@ var staticRenderFns = [
 ]
 render._withStripped = true
 
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ normalizeComponent)
-/* harmony export */ });
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-function normalizeComponent (
-  scriptExports,
-  render,
-  staticRenderFns,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier, /* server only */
-  shadowMode /* vue-cli only */
-) {
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (render) {
-    options.render = render
-    options.staticRenderFns = staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = 'data-v-' + scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = shadowMode
-      ? function () {
-        injectStyles.call(
-          this,
-          (options.functional ? this.parent : this).$root.$options.shadowRoot
-        )
-      }
-      : injectStyles
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functional component in vue file
-      var originalRender = options.render
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return originalRender(h, context)
-      }
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    }
-  }
-
-  return {
-    exports: scriptExports,
-    options: options
-  }
-}
 
 
 /***/ }),

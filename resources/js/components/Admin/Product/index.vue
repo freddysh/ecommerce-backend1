@@ -62,7 +62,7 @@
                         aria-describedby="nameHelp"
                         placeholder="Ingrese el codigo"
                         v-model="product.code"
-                        v-validate="'required|alpha_num'"
+                        v-validate="'required'"
                         :class="{'input': true, 'danger': errors.has('codigo') }"
                       />
                       <i
@@ -110,7 +110,7 @@
                         aria-describedby="urlHelp"
                         placeholder="Ingrese la url"
                         v-model="url"
-                        v-validate="'required|alpha_dash'"
+                        v-validate="'required'"
                         :class="{'input': true, 'danger': errors.has('url') }"
                       />
 
@@ -182,7 +182,17 @@
                         rows="5"
                         v-model="product.description"
                         v-validate="'required'"
+                        :class="{'input': true, 'danger': errors.has('descripcion') }"
                       ></textarea>
+
+                      <i
+                        v-show="errors.has('descripcion')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('descripcion')"
+                        class="help text-danger"
+                      >{{ errors.first('descripcion') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-6">
@@ -195,7 +205,16 @@
                         rows="5"
                         v-model="product.detail"
                         v-validate="'required'"
+                        :class="{'input': true, 'danger': errors.has('descripcion') }"
                       ></textarea>
+                      <i
+                        v-show="errors.has('descripcion')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('descripcion')"
+                        class="help text-danger"
+                      >{{ errors.first('descripcion') }}</span>
                     </div>
                   </div>
 
@@ -211,9 +230,19 @@
                         v-model="product.price"
                         required
                         step="0.10"
-                        min="1"
+                        min="0"
                         v-validate="'decimal:2'"
+                        :class="{'input': true, 'danger': errors.has('precio') }"
                       />
+                      <i
+                        v-show="errors.has('precio')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('precio')"
+                        class="help text-danger"
+                      >{{ errors.first('precio') }}</span>
+
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-4">
@@ -229,7 +258,16 @@
                         required
                         min="0"
                         v-validate="'decimal:2'"
+                        :class="{'input': true, 'danger': errors.has('descuento') }"
                       />
+                      <i
+                        v-show="errors.has('descuento')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('descuento')"
+                        class="help text-danger"
+                      >{{ errors.first('descuento') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-4">
@@ -239,14 +277,23 @@
                         type="number"
                         class="form-control"
                         id="regular_price"
-                        name="precio regular"
+                        name="precio_regular"
                         placeholder="Ingrese el precio regular"
                         v-model="precio"
                         required
                         step="0.10"
                         min="0"
                         v-validate="'decimal:2'"
+                        :class="{'input': true, 'danger': errors.has('precio_regular') }"
                       />
+                      <i
+                        v-show="errors.has('precio_regular')"
+                        class="fa fa-warning"
+                      ></i>
+                      <span
+                        v-show="errors.has('precio_regular')"
+                        class="help text-danger"
+                      >{{ errors.first('precio_regular') }}</span>
                     </div>
                   </div>
                   <div class="col col-sm-12 col-md-3">
@@ -277,7 +324,7 @@
                     v-if="product.limit"
                   >
                     <div class="form-group">
-                      <label>Ingrese el rango de fechas:</label>
+                      <label>Ingrese el rango de fechas:</label><br>
                       <date-picker
                         v-model="product.rango_fecha"
                         range
@@ -732,6 +779,7 @@ export default {
       }
     },
     agregar() {
+      console.log("entro para enviar los datos");
       this.$validator.validate().then(result => {
         if (result) {
           this.agregar_();
@@ -932,33 +980,33 @@ export default {
       valor = parseFloat(valor).toFixed(2);
       console.log("valor 2 decimales" + valor);
       return valor;
-    },
-    //-- funciones para el select tag
-    criteria() {
-      // Compute the search criteria
-      return this.search.trim().toLowerCase();
-    },
-    availableOptions() {
-      const criteria = this.criteria;
-      // Filter out already selected options
-      const options = this.categories.filter(
-        opt => this.product.categorias.indexOf(opt) === -1
-      );
-      if (criteria) {
-        // Show only options that match criteria
-        return this.categories.filter(
-          opt => opt.toLowerCase().indexOf(criteria) > -1
-        );
-      }
-      // Show all options available
-      return options;
-    },
-    searchDesc() {
-      if (this.criteria && this.availableOptions.length === 0) {
-        return "No hay etiquetas que coincidan con sus criterios de búsqueda.";
-      }
-      return "";
     }
+    //-- funciones para el select tag
+    // criteria() {
+    //   // Compute the search criteria
+    //   return this.search.trim().toLowerCase();
+    // },
+    // availableOptions() {
+    //   const criteria = this.criteria;
+    //   // Filter out already selected options
+    //   const options = this.categories.filter(
+    //     opt => this.product.categorias.indexOf(opt) === -1
+    //   );
+    //   if (criteria) {
+    //     // Show only options that match criteria
+    //     return this.categories.filter(
+    //       opt => opt.toLowerCase().indexOf(criteria) > -1
+    //     );
+    //   }
+    //   // Show all options available
+    //   return options;
+    // },
+    // searchDesc() {
+    //   if (this.criteria && this.availableOptions.length === 0) {
+    //     return "No hay etiquetas que coincidan con sus criterios de búsqueda.";
+    //   }
+    //   return "";
+    // }
   }
 };
 </script>
