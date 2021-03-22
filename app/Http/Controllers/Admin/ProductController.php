@@ -248,7 +248,6 @@ class ProductController extends Controller
                         Storage::disk('product')->delete($imagenEnDb->photo);
                     }
                 }
-
             // procedemos a agregar las nuevas imagenes
                 foreach ($request->photos as $imagen) {
                     $imagen_ = $imagen['imgSrc'];
@@ -270,6 +269,11 @@ class ProductController extends Controller
                             Storage::disk('product')->put($src,  $imagen_decode);
 
                             $img->photo=$src;
+                            $img->save();
+                        }
+                        else if($imagen_id>0){
+                            $img= ProductPhotos::findorfail($imagen_id);
+                            $img->state=$state?1:0;
                             $img->save();
                         }
                     }
