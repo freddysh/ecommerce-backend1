@@ -49,12 +49,21 @@ class OrderController extends Controller
         //
         return view('store.orders.show',['order_id'=>$order_id]);
     }
+    public function order_entregar_show_view($order_id)
+    {
+        //
+        return view('store.orders.show',['order_id'=>$order_id]);
+    }
     public function orders_entregadas()
     {
         //
         return view('store.orders.orders-entregadas');
     }
-
+    public function orders_entregar()
+    {
+        //
+        return view('store.orders.orders-entregar');
+    }
     public function index()
     {
         //
@@ -289,6 +298,31 @@ class OrderController extends Controller
         }elseif($state==4){
             $order->entregado_user=Carbon::now('America/Lima')->toDateTimeString();
             $order->entregado_user_id=$user_id;
+        }
+        $order->save();
+        return response()->json(['status'=>'1']);
+    }
+    public function enviar_mensaje(Request $request)
+    {
+
+
+        // return response()->json(['status'=>$request->all()]);
+        $order_id=$request->id;
+        $mensaje=$request->mensaje;
+        $state=$request->state;
+        $user_id=$request->user_id;
+
+        $order=Order::findorfail($order_id);
+        $order->state=$state;
+        if($state==-1){
+            $order->cancelado_user=Carbon::now('America/Lima')->toDateTimeString();
+            $order->cancelado_user_id=$user_id;
+            $order->nota_cancelacion_user=$mensaje;
+        }
+        elseif($state==-2){
+            $order->cancelado_cliente=Carbon::now('America/Lima')->toDateTimeString();
+            $order->cancelado_user_id=$user_id;
+            $order->nota_cancelacion_cliente=$mensaje;
         }
         $order->save();
         return response()->json(['status'=>'1']);

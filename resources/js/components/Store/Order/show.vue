@@ -2,15 +2,6 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-12">
-          <p>Mapa</p>
-          <GoogleMap
-            :latitude=13.7013266
-            :longitude=-89.226622
-            :title="'Titulo Marcador'"
-          />
-
-        </div>
         <div
           v-if="item"
           class="col-sm-12 col-md-4"
@@ -184,11 +175,93 @@
             v-if="item"
             class="row"
           >
+            <div class="col-12">
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div
+                  class="modal-dialog"
+                  role="document"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5
+                        class="modal-title"
+                        id="exampleModalLabel"
+                      >
+                        {{ tituloModal }}
+                      </h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="mensaje">Mensaje</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="mensaje"
+                            name="mensaje"
+                            placeholder="Ingrese el mensaje"
+                            v-model="mensaje"
+                            v-validate="'required'"
+                            :class="{'input': true, 'danger': errors.has('mensaje') }"
+                          />
+                          <i
+                            v-show="errors.has('mensaje')"
+                            class="fa fa-warning"
+                          ></i>
+                          <span
+                            v-show="errors.has('mensaje')"
+                            class="help text-danger"
+                          >{{ errors.first('mensaje') }}</span>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Cerrar
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="cancelar"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
             <div
               class="text-right col-6"
               v-if="item.state == 1"
             >
-              <button class="btn btn-danger btn-lg">
+              <button
+                type="button"
+                class="btn btn-danger btn-lg"
+                data-toggle="modal"
+                @click="iniciarForm(-1)"
+              >
                 Rechazar nueva orden
               </button>
             </div>
@@ -196,7 +269,14 @@
               class="text-right col-6"
               v-if="item.state == 3"
             >
-              <button class="btn btn-danger btn-lg">Cancelar entrega</button>
+              <button
+                type="button"
+                class="btn btn-danger btn-lg"
+                data-toggle="modal"
+                @click="iniciarForm(-2)"
+              >
+                Cancelar entrega
+              </button>
             </div>
             <div class="text-left col-6">
               <button
@@ -241,7 +321,6 @@
 </template>
 <script>
 import Axios from "axios";
-import GoogleMap from "./Map/GoogleMap";
 // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
 // import { Posts } from '../../../FackApi/api/SocialPost'
@@ -254,7 +333,7 @@ import GoogleMap from "./Map/GoogleMap";
 export default {
   //   name: "Order",
   components: {
-    GoogleMap
+    // GoogleMapLoader,
     // GoogleMapMarker,
     // GoogleMapLine
   },
@@ -268,6 +347,27 @@ export default {
   data() {
     return {
       apiKey: "AIzaSyC216yD_VOkh3YKnnNV6pbIQF2f-GDT7Ms",
+      markers: [
+        { id: "a", position: { lat: 3, lng: 101 } },
+        { id: "b", position: { lat: 5, lng: 99 } },
+        { id: "c", position: { lat: 6, lng: 97 } }
+      ],
+      lines: [
+        {
+          id: "1",
+          path: [
+            { lat: 3, lng: 101 },
+            { lat: 5, lng: 99 }
+          ]
+        },
+        {
+          id: "2",
+          path: [
+            { lat: 5, lng: 99 },
+            { lat: 6, lng: 97 }
+          ]
+        }
+      ],
       order: {
         id: 0,
         code: "",
@@ -296,7 +396,10 @@ export default {
       currentPage: 1,
       per_page: 10,
       valorBuscar: "",
-      paginate: ["itemss"]
+      paginate: ["itemss"],
+      mensaje: "",
+      state_mensaje: -1,
+      tituloModal: "Rechazar nueva orden"
     };
   },
   methods: {
@@ -312,28 +415,135 @@ export default {
     },
     rechazar() {},
     enviarEmpacado() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(2);
-      }
+      Vue.swal
+        .fire({
+          title: "Esta seguro de guardar los datos?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Proceder!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.enviarDatos(2);
+          }
+        });
+      //   if (confirm("Estas seguro de borra este dato?")) {
+      //   }
+
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(2);
+      //   }
     },
     enviarEncamino() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(3);
-      }
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(3);
+      //   }
+
+      Vue.swal
+        .fire({
+          title: "Esta seguro de guardar los datos?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Proceder!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.enviarDatos(3);
+          }
+        });
     },
     enviarEntrega() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(4);
-      }
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(4);
+      //   }
+
+      Vue.swal
+        .fire({
+          title: "Esta seguro de guardar los datos?",
+          text: "No podrás revertir este paso!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, Proceder!",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.enviarDatos(4);
+          }
+        });
     },
     async enviarDatos(state) {
       let datos = await Axios.get(
         `${process.env.MIX_MIX_APP_URL}/api/v1/orders/enviar/${this.item.id}/${state}/${this.user_id}`
       );
-      console.log("rpt;", datos.data);
+      console.log("rpt;uouo", datos.data);
       if (datos.data.status == 1) {
         // alert('datos editados')
-        window.location.href = "../../list";
+        if (state == 2) {
+          window.location.href = "../../list";
+        } else if (state == 3) {
+          window.location.href = "../../list";
+        } else if (state == 4) {
+          window.location.href = "../../entregar";
+        }
+      } else {
+        alert("Ocurrio un error, vuelva a intentarlo mas tarde");
+      }
+    },
+    iniciarForm(state) {
+      this.state_mensaje = state;
+      if (state == -2) {
+        this.tituloModal = "Cancelar entrega";
+      } else {
+        this.tituloModal = "Rechazar nueva orden";
+      }
+      this.limpiarCampos();
+      this.toggleModal();
+    },
+    limpiarCampos() {
+      this.mensaje = "";
+    },
+    toggleModal() {
+      $("#exampleModal").modal("toggle");
+    },
+    cancelar() {
+      //   this.state_mensaje = state;
+      this.$validator.validate().then(result => {
+        if (result) {
+          this.enviarDatosMensaje();
+          this.toggleModal();
+        }
+      });
+    },
+    async enviarDatosMensaje() {
+      let mensajito = {
+        id: this.item.id,
+        user_id: this.user_id,
+        state: this.state_mensaje,
+        mensaje: this.mensaje
+      };
+      let datos = await Axios.post(
+        `${process.env.MIX_MIX_APP_URL}/api/v1/orders/enviar`,
+        mensajito
+      );
+      console.log("respuesta:", datos.data);
+      if (datos.data.status == 1) {
+        // alert('datos editados')
+        if (this.state_mensaje == -1) {
+          window.location.href = "../../list";
+        } else if (this.state_mensaje == -2) {
+          window.location.href = "../../entregar";
+        }
       } else {
         alert("Ocurrio un error, vuelva a intentarlo mas tarde");
       }
@@ -473,7 +683,7 @@ export default {
           0
         );
       }
-    }
+    },
     // row() {
     //   return this.items.length;
     // },
@@ -491,6 +701,15 @@ export default {
     //       .includes(this.valorBuscar.toLowerCase());
     //   });
     // },
+    mapConfig() {
+      return {
+        ...mapSettings,
+        center: this.mapCenter
+      };
+    },
+    mapCenter() {
+      return this.markers[1].position;
+    }
   }
 };
 </script>

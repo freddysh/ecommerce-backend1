@@ -11,59 +11,6 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    return {
-      center: {
-        lat: this.latitude,
-        lng: this.longitude
-      },
-      markers: [{
-        position: {
-          lat: this.latitude,
-          lng: this.longitude
-        },
-        title: this.title
-      }]
-    };
-  },
-  props: {
-    latitude: Number,
-    longitude: Number,
-    title: String
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/show.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/show.vue?vue&type=script&lang=js& ***!
@@ -79,7 +26,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Map_GoogleMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Map/GoogleMap */ "./resources/js/components/Store/Order/Map/GoogleMap.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -327,7 +279,86 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
 // import { Posts } from '../../../FackApi/api/SocialPost'
@@ -339,10 +370,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   //   name: "Order",
-  components: {
-    GoogleMap: _Map_GoogleMap__WEBPACK_IMPORTED_MODULE_2__.default // GoogleMapMarker,
+  components: {// GoogleMapLoader,
+    // GoogleMapMarker,
     // GoogleMapLine
-
   },
   mounted: function mounted() {// core.index();
   },
@@ -353,6 +383,44 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       apiKey: "AIzaSyC216yD_VOkh3YKnnNV6pbIQF2f-GDT7Ms",
+      markers: [{
+        id: "a",
+        position: {
+          lat: 3,
+          lng: 101
+        }
+      }, {
+        id: "b",
+        position: {
+          lat: 5,
+          lng: 99
+        }
+      }, {
+        id: "c",
+        position: {
+          lat: 6,
+          lng: 97
+        }
+      }],
+      lines: [{
+        id: "1",
+        path: [{
+          lat: 3,
+          lng: 101
+        }, {
+          lat: 5,
+          lng: 99
+        }]
+      }, {
+        id: "2",
+        path: [{
+          lat: 5,
+          lng: 99
+        }, {
+          lat: 6,
+          lng: 97
+        }]
+      }],
       order: {
         id: 0,
         code: "",
@@ -381,7 +449,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       currentPage: 1,
       per_page: 10,
       valorBuscar: "",
-      paginate: ["itemss"]
+      paginate: ["itemss"],
+      mensaje: "",
+      state_mensaje: -1,
+      tituloModal: "Rechazar nueva orden"
     };
   },
   methods: {
@@ -414,22 +485,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     rechazar: function rechazar() {},
     enviarEmpacado: function enviarEmpacado() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(2);
-      }
+      var _this2 = this;
+
+      Vue.swal.fire({
+        title: "Esta seguro de guardar los datos?",
+        text: "No podrás revertir este paso!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Proceder!",
+        cancelButtonText: "Cancelar"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this2.enviarDatos(2);
+        }
+      }); //   if (confirm("Estas seguro de borra este dato?")) {
+      //   }
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(2);
+      //   }
     },
     enviarEncamino: function enviarEncamino() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(3);
-      }
+      var _this3 = this;
+
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(3);
+      //   }
+      Vue.swal.fire({
+        title: "Esta seguro de guardar los datos?",
+        text: "No podrás revertir este paso!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Proceder!",
+        cancelButtonText: "Cancelar"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this3.enviarDatos(3);
+        }
+      });
     },
     enviarEntrega: function enviarEntrega() {
-      if (confirm("Esta seguro de guardar los datos?")) {
-        this.enviarDatos(4);
-      }
+      var _this4 = this;
+
+      //   if (confirm("Esta seguro de guardar los datos?")) {
+      //     this.enviarDatos(4);
+      //   }
+      Vue.swal.fire({
+        title: "Esta seguro de guardar los datos?",
+        text: "No podrás revertir este paso!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Proceder!",
+        cancelButtonText: "Cancelar"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this4.enviarDatos(4);
+        }
+      });
     },
     enviarDatos: function enviarDatos(state) {
-      var _this2 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var datos;
@@ -438,15 +558,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://sistemaorion.green.com.pe", "/api/v1/orders/enviar/").concat(_this2.item.id, "/").concat(state, "/").concat(_this2.user_id));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://sistemaorion.green.com.pe", "/api/v1/orders/enviar/").concat(_this5.item.id, "/").concat(state, "/").concat(_this5.user_id));
 
               case 2:
                 datos = _context2.sent;
-                console.log("rpt;", datos.data);
+                console.log("rpt;uouo", datos.data);
 
                 if (datos.data.status == 1) {
                   // alert('datos editados')
-                  window.location.href = "../../list";
+                  if (state == 2) {
+                    window.location.href = "../../list";
+                  } else if (state == 3) {
+                    window.location.href = "../../list";
+                  } else if (state == 4) {
+                    window.location.href = "../../entregar";
+                  }
                 } else {
                   alert("Ocurrio un error, vuelva a intentarlo mas tarde");
                 }
@@ -457,6 +583,77 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee2);
+      }))();
+    },
+    iniciarForm: function iniciarForm(state) {
+      this.state_mensaje = state;
+
+      if (state == -2) {
+        this.tituloModal = "Cancelar entrega";
+      } else {
+        this.tituloModal = "Rechazar nueva orden";
+      }
+
+      this.limpiarCampos();
+      this.toggleModal();
+    },
+    limpiarCampos: function limpiarCampos() {
+      this.mensaje = "";
+    },
+    toggleModal: function toggleModal() {
+      $("#exampleModal").modal("toggle");
+    },
+    cancelar: function cancelar() {
+      var _this6 = this;
+
+      //   this.state_mensaje = state;
+      this.$validator.validate().then(function (result) {
+        if (result) {
+          _this6.enviarDatosMensaje();
+
+          _this6.toggleModal();
+        }
+      });
+    },
+    enviarDatosMensaje: function enviarDatosMensaje() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var mensajito, datos;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                mensajito = {
+                  id: _this7.item.id,
+                  user_id: _this7.user_id,
+                  state: _this7.state_mensaje,
+                  mensaje: _this7.mensaje
+                };
+                _context3.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("http://sistemaorion.green.com.pe", "/api/v1/orders/enviar"), mensajito);
+
+              case 3:
+                datos = _context3.sent;
+                console.log("respuesta:", datos.data);
+
+                if (datos.data.status == 1) {
+                  // alert('datos editados')
+                  if (_this7.state_mensaje == -1) {
+                    window.location.href = "../../list";
+                  } else if (_this7.state_mensaje == -2) {
+                    window.location.href = "../../entregar";
+                  }
+                } else {
+                  alert("Ocurrio un error, vuelva a intentarlo mas tarde");
+                }
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     } // async agregar() {
     //   console.log("agregar");
@@ -585,14 +782,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     subTotal: function subTotal() {
-      var _this3 = this;
+      var _this8 = this;
 
       if (this.item.productos_ordenados) {
         return this.item.productos_ordenados.reduce(function (p, c) {
-          return _this3.numero(_this3.numero(p) + _this3.numero(c.quantity) * _this3.numero(c.pu));
+          return _this8.numero(_this8.numero(p) + _this8.numero(c.quantity) * _this8.numero(c.pu));
         }, 0);
       }
-    } // row() {
+    },
+    // row() {
     //   return this.items.length;
     // },
     // tituloModal() {
@@ -609,7 +807,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     //       .includes(this.valorBuscar.toLowerCase());
     //   });
     // },
-
+    mapConfig: function mapConfig() {
+      return _objectSpread(_objectSpread({}, mapSettings), {}, {
+        center: this.mapCenter
+      });
+    },
+    mapCenter: function mapCenter() {
+      return this.markers[1].position;
+    }
   }
 });
 
@@ -1373,45 +1578,6 @@ try {
 
 /***/ }),
 
-/***/ "./resources/js/components/Store/Order/Map/GoogleMap.vue":
-/*!***************************************************************!*\
-  !*** ./resources/js/components/Store/Order/Map/GoogleMap.vue ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GoogleMap.vue?vue&type=template&id=0e6d5386& */ "./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386&");
-/* harmony import */ var _GoogleMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GoogleMap.vue?vue&type=script&lang=js& */ "./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _GoogleMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__.render,
-  _GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Store/Order/Map/GoogleMap.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./resources/js/components/Store/Order/show.vue":
 /*!******************************************************!*\
   !*** ./resources/js/components/Store/Order/show.vue ***!
@@ -1451,22 +1617,6 @@ component.options.__file = "resources/js/components/Store/Order/show.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GoogleMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GoogleMap.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GoogleMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
 /***/ "./resources/js/components/Store/Order/show.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/Store/Order/show.vue?vue&type=script&lang=js& ***!
@@ -1483,23 +1633,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386& ***!
-  \**********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GoogleMap_vue_vue_type_template_id_0e6d5386___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GoogleMap.vue?vue&type=template&id=0e6d5386& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386&");
-
-
-/***/ }),
-
 /***/ "./resources/js/components/Store/Order/show.vue?vue&type=template&id=8999a0d2&":
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/Store/Order/show.vue?vue&type=template&id=8999a0d2& ***!
@@ -1513,54 +1646,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_8999a0d2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_8999a0d2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./show.vue?vue&type=template&id=8999a0d2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/show.vue?vue&type=template&id=8999a0d2&");
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386&":
-/*!*************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Store/Order/Map/GoogleMap.vue?vue&type=template&id=0e6d5386& ***!
-  \*************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "gmap-map",
-    {
-      staticStyle: { width: "100%", height: "300px" },
-      attrs: { center: _vm.center, zoom: 16 }
-    },
-    _vm._l(_vm.markers, function(m, index) {
-      return _c("gmap-marker", {
-        key: index,
-        attrs: {
-          position: m.position,
-          title: m.title,
-          clickable: true,
-          draggable: true
-        },
-        on: {
-          click: function($event) {
-            _vm.center = m.position
-          }
-        }
-      })
-    }),
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
 
 
 /***/ }),
@@ -1584,23 +1669,6 @@ var render = function() {
   return _c("div", { staticClass: "card" }, [
     _c("div", { staticClass: "card-body" }, [
       _c("div", { staticClass: "row" }, [
-        _c(
-          "div",
-          { staticClass: "col-12" },
-          [
-            _c("p", [_vm._v("Mapa")]),
-            _vm._v(" "),
-            _c("GoogleMap", {
-              attrs: {
-                latitude: 13.7013266,
-                longitude: -89.226622,
-                title: "Titulo Marcador"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
         _vm.item
           ? _c("div", { staticClass: "col-sm-12 col-md-4" }, [
               _c("h4", [_vm._v("Datos de generales")]),
@@ -1903,21 +1971,205 @@ var render = function() {
           _vm._v(" "),
           _vm.item
             ? _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-12" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "exampleModal",
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "exampleModalLabel",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _c("div", { staticClass: "modal-header" }, [
+                              _c(
+                                "h5",
+                                {
+                                  staticClass: "modal-title",
+                                  attrs: { id: "exampleModalLabel" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                      " +
+                                      _vm._s(_vm.tituloModal) +
+                                      "\n                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _vm._m(1)
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("form", [
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c("label", { attrs: { for: "mensaje" } }, [
+                                    _vm._v("Mensaje")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.mensaje,
+                                        expression: "mensaje"
+                                      },
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required",
+                                        expression: "'required'"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    class: {
+                                      input: true,
+                                      danger: _vm.errors.has("mensaje")
+                                    },
+                                    attrs: {
+                                      type: "text",
+                                      id: "mensaje",
+                                      name: "mensaje",
+                                      placeholder: "Ingrese el mensaje"
+                                    },
+                                    domProps: { value: _vm.mensaje },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.mensaje = $event.target.value
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("i", {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.errors.has("mensaje"),
+                                        expression: "errors.has('mensaje')"
+                                      }
+                                    ],
+                                    staticClass: "fa fa-warning"
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "show",
+                                          rawName: "v-show",
+                                          value: _vm.errors.has("mensaje"),
+                                          expression: "errors.has('mensaje')"
+                                        }
+                                      ],
+                                      staticClass: "help text-danger"
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.errors.first("mensaje"))
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                      Cerrar\n                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.cancelar }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                      Guardar\n                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
                 _vm.item.state == 1
                   ? _c("div", { staticClass: "text-right col-6" }, [
-                      _c("button", { staticClass: "btn btn-danger btn-lg" }, [
-                        _vm._v(
-                          "\n              Rechazar nueva orden\n            "
-                        )
-                      ])
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-lg",
+                          attrs: { type: "button", "data-toggle": "modal" },
+                          on: {
+                            click: function($event) {
+                              return _vm.iniciarForm(-1)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n              Rechazar nueva orden\n            "
+                          )
+                        ]
+                      )
                     ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.item.state == 3
                   ? _c("div", { staticClass: "text-right col-6" }, [
-                      _c("button", { staticClass: "btn btn-danger btn-lg" }, [
-                        _vm._v("Cancelar entrega")
-                      ])
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-lg",
+                          attrs: { type: "button", "data-toggle": "modal" },
+                          on: {
+                            click: function($event) {
+                              return _vm.iniciarForm(-2)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n              Cancelar entrega\n            "
+                          )
+                        ]
+                      )
                     ])
                   : _vm._e(),
                 _vm._v(" "),
@@ -2004,6 +2256,23 @@ var staticRenderFns = [
         _c("th", { staticClass: "text-right" }, [_vm._v("SubTotal(S/.)")])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true

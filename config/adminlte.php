@@ -319,6 +319,14 @@ return [
             'active'        => ['admin/orders_entregadas/*'],
 //            'label'       => 4,
 //            'label_color' => 'success',
+        ],[
+            'text'        => 'Ordenes para entregar',
+            'route'         => 'admin.orders_entregar',
+            'icon'        => 'fa fa-cog',
+            'can'       => '',
+            'active'        => ['admin/orders_entregar/*'],
+//            'label'       => 4,
+//            'label_color' => 'success',
         ],
         ['header' => 'Reportes'],
         [
