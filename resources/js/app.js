@@ -107,6 +107,7 @@ const app = new Vue({
         'order-view-component':()=>import('./components/Store/Order/show.vue'),
         'orders-entregadas-component':()=>import('./components/Store/Order/orders-entregadas.vue'),
         'orders-entregar-component':()=>import('./components/Store/Order/orders-entregar.vue'),
+        'orders-empacar-component':()=>import('./components/Store/Order/orders-empacar.vue'),
         'report-component':()=>import('./components/Admin/Report/index.vue'),
         // 'google-map-loader-component':()=>import('./components/Store/Order/GoogleMapLoader.vue'),
         // 'google-map-line-component':()=>import('./components/Store/Order/GoogleMapLine.vue'),

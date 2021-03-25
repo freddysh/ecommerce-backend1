@@ -6,14 +6,14 @@
           <div class="card">
             <div class="card-header bg-primary">
               <div class="row">
-                <div class="col-4">
+                <div class="col-12">
                   ORDENES PARA ENTREGAR
                   <i
                     class="fa fa-like"
                     aria-hidden="true"
                   ></i>
                 </div>
-                <div class="col-4">
+                <div class="col-4 d-none">
                   <div class="form-group">
                     <select
                       class="form-control"
@@ -29,7 +29,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4 d-none">
                   <div
                     class="form-group"
                     v-if="filtro == 5"
@@ -57,9 +57,9 @@
               </div>
             </div>
             <div class="p-2 card-body bg-gradient-secondary">
-              <div v-if="itemss && itemss.length > 0">
+              <div v-if="items && items.length > 0">
                 <div
-                  v-for="(item, key) in itemss"
+                  v-for="(item, key) in items"
                   :key="key"
                 >
                   <div
@@ -197,7 +197,7 @@ export default {
       //   this.items = rpt.data.filter(a => a.state == 1);
 
       //   console.log("fecha:" + fecha);
-      this.items.sort((a, b) => a.fecha_entrega - b.fecha_entrega);
+      this.items.sort((a, b) => b.fecha_entrega - a.fecha_entrega);
     },
     numero(num) {
       return Math.round(num * 100) / 100;

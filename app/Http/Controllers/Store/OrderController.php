@@ -64,6 +64,11 @@ class OrderController extends Controller
         //
         return view('store.orders.orders-entregar');
     }
+    public function orders_empacar()
+    {
+        //
+        return view('store.orders.orders-empacar');
+    }
     public function index()
     {
         //

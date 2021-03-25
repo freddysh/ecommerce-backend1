@@ -253,7 +253,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 //   console.log("fecha:" + fecha);
 
                 _this.items.sort(function (a, b) {
-                  return a.fecha_entrega - b.fecha_entrega;
+                  return b.fecha_entrega - a.fecha_entrega;
                 });
 
               case 7:
@@ -2084,7 +2084,7 @@ var render = function() {
               _c("div", { staticClass: "row" }, [
                 _vm._m(0),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-4" }, [
+                _c("div", { staticClass: "col-4 d-none" }, [
                   _c("div", { staticClass: "form-group" }, [
                     _c(
                       "select",
@@ -2130,7 +2130,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-4" }, [
+                _c("div", { staticClass: "col-4 d-none" }, [
                   _vm.filtro == 5
                     ? _c("div", { staticClass: "form-group" }, [
                         _c("input", {
@@ -2186,10 +2186,10 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "p-2 card-body bg-gradient-secondary" }, [
-              _vm.itemss && _vm.itemss.length > 0
+              _vm.items && _vm.items.length > 0
                 ? _c(
                     "div",
-                    _vm._l(_vm.itemss, function(item, key) {
+                    _vm._l(_vm.items, function(item, key) {
                       return _c("div", { key: key }, [
                         item.state == 3
                           ? _c("div", { staticClass: "card" }, [
@@ -2307,7 +2307,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-4" }, [
+    return _c("div", { staticClass: "col-12" }, [
       _vm._v("\n                ORDENES PARA ENTREGAR\n                "),
       _c("i", { staticClass: "fa fa-like", attrs: { "aria-hidden": "true" } })
     ])

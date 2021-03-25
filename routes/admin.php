@@ -33,3 +33,5 @@ Route::get('reportes/list', [OrderController::class,'reportes'])->name('reportes
 
 Route::get('orders/entregar', [OrderController::class,'orders_entregar'])->name('orders_entregar');
 Route::get('orders/entregar/show/{order_id}', [OrderController::class,'order_entregar_show_view'])->name('orders_entregar.order_show_view');
+
+Route::get('orders/empacar', [OrderController::class,'orders_empacar'])->name('orders_empacar');

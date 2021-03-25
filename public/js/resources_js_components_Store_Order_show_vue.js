@@ -1803,16 +1803,14 @@ var render = function() {
               _vm._v(" "),
               _c("p", { staticClass: "py-0 my-0" }, [
                 _c("span", { staticClass: "text-gray" }, [_vm._v("Celular:")]),
-                _vm._v(" " + _vm._s(_vm.item.cliente.phone) + "\n        ")
+                _vm._v(" " + _vm._s(_vm.item.phone) + "\n        ")
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "py-0 my-0" }, [
                 _c("span", { staticClass: "text-gray" }, [
                   _vm._v("Metodo de pago:")
                 ]),
-                _vm._v(
-                  "\n          " + _vm._s(_vm.item.cliente.phone) + "\n        "
-                )
+                _vm._v("\n          " + _vm._s(_vm.item.phone) + "\n        ")
               ])
             ])
           : _vm._e(),
@@ -1828,7 +1826,7 @@ var render = function() {
               _vm._v(" "),
               _c("p", { staticClass: "py-0 my-0" }, [
                 _c("span", { staticClass: "text-gray" }, [_vm._v("Celular:")]),
-                _vm._v(" " + _vm._s(_vm.item.cliente.phone) + "\n        ")
+                _vm._v(" " + _vm._s(_vm.item.phone) + "\n        ")
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "py-0 my-0" }, [

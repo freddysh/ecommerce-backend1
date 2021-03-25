@@ -89,11 +89,11 @@
             {{ item.cliente.address }}
           </p>
           <p class="py-0 my-0">
-            <span class="text-gray">Celular:</span> {{ item.cliente.phone }}
+            <span class="text-gray">Celular:</span> {{ item.phone }}
           </p>
           <p class="py-0 my-0">
             <span class="text-gray">Metodo de pago:</span>
-            {{ item.cliente.phone }}
+            {{ item.phone }}
           </p>
         </div>
         <div
@@ -105,7 +105,7 @@
             <span class="text-gray">Cliente:</span> {{ item.cliente.name }}
           </p>
           <p class="py-0 my-0">
-            <span class="text-gray">Celular:</span> {{ item.cliente.phone }}
+            <span class="text-gray">Celular:</span> {{ item.phone }}
           </p>
 
           <p class="py-0 my-0">
