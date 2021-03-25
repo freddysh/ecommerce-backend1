@@ -94,6 +94,7 @@
           <p class="py-0 my-0">
             <span class="text-gray">Metodo de pago:</span>
             {{ item.metodo_pago }}
+
           </p>
         </div>
         <div
