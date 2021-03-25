@@ -226,7 +226,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://sistemaorion.green.com.pe", "/api/v1/orders"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders"));
 
               case 2:
                 datos = _context.sent;
