@@ -22,7 +22,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $precioPreviaLlamada_='';
+    protected $precioPreviaLlamada_='Consultar precio';
     public function index_view()
     {
         //
