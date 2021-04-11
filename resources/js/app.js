@@ -64,6 +64,9 @@ Vue.use(VueGoogleMaps, {
 
 import VueGeolocation from 'vue-browser-geolocation';
 Vue.use(VueGeolocation);
+
+import LoadScript from 'vue-plugin-load-script';
+Vue.use(LoadScript);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -109,6 +112,7 @@ const app = new Vue({
         'orders-entregar-component':()=>import('./components/Store/Order/orders-entregar.vue'),
         'orders-empacar-component':()=>import('./components/Store/Order/orders-empacar.vue'),
         'report-component':()=>import('./components/Admin/Report/index.vue'),
+        'chekout-component':()=>import('./components/Admin/Checkout/index.vue'),
         // 'google-map-loader-component':()=>import('./components/Store/Order/GoogleMapLoader.vue'),
         // 'google-map-line-component':()=>import('./components/Store/Order/GoogleMapLine.vue'),
         // 'google-map-marker-component':()=>import('./components/Store/Order/GoogleMapMarker.vue'),

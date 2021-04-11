@@ -22,6 +22,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $precioPreviaLlamada_='';
     public function index_view()
     {
         //
@@ -36,8 +37,9 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return Product::with(['categorias','photos'])
+        $res= Product::with(['categorias','photos'])
         ->get();
+        return $this->precioPreviaLlamada($res,$this->precioPreviaLlamada_);
     }
 
     /**
@@ -154,7 +156,8 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
-        return Product::with(['categorias','photos'])->where('id',$product->id)->get();
+        $res= Product::with(['categorias','photos'])->where('id',$product->id)->get();
+        return $this->precioPreviaLlamada($res,$this->precioPreviaLlamada_);
     }
 
     /**
@@ -319,48 +322,52 @@ class ProductController extends Controller
         $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
             $q->whereIn('category_id',$listado);
         })->with('categorias')->with('photos')->get();
-        return $resultados;
+
+
+        return $this->precioPreviaLlamada($resultados,$this->precioPreviaLlamada_);
 
     }
     public function secciones()
     {
         $listado=Category::where('state',2)->get()->pluck('id')->toArray();
-        $resultados = Product::whereHas('categorias_produtos', function($q)use($listado){
+        $res = Product::whereHas('categorias_produtos', function($q)use($listado){
             $q->whereIn('category_id',$listado);
         })->with('categorias')->with('photos')->get();
-        return $resultados;
+
+        return $res;
+        return $this->precioPreviaLlamada($res,$this->precioPreviaLlamada_);
     }
-    public function tops()
-    {
-        //
-         $rpt= DB::table('order_products')
-         ->select('product_id',DB::raw('SUM(quantity) as cantidad'))
-        //  ->groupBy('id')
-         ->groupBy('product_id')
-         ->orderBy('cantidad','desc')
-         ->take(5)
-         ->get()
-         ->pluck('product_id')
-         ->toArray();
-         $productosTop=Product::whereIn('id',$rpt)->get();
-         return $productosTop;
-    }
-    public function tops5()
-    {
-        //
-         $rpt= DB::table('order_products')
-         ->join('products','order_products.product_id','=','products.id')
-        //  ->groupBy('id')
-         ->groupBy('product_id')
-         ->orderBy('cantidad','desc')
-         ->take(5)
-         ->select('products.*',DB::raw('SUM(order_products.quantity) as cantidad'))
-         ->get()
-        //  ->pluck('product_id')
-         ->toArray();
-        //  $productosTop=Product::whereIn('id',$rpt)->get();
-         return $rpt;
-    }
+    // public function tops()
+    // {
+    //     //
+    //      $rpt= DB::table('order_products')
+    //      ->select('product_id',DB::raw('SUM(quantity) as cantidad'))
+    //     //  ->groupBy('id')
+    //      ->groupBy('product_id')
+    //      ->orderBy('cantidad','desc')
+    //      ->take(5)
+    //      ->get()
+    //      ->pluck('product_id')
+    //      ->toArray();
+    //      $productosTop=Product::whereIn('id',$rpt)->get();
+    //      return $productosTop;
+    // }
+    // public function tops5()
+    // {
+    //     //
+    //      $rpt= DB::table('order_products')
+    //      ->join('products','order_products.product_id','=','products.id')
+    //     //  ->groupBy('id')
+    //      ->groupBy('product_id')
+    //      ->orderBy('cantidad','desc')
+    //      ->take(5)
+    //      ->select('products.*',DB::raw('SUM(order_products.quantity) as cantidad'))
+    //      ->get()
+    //     //  ->pluck('product_id')
+    //      ->toArray();
+    //     //  $productosTop=Product::whereIn('id',$rpt)->get();
+    //      return $rpt;
+    // }
     public function get_imagen($filename)
     {
         $file = Storage::disk('product')->get($filename);
@@ -801,5 +808,16 @@ class ProductController extends Controller
     $string = preg_replace("/[^a-z0-9]/u", "$separator", $string);
     $string = preg_replace("/[$separator]+/u", "$separator", $string);
     return $string;
+    }
+
+    protected function precioPreviaLlamada($resultados,$categoria){
+        if(trim($categoria)!=''){
+            foreach($resultados as $resultado){
+                if($resultado->categorias->where('name',$categoria)->count()){
+                    $resultado->price=0;
+                }
+            }
+        }
+        return $resultados;
     }
 }

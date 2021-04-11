@@ -1,5 +1,8 @@
 <template>
-  <div class="card">
+  <div
+    class="card"
+    ref="testHtml"
+  >
     <div class="card-body">
       <div class="row">
         <div
@@ -121,7 +124,7 @@
         </div>
         <hr />
         <div class="col-sm-12">
-          <table class="table table-striped table-hover table-condensed table-sm">
+          <table class="table table-condensed table-sm">
             <thead>
               <tr>
                 <th>Codigo</th>
@@ -314,6 +317,21 @@
                 Realizar entrega
               </button>
             </div>
+            <div
+              class="text-right col-6"
+              v-if="item.state == 1||item.state==2"
+            >
+              <button
+                class="btn btn-danger btn-lg"
+                @click="imprimir"
+              >
+                <i
+                  class="fa fa-print"
+                  aria-hidden="true"
+                ></i>
+                Imprimir
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -322,6 +340,7 @@
 </template>
 <script>
 import Axios from "axios";
+import { jsPDF } from "jspdf";
 // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
 // import { Posts } from '../../../FackApi/api/SocialPost'
@@ -380,7 +399,7 @@ export default {
         hora_entrega: null
         // nameState: null,
       },
-      item: null,
+      item: "",
       order_inicial: {
         id: 0,
         code: "",
@@ -548,6 +567,36 @@ export default {
       } else {
         alert("Ocurrio un error, vuelva a intentarlo mas tarde");
       }
+    },
+    imprimir() {
+      var doc = new jsPDF({
+        orientation: "l",
+        unit: "pt",
+        putOnlyUsedFonts: true,
+        floatPrecision: 16, // or "smart", default is 16
+        format: [700, 1100]
+      });
+      //   var margins = {
+      //     top: 80,
+      //     bottom: 60,
+      //     left: 40,
+      //     width: 522
+      //   };
+
+      //   doc.html(this.$refs.testHtml, margins.left, margins.top, {
+      //     width: margins.width
+      //   });
+
+      //   doc.save("test.pdf");
+
+      doc.html(this.$refs.testHtml, {
+        callback: function(doc) {
+          doc.save("doc");
+        },
+        x: 10,
+        y: 10,
+        width: 722
+      });
     }
     // async agregar() {
     //   console.log("agregar");

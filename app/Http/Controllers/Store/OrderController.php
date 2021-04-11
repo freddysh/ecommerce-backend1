@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Store;
 
+use App\Helpers\PasarelaNiubiz;
 use App\Http\Controllers\Controller;
 use App\Mail\Mail\OrderMail;
 use App\Models\Order;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
@@ -100,136 +102,119 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
+        DB::beginTransaction();
         try {
-            //code...
+            // recojemos los datos
+            $form=$request->form_data;
+            $cart=$request->cart;
 
-        //
-        $form=$request->form_data;
-        // return $form['celular'];
+            $cliente_id=$form['id_user'];
+            $client=User::findorfail($cliente_id);
+            $code='';
+            $full_name=$client->name;
+            $email=$client->email;
+            $phone=$form['celular'];
+            $departament='';
+            $province='';
+            $distrite=$form['distrito'];
+            $address=$form['direccion'];
+            $reference=$form['referencia'];
+            $lat='';
+            $long='';
+            $coupond_id=0;
+            $subcoupond=0;
+            $subtotal=0;
+            $tax=$form['tax'];
+            $total=$form['total_price'];
 
-        $cart=$request->cart;
+            $fecha_pedido= Carbon::now('America/Lima')->toDateTimeString();
+            $fecha_entrega=$this->formatearFecha($form['picked_fecha']);
 
-        // $validated=$request->validate([
-        //     'full_name'=>'required',
-        //     'email'=>'required',
-        //     'phone'=>'required',
-        //     'departament'=>'required',
-        //     'province'=>'required',
-        //     'distrite'=>'required',
-        //     'address'=>'required',
-        //     'reference'=>'required',
-        //     'fecha_entrega'=>'required',
-        //     'hora_entrega'=>'required',
-        //     'metodo_pago'=>'required',
-        //     'carro'=>'required',
-        //     'cliente_id'=>'required',
-        //     'tax'=>'required',
-        //     'total'=>'required',
-        // ]);
+            $hora_entrega=$form['picked_hora'];
+            $metodo_pago=$form['picked_metodo'];;
+            $url_comprobante='';
+            $imagen_comprobante='';
+            $user_id=0;
+            $nota_cancelacion_cliente='';
+            $state=1;
+            $lugar_entrega=0;
+            $cliente_id=$form['id_user'];
+            $nota_cancelacion_user='';
 
+            $order=new Order();
+            $order->code=$code;
+            $order->full_name=$full_name;
+            $order->email=$email;
+            $order->phone=$phone;
+            $order->departament=$departament;
+            $order->province=$province;
+            $order->distrite=$distrite;
+            $order->address=$address;
+            $order->reference=$reference;
+            $order->lat=$lat;
+            $order->long=$long;
+            $order->coupond_id=$coupond_id;
+            $order->subcoupond=$subcoupond;
+            $order->subtotal=$subtotal;
+            $order->tax=$tax;
+            $order->total=$total;
+            $order->fecha_pedido=$fecha_pedido;
+            $order->url_comprobante=$url_comprobante;
+            $order->imagen_comprobante=$imagen_comprobante;
+            $order->nota_cancelacion_user=$nota_cancelacion_user;
+            $order->user_id=$user_id;
+            $order->nota_cancelacion_cliente=$nota_cancelacion_cliente;
+            $order->state=$state;
+            $order->lugar_entrega=$lugar_entrega;
+            $order->cliente_id=$cliente_id;
+            $order->fecha_entrega=$fecha_entrega;
+            $order->hora_entrega=$hora_entrega;
+            $order->metodo_pago=$metodo_pago;
+            $order->save();
 
-        $cliente_id=$form['id_user'];
-        $client=User::findorfail($cliente_id);
-        $code='';
-        $full_name=$client->name;
-        $email=$client->email;
-        $phone=$form['celular'];
-        $departament='';
-        $province='';
-        $distrite=$form['distrito'];
-        $address=$form['direccion'];
-        $reference=$form['referencia'];
-        $lat='';
-        $long='';
-        $coupond_id=0;
-        $subcoupond=0;
-        $subtotal=0;
-        $tax=$form['tax'];
-        $total=$form['total_price'];
-
-        $fecha_pedido= Carbon::now('America/Lima')->toDateTimeString();
-        // $fecha_pedido= $fecha_pedido->today();
-
-        // $fecha_entrega=Carbon::createFromFormat($form['picked_fecha'])->toDateTimeString();
-        $fecha_entrega=$this->formatearFecha($form['picked_fecha']);
-
-        // $Fecha =  "2018-03-27 08:15:00";
-        // $fecha_entrega= date("yyyy-mm-dd", strtotime( $form['picked_fecha']));
-        $hora_entrega=$form['picked_hora'];
-        $metodo_pago=$form['picked_metodo'];;
-        $url_comprobante='';
-        $imagen_comprobante='';
-        $user_id=0;
-        $nota_cancelacion_cliente='';
-        $state=1;
-        $lugar_entrega=0;
-        $cliente_id=$form['id_user'];
-        $nota_cancelacion_user='';
-
-        $order=new Order();
-        $order->code=$code;
-        $order->full_name=$full_name;
-        $order->email=$email;
-        $order->phone=$phone;
-        $order->departament=$departament;
-        $order->province=$province;
-        $order->distrite=$distrite;
-        $order->address=$address;
-        $order->reference=$reference;
-        $order->lat=$lat;
-        $order->long=$long;
-        $order->coupond_id=$coupond_id;
-        $order->subcoupond=$subcoupond;
-        $order->subtotal=$subtotal;
-        $order->tax=$tax;
-        $order->total=$total;
-        $order->fecha_pedido=$fecha_pedido;
-        $order->url_comprobante=$url_comprobante;
-        $order->imagen_comprobante=$imagen_comprobante;
-        $order->nota_cancelacion_user=$nota_cancelacion_user;
-        $order->user_id=$user_id;
-        $order->nota_cancelacion_cliente=$nota_cancelacion_cliente;
-        $order->state=$state;
-        $order->lugar_entrega=$lugar_entrega;
-        $order->cliente_id=$cliente_id;
-        $order->fecha_entrega=$fecha_entrega;
-        $order->hora_entrega=$hora_entrega;
-        $order->metodo_pago=$metodo_pago;
-        $order->save();
-
-        // Creamos el detalle del la orden
-        foreach($cart as $cart_){
-
-            $product_id=$cart_['id'];
-            $quantity=$cart_['quantity'];
-            if($product_id>0&&$quantity>0){
-                $producto=Product::findorfail($product_id);
-                if($producto){
-                    // if($quantity<=$producto->stock){
-
-                        $order_product = new OrderProduct();
-                        $order_product->quantity=$quantity;
-                        $order_product->pu=$producto->price;
-                        $order_product->state=1;
-                        $order_product->product_id=$producto->id;
-                        $order_product->order_id=$order->id;
-                        $order_product->save();
-
-                        $producto->stock=$producto->stock-$quantity;
-                        $producto->save();
-                    // }
+            // Creamos el detalle del la orden
+            if(count($cart)){
+                foreach($cart as $cart_){
+                    $product_id=$cart_['id'];
+                    $quantity=$cart_['quantity'];
+                    if($product_id>0&&$quantity>0){
+                        $producto=Product::findorfail($product_id);
+                        if($producto){
+                            if($quantity<=$producto->stock){
+                                $order_product = new OrderProduct();
+                                $order_product->quantity=$quantity;
+                                $order_product->pu=$producto->price;
+                                $order_product->state=1;
+                                $order_product->product_id=$producto->id;
+                                $order_product->order_id=$order->id;
+                                $order_product->save();
+                                $producto->stock=$producto->stock-$quantity;
+                                $producto->save();
+                            }
+                            else{
+                                throw new \Exception("Este producto no tiene stock");
+                            }
+                        }
+                        else{
+                            throw new \Exception("No existe el producto");
+                        }
+                    }
+                    else{
+                        throw new \Exception("No existe el producto y/o stock");
+                    }
                 }
             }
-
-        }
-        // $this->enviarMail($order->id);
-        return response()->json(['status'=>'1']);
+            else{
+                throw new \Exception("No existe el producto");
+            }
+            DB::commit();
+            // $this->enviarMail($order->id);
+            return response()->json(['status'=>'1']);
 
         } catch (\Exception $th) {
             //throw $th;
-
-        return response()->json(['status'=>'0']);
+            DB::rollBack();
+            return response()->json(['status'=>'0']);
         }
     }
 
@@ -383,4 +368,139 @@ class OrderController extends Controller
         # ¡Enviarlo!
         Mail::to($destinatario)->send($correo);
     }
+
+    public function payment(){
+
+        $pasarela=new PasarelaNiubiz();
+        $numorden=$pasarela->contador();
+        $entorno = 'dev';
+        $amount=100;
+        $mdd4='silvahfreddy@gmail.com';
+        $mdd21='1';
+        $mdd32='9123';
+        $mdd75='Registrado';
+        $mdd77='100';
+        $key = $pasarela->securitykey($entorno);
+        // return $key;
+        setcookie("key",$key);
+        // setcookie("key",$key);
+        $purchasenumber=$numorden;
+        $sessionToken = $pasarela->create_token($entorno,$amount,$mdd4,$mdd21,$mdd32,$mdd75,$mdd77,$key);
+        $sessionkey= json_decode($sessionToken)->sessionKey;
+
+        // Obtenemos la url.js para mostrar el boton de pago
+        $callbackurl=$pasarela->urljs($entorno);
+        $merchantid = $pasarela->merchantidtest();
+        $channel='web';
+        $language='es';
+        $font='https://fonts.googleapis.com/css?family=Montserrat:400&display=swap';
+        $recurrencemaxamount='8.5';
+        // return response()->json([
+        //     'callbackurl'=>$urljs,
+        //     'channel'=>'web',
+        //     'entorno'=>$entorno,
+        //     'purchasenumber'=>$purchasenumber,
+        //     'sessionkey'=>$sessionKey,
+        //     'merchantid'=>$merchantId,
+        //     'amount'=>$amount,
+        //     'language'=>'es',
+        //     'font'=>'https://fonts.googleapis.com/css?family=Montserrat:400&display=swap',
+        //     'language'=>'es',
+        //     'recurrencemaxamount'=>'100'
+        //     ]);
+        // $autorizacion=$pasarela->authorization($entorno,$key,$amount,$sessionKey,$purchaseNumber);
+        // return $autorizacion;
+
+            return view('admin.payment',compact('callbackurl','channel','entorno','purchasenumber',
+            'sessionkey','merchantid','amount','language','recurrencemaxamount','font'));
+    }
+
+    public function payment_respuesta(Request $request,$purchaseNumber,$entorno,$amount){
+        // $variable=base64_decode($variable);
+        // return response()->json("$variable");
+        // dd($_POST);
+        if (isset($_POST['transactionToken'])){
+
+            $transactionToken = $_POST['transactionToken'];
+            $key =$_COOKIE["key"];
+            // dd($key);
+            $pasarela=new PasarelaNiubiz();
+            $respuesta = $pasarela->authorization($entorno,$key,$amount,$transactionToken,$purchaseNumber);
+
+            $data_respuesta = json_decode($respuesta,true);
+            // dd($data_respuesta);
+            $objeto=json_decode($data_respuesta['1']);
+
+            if($data_respuesta['0']=='200'){
+                // EL pago se proceso correctamente
+                dd('proceso de pago correcto');
+            }
+            elseif($objeto){// hubo un aproblema en la transaccion
+                $motivo=$objeto->data->ACTION_DESCRIPTION;
+                dd("Ocurrio un error($objeto->errorCode)");
+                // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto->errorCode). Vuelva a intentarlo",'motivo'=>$motivo]);
+            }
+            else{
+                // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto). Vuelva a intentarlo"]);
+
+                dd("Ocurrio un error($objeto)");
+            }
+        // dd($transactionToken);
+        }
+        // return 'payment';
+    }
+
+    public function payment_desacoplado(){
+        return view('admin.payment-desacoplado');
+    }
+
+    public function payment_desacoplado_api($order_id){
+        $pasarela=new PasarelaNiubiz();
+        $numorden=$pasarela->contador();
+        $entorno = 'dev';
+        $amount=100;
+        $mdd4='silvahfreddy@gmail.com';
+        $name='Freddy walberto';
+        $lastname='Silva Hurtado';
+        $mdd21='1';
+        $mdd32='9123';
+        $mdd75='Registrado';
+        $mdd77='100';
+        $key = $pasarela->securitykey($entorno);
+        // return $key;
+        setcookie("key",$key);
+        // setcookie("key",$key);
+        $purchasenumber=$numorden;
+        $sessionToken = $pasarela->create_token($entorno,$amount,$mdd4,$mdd21,$mdd32,$mdd75,$mdd77,$key);
+        $sessionkey= json_decode($sessionToken)->sessionKey;
+
+        // Obtenemos la url.js para mostrar el boton de pago
+        $callbackurl="payment_respuesta/$purchasenumber/$entorno/$amount";
+        $merchantid = $pasarela->merchantidtest();
+        $channel='web';
+        $language='es';
+        $font='https://fonts.googleapis.com/css?family=Montserrat:400&display=swap';
+        $recurrencemaxamount='8.5';
+        return response()->json([
+            'callbackurl'=>$callbackurl,
+            'channel'=>$channel,
+            'entorno'=>$entorno,
+            'purchasenumber'=>$purchasenumber,
+            'sessionkey'=>$sessionkey,
+            'merchantid'=>$merchantid,
+            'amount'=>$amount,
+            'language'=>$language,
+            'font'=>$font,
+            'recurrencemaxamount'=>$recurrencemaxamount,
+            'name'=>$name,
+            'lastname'=>$lastname,
+            'email'=>$mdd4,
+            ]);
+        // $autorizacion=$pasarela->authorization($entorno,$key,$amount,$sessionKey,$purchaseNumber);
+        // return $autorizacion;
+
+            // return view('admin.payment',compact('callbackurl','channel','entorno','purchasenumber',
+            // 'sessionkey','merchantid','amount','language','recurrencemaxamount','font'));
+    }
+
 }

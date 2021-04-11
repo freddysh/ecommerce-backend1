@@ -60,3 +60,16 @@ Route::get('/v1/orders/others/enviar-mail',[OrderController::class,'enviarMail']
 
 
 Route::get('/v1/fecha/{fechita}',[OrderController::class,'fecha'])->name('orders.fecha');
+
+
+
+// Route::get('/v1/payment', [OrderController::class,'payment'])->name('payment');
+// Route::get('/v1/payment_respuesta/{variable}', [OrderController::class,'payment_respuesta'])->name('payment_respuesta');
+// Route::get('/v1/payment_respuesta', [OrderController::class,'payment_respuesta1'])->name('payment_respuesta');
+
+// Route::get('/v1/pasarela', [OrderController::class,'payment'])->name('payment');
+
+
+
+// Pago desacoplado
+Route::get('/v1/payment-desacoplado/{oder_id}', [OrderController::class,'payment_desacoplado_api'])->name('payment_desacoplado_api');
