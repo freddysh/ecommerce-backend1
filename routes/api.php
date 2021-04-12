@@ -73,3 +73,8 @@ Route::get('/v1/fecha/{fechita}',[OrderController::class,'fecha'])->name('orders
 
 // Pago desacoplado
 Route::get('/v1/payment-desacoplado/{oder_id}', [OrderController::class,'payment_desacoplado_api'])->name('payment_desacoplado_api');
+
+
+Route::get('/v1/prueba', [OrderController::class,'prueba'])->name('prueba');
+
+

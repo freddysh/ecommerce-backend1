@@ -178,8 +178,8 @@ class OrderController extends Controller
                     $product_id=$cart_['id'];
                     $quantity=$cart_['quantity'];
                     if($product_id>0&&$quantity>0){
-                        $producto=Product::with('categorias')->where('id',$product_id)->get()->first();
-                        $categorias_consultar_precio=$producto->categorias()->toArray();
+                        $producto=Product::with(['categorias'])->where('id',$product_id)->get()->first();
+                        $categorias_consultar_precio=$producto->categorias()->get()->pluck('name')->toArray();
                         $pu=$producto->price;
                         if(in_array('Consultar precio',$categorias_consultar_precio)){
                             $pu=0;
@@ -509,4 +509,15 @@ class OrderController extends Controller
             // 'sessionkey','merchantid','amount','language','recurrencemaxamount','font'));
     }
 
+
+    // public function prueba(){
+    //     $producto=Product::with(['categorias'])->where('id','298')->get()->first();
+    //     $categorias_consultar_precio=$producto->categorias()->get()->pluck('name')->toArray();
+    //     $pu=$producto->price;
+    //     if(in_array('Consultar precio',$categorias_consultar_precio)){
+    //         $pu=0;
+    //         $quantity=1;
+    //     }
+    //     return "$pu, $quantity";
+    // }
 }
