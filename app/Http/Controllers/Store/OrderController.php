@@ -300,8 +300,6 @@ class OrderController extends Controller
     }
     public function enviar_mensaje(Request $request)
     {
-
-
         // return response()->json(['status'=>$request->all()]);
         $order_id=$request->id;
         $mensaje=$request->mensaje;
@@ -322,6 +320,24 @@ class OrderController extends Controller
         }
         $order->save();
         return response()->json(['status'=>'1']);
+    }
+    public function enviar_precio(Request $request)
+    {
+
+        try {
+            //code...
+            $id=$request->id;
+            $precio=$request->precio;
+
+            $order_product=OrderProduct::findorfail($id);
+            $order_product->pu=$precio;
+            $order_product->save();
+            return response()->json(['status'=>'1']);
+        } catch (\Exception $th) {
+            //throw $th;
+            return response()->json(['status'=>'0']);
+        }
+
     }
     public function reportes(){
         return view('admin.report.index');

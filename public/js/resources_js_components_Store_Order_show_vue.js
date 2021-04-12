@@ -379,6 +379,99 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
  // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
@@ -473,7 +566,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       paginate: ["itemss"],
       mensaje: "",
       state_mensaje: -1,
-      tituloModal: "Rechazar nueva orden"
+      tituloModal: "Rechazar nueva orden",
+      precioKilo: "",
+      productoOrden_id: 0,
+      puedeEnviar: 0
     };
   },
   methods: {
@@ -508,6 +604,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     enviarEmpacado: function enviarEmpacado() {
       var _this2 = this;
 
+      if (this.puedeEnviar) {
+        Vue.swal("Hay productos con precio '0', ingrese el precio del producto");
+        return;
+      }
+
       Vue.swal.fire({
         title: "Esta seguro de guardar los datos?",
         text: "No podrás revertir este paso!",
@@ -533,6 +634,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //   if (confirm("Esta seguro de guardar los datos?")) {
       //     this.enviarDatos(3);
       //   }
+      if (this.puedeEnviar) {
+        Vue.swal("Hay productos con precio '0', ingrese el precio del producto");
+        return;
+      }
+
       Vue.swal.fire({
         title: "Esta seguro de guardar los datos?",
         text: "No podrás revertir este paso!",
@@ -618,6 +724,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.limpiarCampos();
       this.toggleModal();
     },
+    ConsultarPrecio: function ConsultarPrecio(arreglo, categoria) {
+      var rpt = false;
+
+      for (var index = 0; index < arreglo.length; index++) {
+        // const element = array[index];
+        // console.log("cat", arreglo[index].name);
+        if (arreglo[index].name == "Consultar precio") {
+          rpt = true;
+          this.puedeEnviar++;
+          break;
+        }
+      } //   console.log("cat", rpt);
+
+
+      return rpt;
+    },
+    iniciarFormPrecioKilo: function iniciarFormPrecioKilo(pu, productoOrden_id) {
+      this.precioKilo = "";
+      this.precioKilo = pu;
+      this.productoOrden_id = 0;
+      this.productoOrden_id = productoOrden_id;
+      this.toggleModalPrecioKilo();
+    },
+    toggleModalPrecioKilo: function toggleModalPrecioKilo() {
+      $("#exampleModalPrecioKilo").modal("toggle");
+    },
     limpiarCampos: function limpiarCampos() {
       this.mensaje = "";
     },
@@ -628,7 +760,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this6 = this;
 
       //   this.state_mensaje = state;
-      this.$validator.validate().then(function (result) {
+      this.$validator.validateAll("validar1").then(function (result) {
         if (result) {
           _this6.enviarDatosMensaje();
 
@@ -636,8 +768,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       });
     },
-    enviarDatosMensaje: function enviarDatosMensaje() {
+    enviarPrecio: function enviarPrecio() {
       var _this7 = this;
+
+      //   this.state_mensaje = state;
+      //   alert("validando");
+      this.$validator.validateAll("validar2").then(function (result) {
+        if (result) {
+          //   alert("se valido correctamente");
+          _this7.enviarDatosMensajePrecio();
+
+          _this7.toggleModalPrecioKilo();
+        }
+      });
+    },
+    enviarDatosMensajePrecio: function enviarDatosMensajePrecio() {
+      var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var mensajito, datos;
@@ -646,23 +792,59 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 mensajito = {
-                  id: _this7.item.id,
-                  user_id: _this7.user_id,
-                  state: _this7.state_mensaje,
-                  mensaje: _this7.mensaje
+                  id: _this8.productoOrden_id,
+                  precio: _this8.precioKilo
                 };
-                _context3.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar"), mensajito);
+                console.log("mensajito", mensajito);
+                _context3.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar-precio"), mensajito);
 
-              case 3:
+              case 4:
                 datos = _context3.sent;
                 console.log("respuesta:", datos.data);
 
                 if (datos.data.status == 1) {
+                  alert("datos editados");
+                  window.location.href = "";
+                } else {
+                  alert("Ocurrio un error, vuelva a intentarlo mas tarde");
+                }
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    enviarDatosMensaje: function enviarDatosMensaje() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var mensajito, datos;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                mensajito = {
+                  id: _this9.item.id,
+                  user_id: _this9.user_id,
+                  state: _this9.state_mensaje,
+                  mensaje: _this9.mensaje
+                };
+                _context4.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar"), mensajito);
+
+              case 3:
+                datos = _context4.sent;
+                console.log("respuesta:", datos.data);
+
+                if (datos.data.status == 1) {
                   // alert('datos editados')
-                  if (_this7.state_mensaje == -1) {
+                  if (_this9.state_mensaje == -1) {
                     window.location.href = "../../list";
-                  } else if (_this7.state_mensaje == -2) {
+                  } else if (_this9.state_mensaje == -2) {
                     window.location.href = "../../entregar";
                   }
                 } else {
@@ -671,10 +853,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3);
+        }, _callee4);
       }))();
     },
     imprimir: function imprimir() {
@@ -831,11 +1013,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     subTotal: function subTotal() {
-      var _this8 = this;
+      var _this10 = this;
 
       if (this.item.productos_ordenados) {
         return this.item.productos_ordenados.reduce(function (p, c) {
-          return _this8.numero(_this8.numero(p) + _this8.numero(c.quantity) * _this8.numero(c.pu));
+          return _this10.numero(_this10.numero(p) + _this10.numero(c.quantity) * _this10.numero(c.pu));
         }, 0);
       }
     },
@@ -4300,6 +4482,34 @@ var render = function() {
                               ) +
                               "\n              "
                           )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          producto.pu == 0 &&
+                          _vm.ConsultarPrecio(
+                            producto.producto.categorias,
+                            "Consultar precio"
+                          )
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-sm",
+                                  attrs: {
+                                    type: "button",
+                                    "data-toggle": "modal"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.iniciarFormPrecioKilo(
+                                        _vm.numero(producto.pu),
+                                        producto.id
+                                      )
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-edit" })]
+                              )
+                            : _vm._e()
                         ])
                       ])
                     }),
@@ -4371,6 +4581,151 @@ var render = function() {
                     {
                       staticClass: "modal fade",
                       attrs: {
+                        id: "exampleModalPrecioKilo",
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "exampleModalLabel",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("form", [
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c("label", { attrs: { for: "precio" } }, [
+                                    _vm._v("Precio")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.precioKilo,
+                                        expression: "precioKilo"
+                                      },
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required",
+                                        expression: "'required'"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    class: {
+                                      input: true,
+                                      danger: _vm.errors.has("precio_kilo")
+                                    },
+                                    attrs: {
+                                      type: "number",
+                                      id: "precio_kilo",
+                                      name: "precio_kilo",
+                                      placeholder: "Ingrese el precio",
+                                      step: "0.01",
+                                      min: "0.00",
+                                      "data-vv-scope": "validar2"
+                                    },
+                                    domProps: { value: _vm.precioKilo },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.precioKilo = $event.target.value
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("i", {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.errors.has("precio_kilo"),
+                                        expression: "errors.has('precio_kilo')"
+                                      }
+                                    ],
+                                    staticClass: "fa fa-warning"
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "show",
+                                          rawName: "v-show",
+                                          value: _vm.errors.has("precio_kilo"),
+                                          expression:
+                                            "errors.has('precio_kilo')"
+                                        }
+                                      ],
+                                      staticClass: "help text-danger"
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.errors.first("precio_kilo"))
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                      Cerrar\n                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.enviarPrecio }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                      Guardar\n                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
                         id: "exampleModal",
                         tabindex: "-1",
                         role: "dialog",
@@ -4403,7 +4758,7 @@ var render = function() {
                                 ]
                               ),
                               _vm._v(" "),
-                              _vm._m(1)
+                              _vm._m(2)
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
@@ -4437,7 +4792,8 @@ var render = function() {
                                       type: "text",
                                       id: "mensaje",
                                       name: "mensaje",
-                                      placeholder: "Ingrese el mensaje"
+                                      placeholder: "Ingrese el mensaje",
+                                      "data-vv-scope": "validar1"
                                     },
                                     domProps: { value: _vm.mensaje },
                                     on: {
@@ -4666,8 +5022,35 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-right" }, [_vm._v("Cant.")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-right" }, [_vm._v("SubTotal(S/.)")])
+        _c("th", { staticClass: "text-right" }, [_vm._v("SubTotal(S/.)")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-right" }, [_vm._v("Opcion")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _vm._v(
+          "\n                      Ingresar el precio del producto segun el kilo pesado\n                    "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {

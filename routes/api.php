@@ -49,6 +49,7 @@ Route::apiResource('/v1/orders',OrderController::class);
 Route::get('/v1/orders/{client_id}/get-all-client',[OrderController::class,'getAllClient'])->name('order.getAllClient');
 Route::get('/v1/orders/enviar/{order_id}/{state}/{user_id}',[OrderController::class,'enviar'])->name('order.enviar');
 Route::post('/v1/orders/enviar',[OrderController::class,'enviar_mensaje'])->name('order.enviar.mensaje');
+Route::post('/v1/orders/enviar-precio',[OrderController::class,'enviar_precio'])->name('order.enviar.precio');
 
 
 Route::get('/v1/orders/others/pendientes',[OrderController::class,'pendientes'])->name('orders.pendientes');

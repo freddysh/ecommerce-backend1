@@ -132,6 +132,7 @@
                 <th class="text-right">P.U(S/.)</th>
                 <th class="text-right">Cant.</th>
                 <th class="text-right">SubTotal(S/.)</th>
+                <th class="text-right">Opcion</th>
               </tr>
             </thead>
             <tbody v-if="item">
@@ -148,6 +149,17 @@
                 <td class="text-right">{{ producto.quantity }}</td>
                 <td class="text-right">
                   {{ numero(numero(producto.quantity) * numero(producto.pu)) }}
+                </td>
+                <td>
+                  <button
+                    v-if="(producto.pu==0) &&(ConsultarPrecio(producto.producto.categorias,'Consultar precio'))"
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    data-toggle="modal"
+                    @click="iniciarFormPrecioKilo(numero(producto.pu),producto.id)"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -179,6 +191,86 @@
             v-if="item"
             class="row"
           >
+            <!-- Inicio -> modal para editar el precio de productos con Kg() -->
+            <div class="col-12">
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="exampleModalPrecioKilo"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div
+                  class="modal-dialog"
+                  role="document"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Ingresar el precio del producto segun el kilo pesado
+                      </h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="precio">Precio</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="precio_kilo"
+                            name="precio_kilo"
+                            placeholder="Ingrese el precio"
+                            step="0.01"
+                            min="0.00"
+                            v-model="precioKilo"
+                            v-validate="'required'"
+                            :class="{'input': true, 'danger': errors.has('precio_kilo') }"
+                            data-vv-scope="validar2"
+                          />
+                          <i
+                            v-show="errors.has('precio_kilo')"
+                            class="fa fa-warning"
+                          ></i>
+                          <span
+                            v-show="errors.has('precio_kilo')"
+                            class="help text-danger"
+                          >{{ errors.first('precio_kilo') }}</span>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Cerrar
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="enviarPrecio"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Fin -> modal para editar el precio de productos con Kg() -->
             <div class="col-12">
               <!-- Modal -->
               <div
@@ -223,6 +315,7 @@
                             v-model="mensaje"
                             v-validate="'required'"
                             :class="{'input': true, 'danger': errors.has('mensaje') }"
+                            data-vv-scope="validar1"
                           />
                           <i
                             v-show="errors.has('mensaje')"
@@ -419,7 +512,10 @@ export default {
       paginate: ["itemss"],
       mensaje: "",
       state_mensaje: -1,
-      tituloModal: "Rechazar nueva orden"
+      tituloModal: "Rechazar nueva orden",
+      precioKilo: "",
+      productoOrden_id: 0,
+      puedeEnviar: 0
     };
   },
   methods: {
@@ -435,6 +531,12 @@ export default {
     },
     rechazar() {},
     enviarEmpacado() {
+      if (this.puedeEnviar) {
+        Vue.swal(
+          "Hay productos con precio '0', ingrese el precio del producto"
+        );
+        return;
+      }
       Vue.swal
         .fire({
           title: "Esta seguro de guardar los datos?",
@@ -462,7 +564,12 @@ export default {
       //   if (confirm("Esta seguro de guardar los datos?")) {
       //     this.enviarDatos(3);
       //   }
-
+      if (this.puedeEnviar) {
+        Vue.swal(
+          "Hay productos con precio '0', ingrese el precio del producto"
+        );
+        return;
+      }
       Vue.swal
         .fire({
           title: "Esta seguro de guardar los datos?",
@@ -530,6 +637,31 @@ export default {
       this.limpiarCampos();
       this.toggleModal();
     },
+    ConsultarPrecio(arreglo, categoria) {
+      let rpt = false;
+      for (let index = 0; index < arreglo.length; index++) {
+        // const element = array[index];
+        // console.log("cat", arreglo[index].name);
+        if (arreglo[index].name == "Consultar precio") {
+          rpt = true;
+          this.puedeEnviar++;
+          break;
+        }
+      }
+
+      //   console.log("cat", rpt);
+      return rpt;
+    },
+    iniciarFormPrecioKilo(pu, productoOrden_id) {
+      this.precioKilo = "";
+      this.precioKilo = pu;
+      this.productoOrden_id = 0;
+      this.productoOrden_id = productoOrden_id;
+      this.toggleModalPrecioKilo();
+    },
+    toggleModalPrecioKilo() {
+      $("#exampleModalPrecioKilo").modal("toggle");
+    },
     limpiarCampos() {
       this.mensaje = "";
     },
@@ -538,12 +670,42 @@ export default {
     },
     cancelar() {
       //   this.state_mensaje = state;
-      this.$validator.validate().then(result => {
+      this.$validator.validateAll("validar1").then(result => {
         if (result) {
           this.enviarDatosMensaje();
           this.toggleModal();
         }
       });
+    },
+    enviarPrecio() {
+      //   this.state_mensaje = state;
+
+      //   alert("validando");
+      this.$validator.validateAll("validar2").then(result => {
+        if (result) {
+          //   alert("se valido correctamente");
+          this.enviarDatosMensajePrecio();
+          this.toggleModalPrecioKilo();
+        }
+      });
+    },
+    async enviarDatosMensajePrecio() {
+      let mensajito = {
+        id: this.productoOrden_id,
+        precio: this.precioKilo
+      };
+      console.log("mensajito", mensajito);
+      let datos = await Axios.post(
+        `${process.env.MIX_MIX_APP_URL}/api/v1/orders/enviar-precio`,
+        mensajito
+      );
+      console.log("respuesta:", datos.data);
+      if (datos.data.status == 1) {
+        alert("datos editados");
+        window.location.href = "";
+      } else {
+        alert("Ocurrio un error, vuelva a intentarlo mas tarde");
+      }
     },
     async enviarDatosMensaje() {
       let mensajito = {
