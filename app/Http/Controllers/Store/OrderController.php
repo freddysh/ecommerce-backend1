@@ -178,12 +178,18 @@ class OrderController extends Controller
                     $product_id=$cart_['id'];
                     $quantity=$cart_['quantity'];
                     if($product_id>0&&$quantity>0){
-                        $producto=Product::findorfail($product_id);
+                        $producto=Product::with('categorias')->where('id',$product_id)->get()->first();
+                        $categorias_consultar_precio=$producto->categorias()->toArray();
+                        $pu=$producto->price;
+                        if(in_array('Consultar precio',$categorias_consultar_precio)){
+                            $pu=0;
+                            $quantity=1;
+                        }
                         if($producto){
                             if($quantity<=$producto->stock){
                                 $order_product = new OrderProduct();
                                 $order_product->quantity=$quantity;
-                                $order_product->pu=$producto->price;
+                                $order_product->pu=$pu;
                                 $order_product->state=1;
                                 $order_product->product_id=$producto->id;
                                 $order_product->order_id=$order->id;
