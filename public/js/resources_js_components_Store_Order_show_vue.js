@@ -472,6 +472,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
  // import { core } from '../../../config/pluginInit'
 // import SocialPost from './Components/SocialPost'
@@ -4419,6 +4422,13 @@ var render = function() {
                   _vm._v("Direccion:")
                 ]),
                 _vm._v(" " + _vm._s(_vm.item.address) + "\n        ")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "py-0 my-0" }, [
+                _c("span", { staticClass: "text-gray" }, [
+                  _vm._v("Referencia:")
+                ]),
+                _vm._v(" " + _vm._s(_vm.item.reference) + "\n        ")
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "py-0 my-0" }, [

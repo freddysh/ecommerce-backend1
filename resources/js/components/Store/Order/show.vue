@@ -115,6 +115,9 @@
           <p class="py-0 my-0">
             <span class="text-gray">Direccion:</span> {{ item.address }}
           </p>
+          <p class="py-0 my-0">
+            <span class="text-gray">Referencia:</span> {{ item.reference }}
+          </p>
 
           <p class="py-0 my-0">
             <span class="text-gray">Fecha de entrega:</span>
