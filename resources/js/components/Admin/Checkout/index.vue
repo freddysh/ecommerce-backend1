@@ -63,7 +63,7 @@
             ></i>
             <div
               v-if="loader"
-              class="spinner-border text-secondary"
+              class="text-white spinner-border"
               role="status"
             >
               <span class="sr-only">Loading...</span>
@@ -128,10 +128,6 @@ export default {
           }
         }
       },
-      card: null,
-      cardNumber: null,
-      cardExpiry: null,
-      cardCvc: null,
       loader: false
       //   payform: null
     };
@@ -155,8 +151,8 @@ export default {
     },
     PagoTarjeta() {
       this.loader = true;
+
       this.inicio2();
-      this.loader = false;
     },
     async inicio() {
       await this.$loadScript(
@@ -218,13 +214,13 @@ export default {
         .then(res => {
           // Código en caso de que tu script cargue
           // primero enviamos a guardar la orden y recojemos el id de la orden
-          let orderId = 253;
+          let orderId = 32;
           Axios.get(
             `${process.env.MIX_MIX_APP_URL}/api/v1/payment-desacoplado/${orderId}`
           )
             .then(datos => {
               // primero enviamos a guardar la orden y recojemos el id de la orden
-
+              console.log("rpt:", datos.data);
               this.configuration = datos.data;
               //   payform.setConfiguration(this.configuration);
               VisanetCheckout.configure({
@@ -246,6 +242,8 @@ export default {
                 }
               });
               VisanetCheckout.open();
+
+              this.loader = false;
             })
             .catch(() => {
               // Código en caso de que la carga de tu script fallé

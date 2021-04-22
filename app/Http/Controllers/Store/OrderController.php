@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Store;
 
 use App\Helpers\PasarelaNiubiz;
+use App\Helpers\PasarelaNiubizApi;
 use App\Http\Controllers\Controller;
 use App\Mail\Mail\OrderMail;
 use App\Models\Order;
@@ -136,7 +137,7 @@ class OrderController extends Controller
             $imagen_comprobante='';
             $user_id=0;
             $nota_cancelacion_cliente='';
-            $state=1;
+            $state=0;
             $lugar_entrega=0;
             $cliente_id=$form['id_user'];
             $nota_cancelacion_user='';
@@ -437,37 +438,58 @@ class OrderController extends Controller
             'sessionkey','merchantid','amount','language','recurrencemaxamount','font'));
     }
 
-    public function payment_respuesta(Request $request,$purchaseNumber,$entorno,$amount){
+    public function payment_respuesta(Request $request,$purchaseNumber,$entorno,$amount,$order_id){
         // $variable=base64_decode($variable);
         // return response()->json("$variable");
         // dd($_POST);
-        if (isset($_POST['transactionToken'])){
 
-            $transactionToken = $_POST['transactionToken'];
-            $key =$_COOKIE["key"];
-            // dd($key);
-            $pasarela=new PasarelaNiubiz();
-            $respuesta = $pasarela->authorization($entorno,$key,$amount,$transactionToken,$purchaseNumber);
+        try {
+            //code...
+            if (isset($_POST['transactionToken'])){
+                $transactionToken = $_POST['transactionToken'];
+                // $key =$_COOKIE["clave"];
+                $key='';
+                if(isset($_COOKIE['clave'])){
+                    // dd('No existe la cookie');
+                    $key =$_COOKIE["clave"];
+                }
+                else{
+                    dd("No tenemos la key");
+                    // return redirect()->back();
+                }
+                // dd($key);
+                $pasarela=new PasarelaNiubiz();
+                $respuesta = $pasarela->authorization($entorno,$key,$amount,$transactionToken,$purchaseNumber);
 
-            $data_respuesta = json_decode($respuesta,true);
-            // dd($data_respuesta);
-            $objeto=json_decode($data_respuesta['1']);
-
-            if($data_respuesta['0']=='200'){
-                // EL pago se proceso correctamente
-                dd('proceso de pago correcto');
+                $data_respuesta = json_decode($respuesta,true);
+                // dd($data_respuesta);
+                $objeto=json_decode($data_respuesta['1']);
+                if($data_respuesta['0']=='200'){
+                    // EL pago se proceso correctamente
+                    $order=Order::findOrFail($order_id);
+                    $order->transaction_token='63ueytruyewtrw==';
+                    $order->state=1;
+                    $order->save();
+                    dd('proceso de pago correcto');
+                }
+                elseif($objeto){// hubo un aproblema en la transaccion
+                    $motivo=$objeto->data->ACTION_DESCRIPTION;
+                     dd("Ocurrio un error($objeto->errorCode)");
+                    // return redirect()->back();
+                    // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto->errorCode). Vuelva a intentarlo",'motivo'=>$motivo]);
+                }
+                else{
+                    // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto). Vuelva a intentarlo"]);
+                    // return redirect()->back();
+                     dd("Ocurrio un error($objeto)");
+                }
+            // dd($transactionToken);
             }
-            elseif($objeto){// hubo un aproblema en la transaccion
-                $motivo=$objeto->data->ACTION_DESCRIPTION;
-                dd("Ocurrio un error($objeto->errorCode)");
-                // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto->errorCode). Vuelva a intentarlo",'motivo'=>$motivo]);
-            }
-            else{
-                // return redirect()->route('checkout',compact(''))->with(['msj'=>"Ocurrio un error($objeto). Vuelva a intentarlo"]);
+        } catch (\Exception $ex) {
+            //throw $th;
 
-                dd("Ocurrio un error($objeto)");
-            }
-        // dd($transactionToken);
+            dd("Ocurrio un error catch($ex)");
+            // return redirect()->back();
         }
         // return 'payment';
     }
@@ -477,32 +499,40 @@ class OrderController extends Controller
     }
 
     public function payment_desacoplado_api($order_id){
+
+        $orden=Order::findOrFail($order_id);
         $pasarela=new PasarelaNiubiz();
         $numorden=$pasarela->contador();
         $entorno = 'dev';
-        $amount=100;
-        $mdd4='silvahfreddy@gmail.com';
-        $name='Freddy walberto';
-        $lastname='Silva Hurtado';
-        $mdd21='1';
-        $mdd32='9123';
+        $amount=$orden->total+$orden->tax;
+        $mdd4=$orden->email;
+        $name=$orden->full_name;
+        $lastname=$orden->full_name;
+        $mdd21='1';//-- indica si es cliente frecuente o no
+        $mdd32='987';//-- codigo identificador del cliente o id del cliente
         $mdd75='Registrado';
-        $mdd77='100';
+        $mdd77='20';//-- indica los dias registrados del cliente
         $key = $pasarela->securitykey($entorno);
         // return $key;
-        setcookie("key",$key);
+        // session_start();
+        if(isset($_COOKIE['clave'])){
+            unset ($_COOKIE ["clave"]);
+        }
+        $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+        setcookie('clave', $key, time()+606024*365, '/', $domain, false);
+        // setcookie("clave",$key);
         // setcookie("key",$key);
         $purchasenumber=$numorden;
         $sessionToken = $pasarela->create_token($entorno,$amount,$mdd4,$mdd21,$mdd32,$mdd75,$mdd77,$key);
         $sessionkey= json_decode($sessionToken)->sessionKey;
 
         // Obtenemos la url.js para mostrar el boton de pago
-        $callbackurl="payment_respuesta/$purchasenumber/$entorno/$amount";
+        $callbackurl="payment_respuesta/$purchasenumber/$entorno/$amount/$order_id";
         $merchantid = $pasarela->merchantidtest();
         $channel='web';
         $language='es';
         $font='https://fonts.googleapis.com/css?family=Montserrat:400&display=swap';
-        $recurrencemaxamount='8.5';
+        $recurrencemaxamount='380';
         return response()->json([
             'callbackurl'=>$callbackurl,
             'channel'=>$channel,
@@ -525,15 +555,176 @@ class OrderController extends Controller
             // 'sessionkey','merchantid','amount','language','recurrencemaxamount','font'));
     }
 
+    public function store_api(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            // recojemos los datos
+            $form=$request->form_data;
+            $cart=$request->cart;
 
-    // public function prueba(){
-    //     $producto=Product::with(['categorias'])->where('id','298')->get()->first();
-    //     $categorias_consultar_precio=$producto->categorias()->get()->pluck('name')->toArray();
-    //     $pu=$producto->price;
-    //     if(in_array('Consultar precio',$categorias_consultar_precio)){
-    //         $pu=0;
-    //         $quantity=1;
-    //     }
-    //     return "$pu, $quantity";
-    // }
+            $cliente_id=$form['id_user'];
+            $client=User::findorfail($cliente_id);
+            $code='';
+            $full_name=$client->name;
+            $email=$client->email;
+            $phone=$form['celular'];
+            $departament='';
+            $province='';
+            $distrite=$form['distrito'];
+            $address=$form['direccion'];
+            $reference=$form['referencia'];
+            $lat='';
+            $long='';
+            $coupond_id=0;
+            $subcoupond=0;
+            $subtotal=0;
+            $tax=$form['tax'];
+            $total=$form['total_price'];
+
+            $fecha_pedido= Carbon::now('America/Lima')->toDateTimeString();
+            $fecha_entrega=$this->formatearFecha($form['picked_fecha']);
+
+            $hora_entrega=$form['picked_hora'];
+            $metodo_pago=$form['picked_metodo'];;
+            $url_comprobante='';
+            $imagen_comprobante='';
+            $user_id=0;
+            $nota_cancelacion_cliente='';
+            $state=0;
+            $lugar_entrega=0;
+            $cliente_id=$form['id_user'];
+            $nota_cancelacion_user='';
+
+            $order=new Order();
+            $order->code=$code;
+            $order->full_name=$full_name;
+            $order->email=$email;
+            $order->phone=$phone;
+            $order->departament=$departament;
+            $order->province=$province;
+            $order->distrite=$distrite;
+            $order->address=$address;
+            $order->reference=$reference;
+            $order->lat=$lat;
+            $order->long=$long;
+            $order->coupond_id=$coupond_id;
+            $order->subcoupond=$subcoupond;
+            $order->subtotal=$subtotal;
+            $order->tax=$tax;
+            $order->total=$total;
+            $order->fecha_pedido=$fecha_pedido;
+            $order->url_comprobante=$url_comprobante;
+            $order->imagen_comprobante=$imagen_comprobante;
+            $order->nota_cancelacion_user=$nota_cancelacion_user;
+            $order->user_id=$user_id;
+            $order->nota_cancelacion_cliente=$nota_cancelacion_cliente;
+            $order->state=$state;
+            $order->lugar_entrega=$lugar_entrega;
+            $order->cliente_id=$cliente_id;
+            $order->fecha_entrega=$fecha_entrega;
+            $order->hora_entrega=$hora_entrega;
+            $order->metodo_pago=$metodo_pago;
+            $order->save();
+
+            // Creamos el detalle del la orden
+            if(count($cart)){
+                foreach($cart as $cart_){
+                    $product_id=$cart_['id'];
+                    $quantity=$cart_['quantity'];
+                    if($product_id>0&&$quantity>0){
+                        $producto=Product::with(['categorias'])->where('id',$product_id)->get()->first();
+                        $categorias_consultar_precio=$producto->categorias()->get()->pluck('name')->toArray();
+                        $pu=$producto->price;
+                        if(in_array('Consultar precio',$categorias_consultar_precio)){
+                            $pu=0;
+                            $quantity=1;
+                        }
+                        if($producto){
+                            if($quantity<=$producto->stock){
+                                $order_product = new OrderProduct();
+                                $order_product->quantity=$quantity;
+                                $order_product->pu=$pu;
+                                $order_product->state=1;
+                                $order_product->product_id=$producto->id;
+                                $order_product->order_id=$order->id;
+                                $order_product->save();
+                                $producto->stock=$producto->stock-$quantity;
+                                $producto->save();
+                            }
+                            else{
+                                throw new \Exception("Este producto no tiene stock");
+                            }
+                        }
+                        else{
+                            throw new \Exception("No existe el producto");
+                        }
+                    }
+                    else{
+                        throw new \Exception("No existe el producto y/o stock");
+                    }
+                }
+            }
+            else{
+                throw new \Exception("No existe el producto");
+            }
+            DB::commit();
+            // $this->enviarMail($order->id);
+            return response()->json(['status'=>'1','order_id'=>$order->id]);
+
+        } catch (\Exception $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json(['status'=>'0']);
+        }
+    }
+
+    public function sesion($order_id){
+        // return $order_id;
+        $orden=Order::findOrFail($order_id);
+        $amount=($orden->total+$orden->tax);
+        $channel=env('VISA_CHANNEL');
+        // return env('VISA_URL_SECURITY');
+        $pasarelaNiubizApi=new PasarelaNiubizApi();
+        $token = $pasarelaNiubizApi->generateToken();
+        // return $token;
+        $sesion = $pasarelaNiubizApi->generateSesion($amount, $token, $channel);
+        $purchaseNumber = $pasarelaNiubizApi->generatePurchaseNumber();
+
+        $data = array(
+            "sesionkey" => $sesion,
+            "merchantid" => env('VISA_MERCHANT_ID'),
+            "purchasenumber" => $purchaseNumber,
+            "amount" => $amount,
+            "channel" => $channel
+         );
+        // return response()->json($data);
+        return json_encode($data);
+    }
+    public function authorization(Request $request){
+        $transactionToken=$request->transactionToken;
+        $amount=$request->amount;
+        $purchase=$request->purchase;
+        $pasarelaNiubizApi=new PasarelaNiubizApi();
+        $token = $pasarelaNiubizApi->generateToken();
+        $authorization = $pasarelaNiubizApi->generateAuthorization($amount, $purchase, $transactionToken, $token);
+        // return response()->json($authorization);
+
+        return json_encode($authorization);
+    }
+
+    public function store_confirm($order_id){
+        try {
+                //code...
+                $order=Order::findorfail($order_id);
+                $order->state=1;
+                if($order->save())
+                    return response()->json(['status'=>'1']);
+                else
+                    return response()->json(['status'=>'0']);
+            } catch (\Exception $th) {
+                //throw $th;
+            return response()->json(['status'=>'0']);
+            }
+    }
 }

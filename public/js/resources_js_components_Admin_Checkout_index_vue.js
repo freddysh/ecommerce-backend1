@@ -160,10 +160,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       },
-      card: null,
-      cardNumber: null,
-      cardExpiry: null,
-      cardCvc: null,
       loader: false //   payform: null
 
     };
@@ -186,7 +182,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     PagoTarjeta: function PagoTarjeta() {
       this.loader = true;
       this.inicio2();
-      this.loader = false;
     },
     inicio: function inicio() {
       var _this = this;
@@ -199,7 +194,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 2;
                 return _this.$loadScript("https://pocpaymentserve.s3.amazonaws.com/payform.min.js").then(function (res) {
                   // Código en caso de que tu script cargue
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/payment-desacoplado")).then(function (datos) {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/payment-desacoplado")).then(function (datos) {
                     _this.configuration = datos.data;
                     payform.setConfiguration(_this.configuration);
                     _this.card = payform.createElement("card", {
@@ -243,9 +238,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this2.$loadScript("https://static-content-qas.vnforapps.com/v2/js/checkout.js").then(function (res) {
                   // Código en caso de que tu script cargue
                   // primero enviamos a guardar la orden y recojemos el id de la orden
-                  var orderId = 253;
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/payment-desacoplado/").concat(orderId)).then(function (datos) {
+                  var orderId = 32;
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/payment-desacoplado/").concat(orderId)).then(function (datos) {
                     // primero enviamos a guardar la orden y recojemos el id de la orden
+                    console.log("rpt:", datos.data);
                     _this2.configuration = datos.data; //   payform.setConfiguration(this.configuration);
 
                     VisanetCheckout.configure({
@@ -267,6 +263,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       }
                     });
                     VisanetCheckout.open();
+                    _this2.loader = false;
                   })["catch"](function () {// Código en caso de que la carga de tu script fallé
                   });
                 })["catch"](function () {// Código en caso de que la carga de tu script fallé
@@ -1307,7 +1304,7 @@ var render = function() {
                     ? _c(
                         "div",
                         {
-                          staticClass: "spinner-border text-secondary",
+                          staticClass: "text-white spinner-border",
                           attrs: { role: "status" }
                         },
                         [

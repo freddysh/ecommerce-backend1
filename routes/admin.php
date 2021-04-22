@@ -41,7 +41,7 @@ Route::get('orders/empacar', [OrderController::class,'orders_empacar'])->name('o
 
 // Pago integrado
 Route::get('payment', [OrderController::class,'payment'])->name('payment');
-Route::post('payment_respuesta/{purchasenumber}/{entorno}/{amount}', [OrderController::class,'payment_respuesta'])->name('payment_respuesta');
+Route::post('payment_respuesta/{purchasenumber}/{entorno}/{amount}/{order_id}', [OrderController::class,'payment_respuesta'])->name('payment_respuesta');
 
 
 // Pago desacoplado

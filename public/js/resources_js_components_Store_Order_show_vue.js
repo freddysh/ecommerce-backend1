@@ -586,7 +586,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/").concat(_this.order_id));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/").concat(_this.order_id));
 
               case 2:
                 datos = _context.sent;
@@ -685,7 +685,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar/").concat(_this5.item.id, "/").concat(state, "/").concat(_this5.user_id));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/enviar/").concat(_this5.item.id, "/").concat(state, "/").concat(_this5.user_id));
 
               case 2:
                 datos = _context2.sent;
@@ -797,7 +797,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 console.log("mensajito", mensajito);
                 _context3.next = 4;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar-precio"), mensajito);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/orders/enviar-precio"), mensajito);
 
               case 4:
                 datos = _context3.sent;
@@ -834,7 +834,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   mensaje: _this9.mensaje
                 };
                 _context4.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/enviar"), mensajito);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/orders/enviar"), mensajito);
 
               case 3:
                 datos = _context4.sent;

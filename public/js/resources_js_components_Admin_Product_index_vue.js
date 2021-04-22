@@ -682,7 +682,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/brands"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/brands"));
 
               case 2:
                 datos = _context.sent;
@@ -713,7 +713,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/units"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/units"));
 
               case 2:
                 datos = _context2.sent;
@@ -744,7 +744,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/categories"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/categories"));
 
               case 2:
                 datos = _context3.sent;
@@ -770,7 +770,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/products"));
 
               case 2:
                 datos = _context4.sent;
@@ -852,7 +852,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context5.next = 6;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().put("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/").concat(_this5.product.id), _this5.product);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().put("".concat("http://ecommerce-backend1.test", "/api/v1/products/").concat(_this5.product.id), _this5.product);
 
               case 6:
                 datos = _context5.sent;
@@ -879,7 +879,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 11:
                 _context5.next = 13;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products"), _this5.product);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/products"), _this5.product);
 
               case 13:
                 _datos = _context5.sent;
@@ -942,7 +942,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().delete("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/").concat(brand_id));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().delete("".concat("http://ecommerce-backend1.test", "/api/v1/products/").concat(brand_id));
 
               case 2:
                 datos = _context6.sent;
@@ -989,7 +989,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log("evento switch" + brand_id + "," + valor); //   let valorswich = this.product.state ? 0 : 1;
 
                 _context7.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/swith-state/").concat(brand_id, "/").concat(valor));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/products/swith-state/").concat(brand_id, "/").concat(valor));
 
               case 3:
                 datos = _context7.sent;
