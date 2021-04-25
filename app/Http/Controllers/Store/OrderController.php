@@ -137,7 +137,7 @@ class OrderController extends Controller
             $imagen_comprobante='';
             $user_id=0;
             $nota_cancelacion_cliente='';
-            $state=0;
+            $state=1;
             $lugar_entrega=0;
             $cliente_id=$form['id_user'];
             $nota_cancelacion_user='';

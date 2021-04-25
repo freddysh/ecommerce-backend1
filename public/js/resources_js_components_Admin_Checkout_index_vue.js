@@ -194,7 +194,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 2;
                 return _this.$loadScript("https://pocpaymentserve.s3.amazonaws.com/payform.min.js").then(function (res) {
                   // Código en caso de que tu script cargue
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/payment-desacoplado")).then(function (datos) {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/payment-desacoplado")).then(function (datos) {
                     _this.configuration = datos.data;
                     payform.setConfiguration(_this.configuration);
                     _this.card = payform.createElement("card", {
@@ -239,7 +239,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   // Código en caso de que tu script cargue
                   // primero enviamos a guardar la orden y recojemos el id de la orden
                   var orderId = 32;
-                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/payment-desacoplado/").concat(orderId)).then(function (datos) {
+                  axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/payment-desacoplado/").concat(orderId)).then(function (datos) {
                     // primero enviamos a guardar la orden y recojemos el id de la orden
                     console.log("rpt:", datos.data);
                     _this2.configuration = datos.data; //   payform.setConfiguration(this.configuration);
