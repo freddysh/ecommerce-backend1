@@ -334,7 +334,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/categories"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/categories"));
 
               case 2:
                 datos = _context.sent;
@@ -387,7 +387,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context2.next = 4;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().put("".concat("http://ecommerce-backend1.test", "/api/v1/categories/").concat(_this2.brand.id), _this2.brand);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().put("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/categories/").concat(_this2.brand.id), _this2.brand);
 
               case 4:
                 datos = _context2.sent;
@@ -414,7 +414,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 9:
                 _context2.next = 11;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/categories"), _this2.brand);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/categories"), _this2.brand);
 
               case 11:
                 _datos = _context2.sent;
@@ -476,7 +476,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().delete("".concat("http://ecommerce-backend1.test", "/api/v1/categories/").concat(brand_id));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().delete("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/categories/").concat(brand_id));
 
               case 2:
                 datos = _context3.sent;
