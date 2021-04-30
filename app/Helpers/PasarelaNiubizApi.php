@@ -35,16 +35,17 @@ class PasarelaNiubizApi{
         return $response;
     }
 
-    function generateSesion($amount, $token, $channel) {
+    function generateSesion($amount, $token, $channel, $mdd4, $mdd21, $mdd32, $mdd75, $mdd77) {
         $session = array(
             'amount' => $amount,
             'antifraud' => array(
                 'clientIp' => $_SERVER['REMOTE_ADDR'],
                 'merchantDefineData' => array(
-                    'MDD4' => 'integraciones.visanet@necomplus.com',
-                    'MDD32' => 'integraciones.visanet@necomplus.com',
-                    'MDD75' => 'Registrado',
-                    'MDD77' => '63'
+                    'MDD4' =>$mdd4, //'integraciones.visanet@necomplus.com',
+                    'MDD21' =>$mdd21,// 'integraciones.visanet@necomplus.com',
+                    'MDD32' =>$mdd32,// 'integraciones.visanet@necomplus.com',
+                    'MDD75' =>$mdd75,// 'Registrado',
+                    'MDD77' =>$mdd77// '63'
                 ),
             ),
             'channel' => $channel,

@@ -550,7 +550,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loadder = true;
       var formData = new FormData();
       formData.append("import_file", this.import_file);
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/importar-excel"), formData, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/products/importar-excel"), formData, {
         headers: {
           "content-type": "multipart/form-data"
         }
@@ -580,7 +580,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loadder = true;
       var formData = new FormData();
       formData.append("import_file", this.import_file);
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/importar-excel-ya"), formData, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("http://ecommerce-backend1.test", "/api/v1/products/importar-excel-ya"), formData, {
         headers: {
           "content-type": "multipart/form-data"
         }

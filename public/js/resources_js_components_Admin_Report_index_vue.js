@@ -188,7 +188,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/products/others/5"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/products/others/5"));
 
               case 2:
                 datos = _context.sent;
@@ -219,7 +219,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/others/pendientes"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/others/pendientes"));
 
               case 2:
                 datos = _context2.sent;
@@ -243,7 +243,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/others/empacados"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/others/empacados"));
 
               case 2:
                 datos = _context3.sent;
@@ -267,7 +267,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/others/encamino"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/others/encamino"));
 
               case 2:
                 datos = _context4.sent;
@@ -292,7 +292,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this5.loadder = true;
                 _context5.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders/others/ingresos/").concat(_this5.moment(_this5.rango_fecha[0]).format("YYYY-MM-DD"), "/").concat(_this5.moment(_this5.rango_fecha[1]).format("YYYY-MM-DD")));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders/others/ingresos/").concat(_this5.moment(_this5.rango_fecha[0]).format("YYYY-MM-DD"), "/").concat(_this5.moment(_this5.rango_fecha[1]).format("YYYY-MM-DD")));
 
               case 3:
                 datos = _context5.sent;

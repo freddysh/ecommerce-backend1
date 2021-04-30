@@ -171,6 +171,7 @@ class OrderController extends Controller
             $order->fecha_entrega=$fecha_entrega;
             $order->hora_entrega=$hora_entrega;
             $order->metodo_pago=$metodo_pago;
+            $order->created_at=$fecha_pedido;
             $order->save();
 
             // Creamos el detalle del la orden
@@ -625,8 +626,12 @@ class OrderController extends Controller
             $order->fecha_entrega=$fecha_entrega;
             $order->hora_entrega=$hora_entrega;
             $order->metodo_pago=$metodo_pago;
+            $order->created_at=$fecha_pedido;
             $order->save();
 
+
+            $order->code=$order->id;
+            $order->save();
             // Creamos el detalle del la orden
             if(count($cart)){
                 foreach($cart as $cart_){
@@ -681,15 +686,35 @@ class OrderController extends Controller
 
     public function sesion($order_id){
         // return $order_id;
-        $orden=Order::findOrFail($order_id);
+        $orden=Order::where('id',$order_id)->get()->first();
         $amount=($orden->total+$orden->tax);
         $channel=env('VISA_CHANNEL');
         // return env('VISA_URL_SECURITY');
         $pasarelaNiubizApi=new PasarelaNiubizApi();
         $token = $pasarelaNiubizApi->generateToken();
         // return $token;
-        $sesion = $pasarelaNiubizApi->generateSesion($amount, $token, $channel);
-        $purchaseNumber = $pasarelaNiubizApi->generatePurchaseNumber();
+
+        $fechaRegitro=Carbon::parse($orden->cliente->created_at);
+        $fechaActual= Carbon::now('America/Lima');
+        $date_diff=$fechaActual->diffInDays($fechaRegitro);
+        // return $date_diff;
+        // $date_diff='63';
+
+        // $mdd4='integraciones.visanet@necomplus.com';
+        // $mdd21='1';
+        // $mdd32='integraciones.visanet@necomplus.com';
+        // $mdd75='Registrado';
+        // $mdd77='63';
+
+        $mdd4=$orden->email;//-- email del cliente
+        $mdd21='1';//-- cliente frecuente 0,1
+        $mdd32=$orden->email;//-- id del cliente
+        $mdd75='Registrado';//-- indicar si el cliente es registrado
+        $mdd77=$date_diff;//-- diferencias de dias
+
+        $sesion = $pasarelaNiubizApi->generateSesion($amount, $token, $channel, $mdd4, $mdd21, $mdd32, $mdd75, $mdd77);
+        // $purchaseNumber = $pasarelaNiubizApi->generatePurchaseNumber();
+        $purchaseNumber = $orden->code;
 
         $data = array(
             "sesionkey" => $sesion,
@@ -713,11 +738,14 @@ class OrderController extends Controller
         return json_encode($authorization);
     }
 
-    public function store_confirm($order_id){
+    public function store_confirm($order_id,$state,$card,$traceNumber,$description){
         try {
                 //code...
                 $order=Order::findorfail($order_id);
-                $order->state=1;
+                $order->state=$state;
+                $order->card=$card;
+                $order->traceNumber=$traceNumber;
+                $order->card_description=$description;
                 if($order->save())
                     return response()->json(['status'=>'1']);
                 else
@@ -727,4 +755,17 @@ class OrderController extends Controller
             return response()->json(['status'=>'0']);
             }
     }
+    public function store_denegado($order_id){
+        try {
+                //code...
+                $order=Order::findorfail($order_id);
+                $numeroPedido=$order->code;
+                $fecha_hora=$order->created_at;
+                return response()->json(['numeroPedido'=>$numeroPedido,'fecha_hora'=>$fecha_hora]);
+            } catch (\Exception $th) {
+                //throw $th;
+            return response()->json(['status'=>'0']);
+            }
+    }
+
 }
