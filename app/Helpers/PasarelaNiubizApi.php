@@ -114,4 +114,7 @@ class PasarelaNiubizApi{
         curl_close($curl);
         return $response;
     }
+    function visa_merchant_id(){
+        return env('VISA_DEVELOPMENT')?env('VISA_DEV_MERCHANT_ID'):env('VISA_PRD_MERCHANT_ID');
+    }
 }

@@ -87,6 +87,6 @@ Route::get('/v1/sesion/{order_id}', [OrderController::class,'sesion'])->name('se
 Route::post('/v1/authorization', [OrderController::class,'authorization'])->name('authorization');
 
 Route::post('/v1/orders-api',[OrderController::class,'store_api'])->name('orders.store_api');
-Route::get('/v1/orders-confirm/{order_id}/{state}/{card}/{trace}/{description}/',[OrderController::class,'store_confirm'])->name('orders.store_confirm');
+Route::get('/v1/orders-confirm/{order_id}/{state}/{card}/{card_brand}/{trace}/{description}/',[OrderController::class,'store_confirm'])->name('orders.store_confirm');
 Route::get('/v1/orders-denegado/{order_id}/',[OrderController::class,'store_denegado'])->name('orders.store_confirm');
 

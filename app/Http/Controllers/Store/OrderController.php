@@ -707,7 +707,7 @@ class OrderController extends Controller
         // $mdd77='63';
 
         $mdd4=$orden->email;//-- email del cliente
-        $mdd21='1';//-- cliente frecuente 0,1
+        $mdd21='0';//-- cliente frecuente 0,1
         $mdd32=$orden->email;//-- id del cliente
         $mdd75='Registrado';//-- indicar si el cliente es registrado
         $mdd77=$date_diff;//-- diferencias de dias
@@ -718,7 +718,7 @@ class OrderController extends Controller
 
         $data = array(
             "sesionkey" => $sesion,
-            "merchantid" => env('VISA_MERCHANT_ID'),
+            "merchantid" => $pasarelaNiubizApi->visa_merchant_id(),
             "purchasenumber" => $purchaseNumber,
             "amount" => $amount,
             "channel" => $channel
@@ -738,12 +738,13 @@ class OrderController extends Controller
         return json_encode($authorization);
     }
 
-    public function store_confirm($order_id,$state,$card,$traceNumber,$description){
+    public function store_confirm($order_id,$state,$card,$cardBrand,$traceNumber,$description){
         try {
                 //code...
                 $order=Order::findorfail($order_id);
                 $order->state=$state;
                 $order->card=$card;
+                $order->cardBrand=$cardBrand;
                 $order->traceNumber=$traceNumber;
                 $order->card_description=$description;
                 if($order->save())
