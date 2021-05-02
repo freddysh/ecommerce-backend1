@@ -256,7 +256,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("http://ecommerce-backend1.test", "/api/v1/orders"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat("https://sistemaorion.nebulaperu.com", "/api/v1/orders"));
 
               case 2:
                 datos = _context.sent;
