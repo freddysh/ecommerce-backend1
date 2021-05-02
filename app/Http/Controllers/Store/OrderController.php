@@ -174,6 +174,9 @@ class OrderController extends Controller
             $order->created_at=$fecha_pedido;
             $order->save();
 
+            $order->code=$order->id;
+            $order->save();
+
             // Creamos el detalle del la orden
             if(count($cart)){
                 foreach($cart as $cart_){
@@ -719,6 +722,7 @@ class OrderController extends Controller
         $data = array(
             "sesionkey" => $sesion,
             "merchantid" => $pasarelaNiubizApi->visa_merchant_id(),
+            // "merchantid" => env('VISA_DEV_MERCHANT_ID'),
             "purchasenumber" => $purchaseNumber,
             "amount" => $amount,
             "channel" => $channel
