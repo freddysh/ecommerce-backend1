@@ -132,7 +132,7 @@ class OrderController extends Controller
             $fecha_entrega=$this->formatearFecha($form['picked_fecha']);
 
             $hora_entrega=$form['picked_hora'];
-            $metodo_pago=$form['picked_metodo'];;
+            $metodo_pago=$form['picked_metodo'];
             $url_comprobante='';
             $imagen_comprobante='';
             $user_id=0;
