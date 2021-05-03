@@ -773,4 +773,9 @@ class OrderController extends Controller
             }
     }
 
+    public function prueba_visa(){
+
+        $pasarelaNiubizApi=new PasarelaNiubizApi();
+        return $pasarelaNiubizApi->VISA_USER;
+    }
 }

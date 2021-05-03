@@ -90,3 +90,5 @@ Route::post('/v1/orders-api',[OrderController::class,'store_api'])->name('orders
 Route::get('/v1/orders-confirm/{order_id}/{state}/{card}/{card_brand}/{trace}/{description}/',[OrderController::class,'store_confirm'])->name('orders.store_confirm');
 Route::get('/v1/orders-denegado/{order_id}/',[OrderController::class,'store_denegado'])->name('orders.store_confirm');
 
+
+Route::get('/v1/prueba_visa/1',[OrderController::class,'prueba_visa'])->name('orders.prueba_visa');
