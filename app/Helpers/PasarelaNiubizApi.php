@@ -124,9 +124,10 @@ class PasarelaNiubizApi{
         return $response;
     }
     function visa_merchant_id(){
-        if(env('VISA_DEVELOPMENT'))
-        return env('VISA_DEV_MERCHANT_ID');
-        else
-        return env('VISA_PRD_MERCHANT_ID');
+        // if(env('VISA_DEVELOPMENT'))
+        // return env('VISA_DEV_MERCHANT_ID');
+        // else
+        // return env('VISA_PRD_MERCHANT_ID');
+        return $this->VISA_MERCHANT_ID;
     }
 }
