@@ -35,6 +35,7 @@ Route::get('orders/entregar', [OrderController::class,'orders_entregar'])->name(
 Route::get('orders/entregar/show/{order_id}', [OrderController::class,'order_entregar_show_view'])->name('orders_entregar.order_show_view');
 
 Route::get('orders/empacar', [OrderController::class,'orders_empacar'])->name('orders_empacar');
+Route::get('orders/crear-orden', [OrderController::class,'orders_crear'])->name('orders_crear');
 
 
 

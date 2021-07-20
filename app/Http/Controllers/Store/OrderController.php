@@ -42,6 +42,12 @@ class OrderController extends Controller
         //
         return view('store.orders.index');
     }
+
+    public function orders_crear()
+    {
+        //
+        return view('store.orders.crear');
+    }
     public function order_show_view($order_id)
     {
         //

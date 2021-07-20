@@ -303,7 +303,19 @@ return [
 //            'label_color' => 'success',
         ],
         [   'header' => 'Ventas'
-        ],
+        ]
+        ,
+
+        [
+            'text'        => 'Crear orden',
+            'route'         => 'admin.orders_crear',
+            'icon'        => 'fa fa-cog',
+            'can'       => 'Crear Ordenes',
+            'active'        => ['admin/orders/crear-orden/*'],
+//            'label'       => 4,
+//            'label_color' => 'success',
+        ]
+        ,
         [
             'text'        => 'Ordenes',
             'route'         => 'admin.orders_list',

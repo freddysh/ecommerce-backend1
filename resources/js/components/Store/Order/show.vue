@@ -96,8 +96,7 @@
           </p>
           <p class="py-0 my-0">
             <span class="text-gray">Metodo de pago:</span>
-            {{ item.metodo_pago }}
-
+            <span class="badge badge-primary"> {{ item.metodo_pago }}</span>
           </p>
         </div>
         <div
